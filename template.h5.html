@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>
+    <%= htmlWebpackPlugin.options.title %>
+  </title>
+
+  <script src="https://cdn.bootcss.com/vConsole/3.2.2/vconsole.min.js"></script>
+  <script src="static/js/html2canvas.min.js"></script>
+  <script>
+    // 禁止双击放大
+    document.documentElement.addEventListener('touchstart', function (event) {
+      if (event.touches.length > 1) {
+        event.preventDefault();
+      }
+    }, false);
+  </script>
+
+  <link rel="stylesheet" href="<%= BASE_URL %>static/index.<%= VUE_APP_INDEX_CSS_HASH %>.css" />
+</head>
+<body>
+<noscript>
+  <strong>Please enable JavaScript to continue.</strong>
+</noscript>
+<div id="app"></div>
+
+</body>
+</html>

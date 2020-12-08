@@ -1,0 +1,88 @@
+
+
+page {
+  background-color: $main-color-background;
+	font-size: 28rpx;
+	height: 100%;
+
+}
+.nav-bar-dark{
+  background:$nav-bar-dark-bg-color;
+  color:$nav-bar-dark-font-color;
+}
+
+.nav-bar-light{
+  background:$nav-bar-light-bg-color;
+  color:$nav-bar-light-font-color;
+}
+
+.nav-bar-white{
+  background:$nav-bar-white-bg-color;
+  color:$nav-bar-white-font-color;
+  box-shadow: $nav-bar-white-box-shadow;
+}
+
+.nav-btn-group{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-fixed-top{
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
+.nav-row-center-center{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-row-start-center{
+   display: flex;
+   flex-direction: row;
+   justify-content: flex-start;
+   align-items: center;
+ }
+
+.nav-row-start-start{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.nav-row-end-center{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.nav-row-between-center{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-row-between-start{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.nav-column-start-center{
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+}
+
+
+

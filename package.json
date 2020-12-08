@@ -1,0 +1,33 @@
+{
+  "name": "Twallet-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.chainopen.cn/thinkium/wallet-open-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bignumber.js": "^9.0.1",
+    "bip39": "^3.0.2",
+    "crypto-js": "^4.0.0",
+    "elliptic": "^6.5.3",
+    "ethereumjs-util": "^7.0.6",
+    "hdkey": "^2.0.1",
+    "js-cookie": "^2.2.1",
+    "js-sha3": "^0.8.0",
+    "lodash": "^4.17.20",
+    "secp256k1": "^3.8.0",
+    "thinkium-web3js": "^1.0.17-app"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^8.2.0"
+  }
+}

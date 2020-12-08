@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+	<head>
+		<meta charset="UTF-8">
+		<title class="title">[文件管理器]</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<style type="text/css">
+			.content {background: transparent;}
+			.fixed {position: fixed;bottom: 0;left: 0;right: 0;width: 100%;}
+			.content .mask {top: 0;background: rgba(0,0,0,.4);z-index: 90;}
+			.content .file-content {z-index: 91;height: 60px;background: #fff;text-align: center;}
+			.btn {position: relative;}
+			.btn .file {position: absolute;z-index: 93;left: 0;right: 0;top: 0;bottom: 0;height: 60px;width: 100%;opacity: 0;}
+			.btn-bg {margin-top: 10px;background: #2C446A;color: #fff;width: 80%;height: 40px;border: 0;border-radius: 5px;}
+			.tis {top: 0;z-index: 95;display: none;justify-content: center;align-items: center;}
+			.tis .tis-content {background: #fff;width: 60%;border-radius: 10px;padding: 20px 0;}
+			.tis .tis-content img {width: 50px;height: 50px;}
+			.tis-progress {margin: 10px 0;color: #999;}
+			.cancel-btn {margin-top: 30px;height: 30px;line-height: 1;padding: 0 2em;background: #e3e3e3;color: #898989;border: 0;border-radius: 5px;}
+		</style>
+	</head>
+
+	<body>
+		
+		<div class="content">
+			
+			<div class="fixed mask"></div>
+			
+			<div align="center" class="fixed tis">
+				<div class="tis-content">
+					<div>
+						<!-- <img src="../../static/logo.png" > -->
+					</div>
+					<div class="tis-progress">
+						努力上传中..
+					</div>
+					<div class="cancel">
+						<button type="button" class="cancel-btn">取消上传</button>
+					</div>
+				</div>
+			</div>
+			
+			<div class="fixed file-content">
+				<div class="btn">
+					<button type="button" class="btn-bg">打开文件管理器</button>
+					<input class="file" type="file" />
+				</div>
+			</div>
+		</div>
+		
+		<script type="text/javascript" src="https://js.cdn.aliyun.dcloud.net.cn/dev/uni-app/uni.webview.1.5.2.js"></script>
+		<script src="js/h5-uploader.js" type="text/javascript" charset="utf-8"></script>
+	</body>
+
+</html>
