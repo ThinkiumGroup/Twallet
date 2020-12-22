@@ -14,6 +14,17 @@ https://github.com/ThinkiumGroup/Twallet.git
 ### （3）项目目录
 <img src="http://qn-data.chainopen.cn/pic%2Fb8554666f57f4379a7f383c3e85125fa.jpg" width="300">
 
+### （4）方法说明
+- 校验TH地址
+  文件目录 utils/businessCommon.js
+  方法 aboutWallet.checkAddress
+- 将0x地址改为TH地址
+  文件目录 utils/businessCommon.js
+  方法名 aboutWallet.toTHAddress
+- 将TH地址改为0x地址
+  文件目录 utils/businessCommon.js
+  方法 aboutWallet.toAddress
+
 ## 3、启动
 
 ### （1） h5启动
