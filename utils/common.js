@@ -183,30 +183,46 @@ export function arrangeNum(number, type = 'auto', n = 6){
 		return 0;
 	}
 
+	let numberReturn;
 	if(type === 'auto' || !type){
-		return parseFloat((number - 0).toFixed(n))
+		numberReturn =  parseFloat((number - 0).toFixed(n))
 	}
 
-	number *= Math.pow(10, n);
+
 	if(type === 'ceil'){
+		number *= Math.pow(10, n);
 		number = Math.ceil(number);
-		return parseFloat(number/Math.pow(10, n))
+		numberReturn =  parseFloat(number/Math.pow(10, n))
 	}
 	if(type === 'floor'){
+		number *= Math.pow(10, n);
 		number = Math.floor(number);
-		return parseFloat(number/Math.pow(10, n))
+		numberReturn =  parseFloat(number/Math.pow(10, n))
 	}
+	if(numberReturn - 999999999 > 0){
+		numberReturn = numberReturn.toExponential(n);
+	}
+
+	return numberReturn
 }
 
 // 获得百分比, 以num2 为基数
 export function getPercentage(num1, num2, type, n = 2){
 	console.log(num1, num2);
-  let percentage = (num1 - num2)/num2;
+  let ratio = (num1 - num2)/num2;
+  let percentage;
+
   if(type === 'positive'){  // 获得正数
-     return  (Math.abs(percentage)*100).toFixed(n) + '%';
+		percentage =  (Math.abs(ratio)*100).toFixed(n);
 	}else{
-		 return (percentage*100).toFixed(n) + '%';
+		percentage =  (ratio*100).toFixed(n);
 	}
+
+	if(ratio - 999999999 > 0){
+		percentage = ratio.toExponential(n);
+	}
+
+	return percentage + '%'
 }
 
 /**

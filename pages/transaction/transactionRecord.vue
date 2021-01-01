@@ -35,7 +35,7 @@
 					>
 						<image class="transfer-list-item-type" :src="typeImgUrl[index]" mode=""></image>
 						<view class="transfer-list-item-content">
-							<text class="transfer-list-item-hash">{{item.tradingHash}}</text>
+							<text @click="copyData(item.tradingHash)" class="transfer-list-item-hash">{{item.tradingHash}}</text>
 							<!-- <text class="transfer-list-it em-hash">{{chainInfo[item]}}</text> -->
 							<text class="transfer-list-item-time">{{item.timeStamp | formatDate}}</text>
 						</view>
@@ -43,7 +43,7 @@
 						<view class="transfer-list-item-money" :style="{color: index == 0 && '#34CE9A'}">
 							<view class="transfer-list-item-money-top">
 								<text class="transfer-list-money-num">
-									{{index == 0 ? '+' : '-' }} {{ tokenType ? item.tokenNum || 0 : numberChange(item.currencyAmount)}}
+									{{index == 0 ? '+' : '-' }} {{ tokenType ? numberChange(item.tokenNum || 0) : numberChange(item.currencyAmount)}}
 								</text>
 								<text class="transfer-list-money-token">{{tokenNname}}</text>
 							</view>
@@ -65,6 +65,7 @@
 	import { transferTypeUrl } from '@/utils/data/enums.js'
 	import { mapState } from 'vuex'
 	import { aboutWallet } from '@/utils/businessCommon.js'
+	import { copy } from "@/utils/common.js"
 	import {
 		getTokenHoldingsForWallet,
 		getTraingListInOneZeroThree,
@@ -145,8 +146,13 @@
 				if(newVal) {
 					this.tabList = this.tabListClone.filter(v => v.id != 2 && v.id != 3)
 					this.clearData()
-					const transType =  this.tabIndex ? 0 : 1
-					this.getTokenTransferList({ transType })
+					//tkm切换到token时 如果选中的为 闪对或者跨链重置为转入展示
+					//否则直接继承
+					if(this.tabIndex == 2 || this.tabIndex == 3) {
+						this.tabIndex = 0
+					} else {
+						this.getTokenTransferList({ transType: this.tabIndex })
+					}
 				} else {
 					this.tabList = this.tabListClone
 					this.clearData()
@@ -158,7 +164,7 @@
 		},
 		onLoad({ tokenType }) {
 			this.tokenType = Number(tokenType)
-			this.contractAddress = this._contractAddress.CONTRACT_ROUTER;
+			this.contractAddress = [this._contractAddress.CONTRACT_ROUTER, this._contractAddress.CONTRACT_FLASH_SWAP, this._contractAddress.CONTRACT_FLASH_SWAP_POOL];
 		},
 		onShow() {
 			if(!this.tokenType) {
@@ -171,6 +177,16 @@
 			...mapState(['defaultWallet', '_contractAddress']),
 		},
 		methods: {
+			copyData(data) {
+				copy(data)
+				uni.showToast({
+					title: this.$lan('复制成功'),
+					icon: 'none',
+					duration: 2000
+				});
+			
+			},
+			
 			numberChange(nums) {
 				return aboutWallet.toRegularNumber(nums)
 			},
@@ -227,9 +243,9 @@
 					tables: this.tables,
 				}
 				//获取闪兑记录 添加参数
-				if(this.parentType === 2) {
+				if(this.tabIndex === 2) {
 					const paramsData = {
-						contractAddress: this.contractAddress,
+						contractAddresss: this.contractAddress,
 						chainId: 103,
 					}
 					data = { ...data, ...paramsData }
@@ -260,15 +276,20 @@
 				tokenList.unshift({
 					text: 'TKM',
 					value: 0,
-					contractAddress: this._contractAddress.CONTRACT_ROUTER
+					contractAddress: [this._contractAddress.CONTRACT_ROUTER, this._contractAddress.CONTRACT_FLASH_SWAP, this._contractAddress.CONTRACT_FLASH_SWAP_POOL]
 				})
+				if(this._contractAddress) {
+					// this._contractAddress.CONTRACT_ROUTER
+					console.log(this._contractAddress)
+					console.log(this._contractAddress.CONTRACT_ROUTER, 99999)
+				}
+				
 				this.tokenList = tokenList
 				console.log(this.tokenList , 9000)
 			},
 
 			//获取token交易记录
 			async getTokenTransferList({ transType }) {
-
 				const data = {
 					address: this.defaultWallet.address,
 					orderType: '',
@@ -290,7 +311,7 @@
 				const list = data.data
 
 				this.total = data.total
-				this.pageData = [...list, ...this.pageData]
+				this.pageData = [...this.pageData, ...list ]
 				this.timeStamp = list.length && list[list.length -1].timeStamp
 				if(this.total <= this.rows) { //数据比较少不足一屏幕 无法触发滚动事件时
 					this.isMore = false //隐藏正在加载loading

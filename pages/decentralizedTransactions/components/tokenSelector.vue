@@ -1,25 +1,26 @@
 <template>
     <view class="app">
-        <UniPopup ref="uniPop" type="center">
+        <UniPopup ref="uniPop" type="bottom">
             <view class="token-selector-popup-container">
                 <view class="content">
-                    <view class="tabs">
-                        <view
-                            @click="switchTab(index)"
-                            class="tabs-item"
-                            v-for="(item, index) in tabList"
-                            :class="index == tabIndex && 'tabs-item-active'">
-                            {{item.name}}
-                        </view>
-                    </view>
+                    <input
+                        v-model="tokenNameInput"
+                        @input="handleTokenNameInput"
+                        :placeholder="$lan('输入通证名称')"
+                        class="token-input"/>
                     <swiper class="transfer-swiper" :current="tabIndex" @change="swiperChange">
                         <swiper-item  v-for="(pageData, index) in tabList">
-                            <view style="padding: 0 32rpx 0 27rpx; height: 100%">
+                            <view style=" height: 100%">
                                 <scroll-view :scroll-y="true" class="scroll-view">
                                     <view class="token-list">
-                                        <view v-for="item in pageData.list" class="token-item nav-row-start-center" @click="handleSelected(item)">
-                                            <image :src="item.iconUrl" class="token-image"/>
-                                            <view class="token-name">{{item.tokenName}}</view>
+                                        <view v-for="item in (tokenList.length ? tokenList : pageData.list)" class="token-item nav-row-start-center" @click="handleSelected(item)">
+                                            <template v-if="!item._status">
+                                                <image :src="item.iconUrl" class="token-image"/>
+                                                <view class="token-name">{{item.tokenName}}</view>
+                                            </template>
+                                            <template v-else>
+                                                <view class="token-name">没有该通证</view>
+                                            </template>
                                         </view>
                                     </view>
                                 </scroll-view>
@@ -53,9 +54,13 @@
                         list: [{image: '', tokenName: 'TKM', type: 'other',},
                                {image: '', tokenName: 'TKM', type: 'other',},]
                     }],
+                tokenList: [
+
+                ],
                 currentTokenList: [],
                 tabIndex: '',
                 source: '',
+                tokenNameInput: '',
             }
         },
         methods: {
@@ -63,6 +68,7 @@
                 this.tabList = _.cloneDeep(data || []);
                 console.log('tabList', this.tabList);
                 this.source = source;
+                this.tabIndex = 0;
                 this.$refs.uniPop.open();
             },
             closePop(){
@@ -78,6 +84,20 @@
                 this.$emit('select', {source: this.source, data});
                 this.closePop();
             },
+            handleTokenNameInput(){
+                let tokenNameInput = this.tokenNameInput.trim().toUpperCase();
+                if( !tokenNameInput ){
+                    this.tokenList = [];
+                    return;
+                }
+                this.tokenList = this.tabList[this.tabIndex].list.filter((item) => {
+                    let tokenName =  item.tokenName.toUpperCase();
+                    return tokenName.indexOf(tokenNameInput) > -1
+                })
+                if(!this.tokenList.length){
+                    this.tokenList = [{_status: -1}] //没有筛选出通证
+                }
+            },
         }
     }
 </script>
@@ -86,13 +106,14 @@
         box-sizing: border-box;
     }
     .token-selector-popup-container{
-        width: 620rpx;
-        height: 952rpx;
-        background: url("../../../static/image/decentralizedTransactions/token-selector-bg.png") no-repeat center;
+        width: 100%;
+        height: 800rpx;
+        background: #fff;
         background-size: cover;
         position: relative;
         .content{
-            padding-top: 260rpx;
+            overflow: hidden;
+            padding: 0 64rpx;
             .tabs{
                 height: 90rpx;
                 width: 564rpx;
@@ -118,6 +139,15 @@
                     margin-left: 38rpx;
                 }
             }
+            .token-input{
+                width: 100%;
+                height:  80rpx;
+                border: 1rpx solid #aaa;
+                border-radius: 8rpx;
+                margin:  64rpx 0 53rpx;
+                padding: 0 46rpx;
+
+            }
             .transfer-swiper{
                 margin-top: 50rpx;
                 height: 500rpx;
@@ -133,10 +163,10 @@
                 justify-content: space-between;
                 flex-wrap: wrap;
                 align-items: center;
+                padding-bottom: 50rpx;
                 .token-item{
                     width: 100%;
                     height: 80rpx;
-                    padding-left: 55rpx;
                     &:nth-child(n + 2){
                         margin-top: 50rpx;
                     }

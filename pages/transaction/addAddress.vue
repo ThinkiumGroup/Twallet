@@ -50,6 +50,9 @@
 </template>
 
 <script>
+	import {
+		aboutWallet
+	} from '@/utils/businessCommon'
 	export default {
 		data() {
 			return {
@@ -68,12 +71,12 @@
 					this.$showToast(this.$lan('名称不能为空'))
 					return
 				}
-				if(address == '') {
-					this.$showToast(this.$lan('地址不能为空'))
+				if(address == '' || !aboutWallet.checkAddress(address)) {
+					this.$showToast(this.$lan('请输入正确地址'))
 					return
 				}
-				if(phone == '') {
-					this.$showToast(this.$lan('手机号不能为空'))
+				if(phone == '' ||  !/^1[3456789]\d{9}$/.test(phone)) {
+					this.$showToast(this.$lan('请输入正确手机号'))
 					return
 				}
 				this.$store.commit('setAddressList', [this.formData])

@@ -27,7 +27,7 @@
 			</view>
 			<!-- banner -->
 			<view class="banner" @click="goRece">
-				<view class="banner-cont">
+				<!-- <view class="banner-cont"> -->
 					<view class="ban_top">
 						<text>{{$lan('总资产')}}</text>
 					</view>
@@ -40,7 +40,7 @@
 						<text class="ban_bottom_cont">{{ $toTHAddress(defaultWallet.address) }}</text>
 						<view @click="copyData($toTHAddress(defaultWallet.address))">{{$lan('复制')}}</view>
 					</view>
-				</view>
+				<!-- </view> -->
 
 			</view>
 			<!-- 收款，转账 -->
@@ -55,9 +55,12 @@
 				</view>
 			</view>
 			<!-- 资产列表 -->
-			<view class="zclb">
+			<view  class="zclbTop">
 				<text class=zclb_topTxt>{{$lan('资产列表')}}</text>
 				<image class=zclb_topImg src="../../static/image/home/icon_lb.png"></image>
+			</view>
+				
+				<view class="zclb">
 				<view class="zclb_box1"  @tap="goTransactionRecord(0)">
 					<view class="tkm">
 						<view class="tkm_left">
@@ -83,7 +86,11 @@
 						</view>
 					</view>
 				</view>
-
+			
+			
+				
+				
+			</view>
 				<view
 					class="zclb_box2"
 					v-for="(item,index) in addList"
@@ -91,7 +98,6 @@
 					@tap="goTransactionRecord(index+1)"
 				>
 					<view class="rje">
-						<!-- <view class="zcl1_cont"> -->
 						<view class="rje_left">
 							<image :src="item.iconUrl"></image>
 							<text>{{ item.tokenName }}</text>
@@ -99,12 +105,10 @@
 						<view class="rje_right">
 							<view class="r_r_t1">{{ item.amount | $toRegularNumber }}</view>
 						</view>
-						<!-- </view> -->
 					</view>
 				</view>
-				<view id="bcid"></view>
-
-			</view>
+				
+				
 		</view>
 
 	</view>
@@ -204,7 +208,7 @@
 
 		},
 		onLoad: function (options) {
-			this.getContractAddresses();
+
     },
 		 onPullDownRefresh() {
 
@@ -215,15 +219,7 @@
             //         mask: true,
 			// 	});
 			 uni.startPullDownRefresh();
-
         }, 1000);
-
-
-
-        // setTimeout(function () {
-		// 	 uni.hideLoading();
-        //     uni.stopPullDownRefresh();
-		// }, 1000);
 		this.getHomeDate()
 		this.BottomFun()
     },
@@ -241,7 +237,6 @@
 				console.log("触底加载")
 			this.BottomFun()
 			}
-
 		},
 
 
@@ -250,12 +245,10 @@
 			NoDefaultWallet,
 		},
 		methods: {
-			...mapActions(['getContractAddresses']),
+
 
 			BottomFun() {
-				this.page = 1
-				this.page++
-				console.log("page3", this.page)
+
 				if (this.total <= this.addList.length) {
 					// if(this.total==0){
 					// 	uni.showToast({
@@ -269,8 +262,12 @@
 					// });
 					// return
 					// }
+          		return;
 
 				}
+				this.page = 1
+				this.page++
+				console.log("page3", this.page)
 				getAddressList({
 					"chainId": 103,
 					"accountAddress": this.defaultWallet.address,
@@ -306,44 +303,26 @@
 					this.homeList = res;
 					this.data = res.data.address
 					this.tkmList = res.data.taskChains
-
 					let len = res.data.taskChains.length
 					let numArr = []
 					// let zong = 0
 					// console.log("00000000000000",len)
 					for (let i = 0; i < len; i++) {
 						let num = Number(res.data.taskChains[i].currencyAmount)
-
 						numArr.push(num)
-						console.log("iii", i, num)
-						console.log("11iii",i, numArr)
-
-						// console.log("numFun",numFun)
-						// sum = Number(numArr.reduce(numFun))
-						// console.log("总数",sum);
-						// sum += res.data.taskChains[i].currencyAmount
-						// console.log("13333333333", typeof(num),num)
-						// let sum = 0
-						// sum +=Number(num)
-						// this.sum = Number(num) + Number(this.sum)
-						// this.sum += Number(num)
-
-					// console.log("000sum", this.sum)
+						// console.log("iii", i, num)
+						// console.log("11iii",i, numArr)
 					}
-					console.log("数组",numArr)
+					// console.log("数组",numArr)
 					 this.zong = numArr.reduce(function(accumulator, currentValue, currentIndex, array){
 							  return  accumulator + currentValue;
-
 						});
-						console.log("总数",this.zong)
-
+						// console.log("总数",this.zong)
 					// this.sum = Number(num) + Number(this.sum)
-
-					console.log("每个数", typeof(this.sum),this.sum)
-
-					console.log("111sum", this.sum)
-					console.log("首页banner数据", res)
-					console.log("首页TKM数据", res.data.taskChains)
+					// console.log("每个数", typeof(this.sum),this.sum)
+					// console.log("111sum", this.sum)
+					// console.log("首页banner数据", res)
+					// console.log("首页TKM数据", res.data.taskChains)
 				}).catch(() => {
 					uni.hideLoading()
 				});
@@ -399,10 +378,13 @@
 </script>
 
 <style lang="scss" scoped>
+	*{
+		box-sizing: border-box;
+	}
 	.home-container {
 		min-height: 1624rpx;
 		overflow-y: auto;
-		background-color: #F5F6F8;
+		background-color: #FBFBFB;
 		display: flex;
 		font-family: PingFang SC;
 		flex-direction: column;
@@ -410,7 +392,7 @@
 		.home-cont {
 			min-height: 1624rpx;
 			overflow-y: auto;
-			background-color: #F5F6F8;
+			background-color: #FBFBFB;
 			display: flex;
 			font-family: PingFang SC;
 			flex-direction: column;
@@ -418,27 +400,41 @@
 
 		//头部
 		.h_top {
-			width: 96%;
-			margin: 0 auto;
+			width: 704rpx;
+			margin:0 22rpx;
 			height: 74rpx;
 			margin-top: 36rpx;
 			margin-bottom: 46rpx;
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
+			.top_right {
+				width: 36rpx;
+				height: 36rpx;
+				margin-right: 11rpx;
+				display: flex;
+				justify-content: flex-end;
+				align-items: center;
+				background-color: #FFFFFF;
 
+				image {
+					width: 35rpx;
+					height: 35rpx;
+				}
+			}
 			.top_left {
+				margin-left: 22rpx;
 				width: 266rpx;
 				height: 74rpx;
 				display: flex;
 				justify-content: center;
 				align-items: center;
 				background-color: #FFFFFF;
-				border-radius: 40rpx;
-				// box-shadow: 2rpx 0 20rpx #dddddd;
+				border-radius: 37rpx;
+				box-shadow: 0px 3rpx 10rpx 0px rgba(185, 196, 231, 0.3);
 				.top_left_top{
-					width:92%;
-					margin: 0 auto;
+					width:100%;
+					margin: 0 39rpx;
 					display: flex;
 					justify-content: space-around;
 					align-items: center;
@@ -455,14 +451,20 @@
 					}
 
 					.left_text {
-						width: 70%;
+						width: 144rpx;
 						display: flex;
-						justify-content:flex-start;
+						justify-content: flex-start;
 						align-items: center;
 
 						text {
-							width: 100%;
-							margin-left: -12rpx;
+							
+							
+							// height: 20rpx;
+							// line-height: 20rpx;
+							// margin-left: -12rpx;
+							// display: flex;
+							
+							padding-left: 21rpx;
 							// text-align: left;
 							white-space:nowrap;
 							overflow:hidden;
@@ -474,26 +476,14 @@
 
 			}
 
-			.top_right {
-				width: 36rpx;
-				height: 36rpx;
-				display: flex;
-				justify-content: flex-end;
-				align-items: center;
-				background-color: #FFFFFF;
-
-				image {
-					width: 35rpx;
-					height: 35rpx;
-				}
-			}
+			
 		}
 
 		//总资产模块
 		.banner {
-			width: 98%;
+			width: 704rpx;
 			height: 363rpx;
-			margin: 16rpx auto;
+			margin: 0 auto;
 			border-radius: 28rpx;
 			background-image: url(../../static/image/home/home_banner.png);
 			background-repeat: no-repeat;
@@ -501,68 +491,92 @@
 			background-size: cover;
 			color: #FFFFFF;
 
-			.banner-cont {
-				width: 100%;
-				height: 100%;
-
+			// .banner-cont {
+			// 	width: 704rpx;
+			// height: 363rpx;
+			// margin: 0 auto;
 				.ban_top {
-					width: 88%;
+					// width:100%;
+					padding-left: 60rpx;
+					line-height: 31rpx;
 					font-size: 32rpx;
-					margin: 30rpx auto;
+					// margin: 0 60rpx;
+					margin-top: 66rpx;
+					margin-bottom: 60rpx;
 				}
 
 				.ban_mid {
-					width: 88%;
+					padding-left: 60rpx;
 					font-size: 60rpx;
+					line-height: 45rpx;
 					// color: #000000;
-					margin: 44rpx auto;
+					margin: 0 auto;
+					// margin-bottom: 63rpx;
 				}
 
 				.ban_bottom {
-					width: 88%;
-					margin: 30rpx auto;
+					padding-left: 60rpx;
+					// margin: 0 auto;
+					margin-top: 63rpx;
+					line-height: 36rpx;
+					// margin-bottom: 73rpx;
 					display: flex;
-					justify-content: space-between;
+					// justify-content: space-between;
+					align-items: center;
 
 					view {
-						width: 126rpx;
-						height: 46rpx;
-						text-align: center;
-						line-height: 46rpx;
-						border-radius: 40rpx;
+						width: 95rpx;
+						height: 36rpx;
+						font-size: 22rpx;
+						display: flex;
+					justify-content: center;
+					align-items: center;
+						// text-align: center;
+
+						line-height: 21rpx;
+						border-radius: 18rpx;
+						margin-left: 40rpx;
 						border: 1px solid #ffffff;
-						background-color: rgba(243, 243, 243, 0.2)
+						background: rgba(192, 223, 255, 0.2);
 					}
 
 					.ban_bottom_cont {
 						// width: 90%;
+						width: 451rpx;
+						font-size: 24rpx;
 						overflow: hidden;
 						white-space: nowrap; //取消自动换行
 						text-overflow: ellipsis;
 
 					}
 				}
-			}
+			// }
 
 		}
 
 		// 收款，转账
 		.banner_bottom {
-			width: 94%;
-			margin: 0rpx auto;
-			margin-top: 34rpx;
+			width: 704rpx;
+			margin: 0rpx 22rpx;
+			// padding: 0rpx 22rpx;
+			margin-top: 33rpx;
+			margin-bottom:55rpx ;
+			font-size: 30rpx;
 			height: 100rpx;
 			display: flex;
-			color: #808080;
-			justify-content: space-between;
+			color: #333333;		
+			font-weight: 500;
+			// justify-content: space-between;
 
 			.sk {
 				width: 320rpx;
 				height: 100rpx;
+				margin-left: 10rpx;
+				margin-right: 46rpx;
 				background-color: #FFFFFF;
-				border-radius: 12rpx;
+				border-radius: 10rpx;
 				box-sizing: border-box;
-				// box-shadow: 2rpx 0 20rpx #dddddd;
+				box-shadow: 0px 3rpx 10rpx 0px rgba(185, 196, 231, 0.3);
 				display: flex;
 				justify-content: center;
 				align-items: center;
@@ -570,17 +584,18 @@
 				image {
 					width: 50rpx;
 					height: 37rpx;
-					margin-right: 24rpx;
+					margin-right: 33rpx;
 				}
 			}
 
 			.zj {
 				width: 320rpx;
 				height: 100rpx;
+				margin-right: 8rpx;
 				background-color: #FFFFFF;
-				border-radius: 12rpx;
+				border-radius: 10rpx;
 				box-sizing: content-box;
-				// box-shadow: 2rpx 0 20rpx #dddddd;
+				box-shadow: 0px 3rpx 10rpx 0px rgba(185, 196, 231, 0.3);
 				display: flex;
 				justify-content: center;
 				align-items: center;
@@ -595,47 +610,66 @@
 		}
 
 		// 资产列表
-		.zclb {
-			width: 94%;
-			margin: 0 auto;
-			overflow: auto;
-			margin-top: 56rpx;
-			margin-bottom: 106rpx;
-			display: felx;
-			justify-content: flex-start;
-			align-items: center;
-
+		.zclbTop{
+			width: 686rpx;
+			margin: 0rpx 32rpx;
+			margin-bottom: 35rpx;
+			line-height: 35rpx;
 			.zclb_topTxt {
-				font-size: 36rpx;
-				font-weight: 700;
+				font-size: 36rpx; 
+				font-weight: bold;;
+				// margin-bottom: 35rpx;
 				color: #555555;
 			}
 
 			.zclb_topImg {
 				width: 20rpx;
 				height: 23rpx;
-				margin-left: 20rpx;
+				margin-left: 26rpx;
+				// margin: 6rpx 0rpx 6rpx 26rpx;
 			}
 
+		}
+		.zclb {
+			width: 686rpx;
+			margin: 0rpx 32rpx;
+			overflow: auto;
+			background-color: #FFFFFF;
+			// margin-top: 56rpx;
+			margin-bottom: 20rpx;
+			// display: flex;
+			// justify-content: flex-start;
+			// align-items: center;
+			// box-shadow: 0px 3rpx 10rpx 0rpx rgba(185, 196, 231, 0.3);
+			border-radius: 10rpx;
+			box-shadow: 0px 3rpx 10rpx 0px rgba(185, 196, 231, 0.3);
+			
 			.zclb_box1 {
 				width: 100%;
-				height: 402rpx;
-				margin: 18rpx auto;
+				min-height: 402rpx;
+				// margin: 0 auto;
+				// margin-top: 35rpx;
 				background-color: #FFFFFF;
-				border-radius: 4rpx;
+				border-radius: 10rpx;
 				box-sizing: content-box;
-				// box-shadow: 2rpx 0 20rpx #dddddd;
+				margin-bottom: 20rpx;
+				// box-shadow: 0px 3rpx 10rpx 0rpx rgba(185, 196, 231, 0.3);
 			}
 
 			.tkm {
-				width: 92%;
-				margin: 16rpx auto;
-				padding: 36rpx 0rpx 20rpx 0rpx;
-				height: 70rpx;
+				// width: 100%;
+				margin: 0 39rpx 48rpx 45rpx;
+				// padding-top: 47rpx;
+				background-color: #FFFFFF;
+				// margin-bottom: 37rpx;
+				padding: 47rpx 0rpx 37rpx 0rpx;
+				// height: 70rpx;
+				line-height: 50rpx;
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
 				border-bottom: 1rpx solid #DEDEDE;
+				
 
 				.tkm_left {
 					display: flex;
@@ -644,6 +678,8 @@
 
 					text {
 						font-size: 34rpx;
+						color: #333333;	
+						font-weight: bold;
 						font-family: PingFang SC;
 						// font-weight: 700;
 					}
@@ -673,13 +709,19 @@
 			}
 
 			.zcl1 {
-				width: 92%;
-				margin: 8rpx auto;
+				width: 100%;
+				// min-height: 266rpx;
+				margin-bottom: 20rpx;
+				// margin: 0 45rpx 0 39rpx;
+				// padding-bottom: 33rpx;
 				height: 70rpx;
+				
 
 				.zcl1_cont {
-					width: 100%;
-					height: 100%;
+					// width: 100%;
+					// height: 100%;
+					line-height: 31rpx;
+					padding: 0 46rpx 50rpx 42rpx;
 					display: flex;
 					justify-content: space-between;
 					align-items: center;
@@ -692,6 +734,7 @@
 
 					text {
 						font-size: 30rpx;
+						font-weight: 400;
 						color: #666666;
 
 					}
@@ -706,78 +749,74 @@
 				.zcl1_right {
 					.l_r_t1 {
 						font-size: 30rpx;
-						font-weight: 500;
+						font-weight: 400;
 						color: #666666;
 					}
 				}
 			}
 
-			.zclb_box2 {
-				width: 100%;
+			
+
+		}
+		.zclb_box2 {
+				// width: 100%;
+				width: 686rpx;
+				margin: 0rpx 32rpx;
 				height: 140rpx;
-				margin: 20rpx auto;
+				// margin: 20rpx auto;
+				// margin-bottom: 20rpx;
 				background-color: #FFFFFF;
-				border-radius: 4rpx;
 				box-sizing: content-box;
 				display: flex;
 				justify-content: center;
 				align-items: center;
-				// box-shadow: 2rpx 0 20rpx #dddddd;
+				border-radius: 10rpx;
+				box-shadow: 0px 3rpx 10rpx 0px rgba(185, 196, 231, 0.3);
 
 				.rje {
-					width: 92%;
-					height: 140rpx;
-					// height: 70px;
-					margin: 0rpx auto;
-					// padding-bottom: 14px;
-					// padding-top:12px ;
-					// height: 40px;
-					background-color: #FFFFFF;
-					border-radius: 4rpx;
-					box-sizing: content-box;
-					// box-shadow: -1px 0 1px #dddddd, 0 -1px 1px #dddddd, 0 3px 10px #dddddd, 3px 0 10px #dddddd;
+					width: 100%;
+					// padding: 47rpx 45rpx 44rpx 41rpx;
+					margin: 46rpx 45rpx 44rpx 41rpx;
+					line-height: 50rpx;
 					display: flex;
 					justify-content: space-between;
 					align-items: center;
-					// border-bottom: 1px solid #DEDEDE;
-
+					background-color: #FFFFFF;
+					border-radius: 10rpx;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
 					.rje_left {
 						display: flex;
 						justify-content: space-between;
 						align-items: center;
-
 						text {
 							font-size: 34rpx;
-							font-family: PingFang SC;
+						color: #333333;	
+						font-weight: bold;
+						font-family: PingFang SC;
 							// font-weight: 700;
 						}
-
 						image {
 							width: 50rpx;
 							height: 50rpx;
 							margin-right: 20rpx;
 						}
 					}
-
 					.rje_right {
-
 						.r_r_t1 {
 							font-size: 30rpx;
 							font-weight: 500;
 							color: #333333;
 							text-align: end;
 						}
-
 						.r_r_t2 {
 							font-size: 20rpx;
 							color: #999999;
 							text-align: end;
 						}
 					}
-
 				}
 			}
-
-		}
 	}
 </style>

@@ -7,14 +7,13 @@
 				"navigationBarTitleText": "uni-app",
 				"app-plus": {
 					"titleView": false,
-					"pullToRefresh":{ 
-                        "color":"#000" 
+					"pullToRefresh":{
+                        "color":"#000"
                     }
 				},
 				"enablePullDownRefresh": true
 			}
 		},
-
 		{
 			"path": "pages/transaction/receiveMoney",
 			"style": {
@@ -115,6 +114,24 @@
 			}
 		},
 		{
+			"path": "pages/decentralizedTransactions/myTokenPools",
+			"style": {
+				"navigationBarTitleText": "uni-app",
+				"app-plus": {
+					"titleView": false
+				}
+			}
+		},
+		{
+			"path": "pages/decentralizedTransactions/exitTokenPool",
+			"style": {
+				"navigationBarTitleText": "uni-app",
+				"app-plus": {
+					"titleView": false
+				}
+			}
+		},
+		{
 			"path": "pages/wallet/importWallet",
 			"style": {
 				"navigationBarTitleText": "uni-app",
@@ -178,7 +195,7 @@
 			}
 		},
 		{
-			
+
 			"path": "pages/browser/index",
 			"style": {
 				"navigationBarTitleText": "uni-app",
@@ -188,7 +205,7 @@
 			}
 		},
 		{
-			
+
 			"path": "pages/privateKey/exportPrivateKey",
 			"style": {
 				"navigationBarTitleText": "uni-app",
@@ -225,11 +242,13 @@
 
 	},
 	"tabBar": {
-		"fontSize":"14",
-		"color": "#C0C4CC",
-		"selectedColor": "#3379F1",
-		"borderStyle": "black",
-		"backgroundColor": "#ffffff",
+		"fontSize":"10",
+		"color": "#999",
+		"selectedColor": "#243FFF",
+		"borderStyle": "white",
+		"backgroundColor": "#fff",
+		"iconWidth": "22",
+		"spacing": "5.5",
 		"list": [
 			{
 				"pagePath": "pages/home/index",

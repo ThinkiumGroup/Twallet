@@ -1,5 +1,8 @@
 <template>
-    <view class="custom-bar-container" :style="{paddingTop: customBar +5 + 'px'}"/>
+    <view 
+			class="custom-bar-container" 
+			:style="{paddingTop: customBar + 5 + 'px', ...styles}"
+		/>
 </template>
 
 <script>
@@ -18,6 +21,10 @@
                 type: Boolean,
                 default: false
             },
+						styles: {
+							type: Object,
+							default: () => ({})
+						}
 
         },
         data() {

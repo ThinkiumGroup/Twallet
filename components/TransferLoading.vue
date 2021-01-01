@@ -1,5 +1,5 @@
 <template>
-    <view class="container" v-if="isShow">
+    <view class="_container" v-if="isShow">
       <view class="_modal">
           <image src="/static/image/wallet/iconTransgif.gif" class="loading-image"/>
           <view class="explain">{{text || text2}}</view>
@@ -36,7 +36,7 @@
   *{
     box-sizing: border-box;
   }
-  .container{
+  ._container{
     position: fixed;
     top: 0;
     left: 0;

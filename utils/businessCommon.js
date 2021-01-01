@@ -294,22 +294,38 @@ export const aboutWallet = {
 	  let regularNumber = new BigNumber(number).div("1e+18").toString(10);
 
     if (type === 'origin') {
-      return regularNumber;
+
     }
     if (type === 'auto') {
-      return parseFloat((regularNumber - 0).toFixed(n))
+      regularNumber =  parseFloat((regularNumber - 0).toFixed(n))
     }
 
-    regularNumber *= Math.pow(10, n);
+
     if (type === 'ceil') {
+      regularNumber *= Math.pow(10, n);
       regularNumber = Math.ceil(regularNumber);
-      return parseFloat(regularNumber / Math.pow(10, n))
+      regularNumber =  parseFloat(regularNumber / Math.pow(10, n))
     }
     if (type === 'floor') {
+      regularNumber *= Math.pow(10, n);
       regularNumber = Math.floor(regularNumber);
-      return parseFloat(regularNumber / Math.pow(10, n))
+      regularNumber =  parseFloat(regularNumber / Math.pow(10, n))
     }
-  }
+
+    if(regularNumber - 999999999 > 0){
+      regularNumber = regularNumber.toExponential(n);
+    }
+
+    console.log('---regularNumber', regularNumber);
+    return regularNumber;
+  },
+	/**
+	 * 校验地址
+	 * @param address
+	 */
+	checkAddress(address) {
+		return web3.Iban.isValid(address)
+	}
 };
 
 /**

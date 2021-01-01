@@ -66,7 +66,7 @@
 
 				<view class="transfer-balance">
 					{{$lan('余额：')}}
-					{{transferType == 2 ? this.balance : getToken.amount}}
+					{{this.balance}}
 					{{transferType == 2 ? 'TKM' : getToken.text}}
 				</view>
 				<view class="gas-remark">{{$lan('预估手续费用GAS：')}}{{gasPrice}} TKM
@@ -197,7 +197,7 @@
 				saveToAddress: '0x0000000000000000000000000000000000030000',
 				returnToAddress: '0x0000000000000000000000000000000000040000',
 				expireHeight: '', //块高
-				privateKey: '' //私钥
+				privateKey: '' ,//私钥
 			}
 		},
 
@@ -222,8 +222,9 @@
 				if(this.tokenType == 0) {
 					 this.getAccount()
 				}
-
-				return  this.list.length && this.list.find(v => v.value == this.tokenType)
+				const item =  this.list.length && this.list.find(v => v.value == this.tokenType)
+				this.balance = item.amount
+				return item
 			}
 		},
 		onLoad({
@@ -326,11 +327,46 @@
 				if (this.isEmpty) {
 					return
 				}
-				//余额不足
-				if ((this.amount * 1 + this.gasPrice) > this.balance) {
-					this.$showToast(this.$lan('余额不足'))
+				const reg = /^\d+(\.\d+)?$/;
+				if(!reg.test(this.amount)){
+					this.$showToast('请输入正确格式金额')
+					return;
+				}
+				if(this.amount.indexOf('.')!==-1 && this.amount.split('.')[1].length > 6){
+					this.$showToast('输入金额小数点后不得超过六位')
+					return;
+				}
+				if(Number(this.amount) <= 0){
+					this.$showToast('转账金额不得小于零，请输入正确的金额')
+					return;
+				}
+
+				//type为xto时查询商业链的tkm余额是否大于手续费
+				if(this.tokenType) {
+					const { balance } = await walletApi.getAccount('103', this.defaultWallet.address)
+					if (this.gasPrice > balance) {
+						this.$showToast(this.$lan('商业链余额不足手续费用'))
+						return
+					}
+					if ((this.amount * 1) > this.balance) {
+						this.$showToast(this.$lan('余额不足'))
+						return
+					}
+				} else {
+					if ((this.amount * 1 + this.gasPrice) > this.balance) {
+						this.$showToast(this.$lan('余额不足'))
+						return
+					}
+				}
+
+				console.log(aboutWallet.checkAddress(this.toAddress))
+
+				//地址校验
+				if(this.transferType == 1 && !aboutWallet.checkAddress(this.toAddress)) {
+					this.$showToast(this.$lan('输入地址不正确'))
 					return
 				}
+
 				this.$refs.passwordPopup.showPasswordPopup()
 			},
 
@@ -382,6 +418,7 @@
 					input: '',
 					privateKey: this.privateKey,
 				}
+
 				uni.showLoading({
 					title:this.$lan('转账中...')
 				});
@@ -409,12 +446,7 @@
 					title: '转账中...'
 				});
 				//获取103链nonce
-				const { nonce, balance } = await walletApi.getAccount('103', this.defaultWallet.address)
-				//余额不足
-				if (this.gasPrice > balance) {
-					this.$showToast(this.$lan('余额不足'))
-					return
-				}
+				const { nonce } = await walletApi.getAccount('103', this.defaultWallet.address)
 				uni.setStorageSync('amounts', this.getToken.amount)
 				const amount = aboutWallet.toBigNumber(this.amount)
 				const address = aboutWallet.toAddress(this.toAddress)
@@ -428,9 +460,10 @@
 					nonce,
 					value: '0',
 					input: '0x' + encoded.toString("hex"),
-					extra: new Buffer.from(JSON.stringify({gas:6000000})).toString('hex'),
+					extra: new Buffer.from(JSON.stringify({ gas:6000000 })).toString('hex'),
 					privateKey: this.privateKey,
 				};
+				walletApi.setVal('0')
 				const { TXhash } = await walletApi.sendTx(obj)
 				const { status } = await this.asyncTask(() => walletApi.getTransactionByHash('103', TXhash))
 			 //账户xto余额查询会有延时
@@ -485,6 +518,7 @@
 					input,
 					privateKey: this.privateKey,
 				}
+
 				//发起交易以及查询结果
 				const withdrawlHash = await walletApi.sendTx(withdrawlObj)
 				const withdrawlReturn = await this.asyncTask(() => walletApi.getTransactionByHash(this.chainId, withdrawlHash.TXhash))
@@ -544,6 +578,7 @@
 					input: proofResult.input,
 					privateKey: this.privateKey,
 				}
+
 				console.log(saveObj, 9999999998)
 				const saveHash = await walletApi.sendTx(saveObj)
 				const saveReturn = await this.asyncTask(() => walletApi.getTransactionByHash(this.toChainId, saveHash.TXhash))
@@ -588,6 +623,7 @@
 						input: proofCancel.input,
 						privateKey: this.privateKey,
 					}
+
 					const cancelHash = await walletApi.sendTx(cancelObj)
 					const cancelReturn = await this.asyncTask(() => walletApi.getTransactionByHash(this.chainId, cancelHash.TXhash))
 					if (cancelReturn.status == 1) {

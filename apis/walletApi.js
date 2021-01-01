@@ -96,6 +96,7 @@ export default {
       extra: ''
     };
 		console.log(obj, 99999999)
+		this.setVal(null)
     //签名参数
 		privateKey && web3.thk.signTransaction(obj, privateKey);
     return web3.thk.SendTx(obj)

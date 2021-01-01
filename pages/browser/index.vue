@@ -1,10 +1,13 @@
 <template>
   <view class="app">
-    <CustomBar class="topBar"/>
+    <CustomBar class="topBar" :styles="{background: '#fff'}"/>
     <NoDefaultWallet v-if="!hasDefaultWallet"></NoDefaultWallet>
-
-    <web-view v-else  :webview-styles="webviewStyles" @message="handleMessage"
-		 :src="src"></web-view>
+    <web-view 
+			v-else  
+			:webview-styles="webviewStyles" 
+			:src="src"
+			@message="handleMessage"
+		 ></web-view>
      
   </view>
 </template>
@@ -15,7 +18,7 @@ import { mapState, mapGetters } from "vuex";
 export default {
   data() {
     return {
-      src: "https://browser.thinkium.io/phone",
+      src: "https://browser.thinkium.io/phone?public",
        webviewStyles: {
                      progress: false //必须要设置为false
                     // progress: {
@@ -24,55 +27,66 @@ export default {
                 }
     };
   },
-  	onShow() {
+  onShow() {
       
       
       
-	// 		 var pages = getCurrentPages();
-  // var page = pages[pages.length - 1];
-  // console.log("page",page)
-  // console.log("pages",pages)
-  
-  // var currentWebview=page.$getAppWebview();
-  // console.log("currentWebview",currentWebview)
-	// setTimeout(function(){
-  //   var web_view= currentWebview.children();
-  //   console.log("111",web_view)
-  //   var w=plus.nativeUI.showWaiting();
-  //   console.log("222",w)
-	// 	web_view[0].addEventListener("loading",function(){
-	// 		w.show();
-	// 	},false);
+		// 		 var pages = getCurrentPages();
+		// var page = pages[pages.length - 1];
+		// console.log("page",page)
+		// console.log("pages",pages)
 		
-	// 	web_view[0].addEventListener("loaded",function(){
-	// 		w.close();
-	// 		w=null;
-	// 	},false);
-	// },600)
+		// var currentWebview=page.$getAppWebview();
+		// console.log("currentWebview",currentWebview)
+		// setTimeout(function(){
+		//   var web_view= currentWebview.children();
+		//   console.log("111",web_view)
+		//   var w=plus.nativeUI.showWaiting();
+		//   console.log("222",w)
+		// 	web_view[0].addEventListener("loading",function(){
+		// 		w.show();
+		// 	},false);
+			
+		// 	web_view[0].addEventListener("loaded",function(){
+		// 		w.close();
+		// 		w=null;
+		// 	},false);
+		// },600)
 			
     },
     onReady(){
       console.log("this",this)
     },
-  onload(option) {
-    this.src = option.src;
-  //   var pages = getCurrentPages();
-	// var page = pages[pages.length - 1];
-	// var currentWebview=page.$getAppWebview();
-	// setTimeout(function(){
-  //   var web_view= currentWebview.children();
-  //   console.log("111",web_view)
-  //   var w=plus.nativeUI.showWaiting();
-  //   console.log("222",w)
-	// 	web_view[0].addEventListener("loading",function(){
-	// 		w.show();
-	// 	},false);
+		onLoad(option) {
+		if(option.src) this.src = option.src;
+   
 		
-	// 	web_view[0].addEventListener("loaded",function(){
-	// 		w.close();
-	// 		w=null;
-	// 	},false);
-	// },600)
+		// var pages = getCurrentPages();
+		// var page = pages[pages.length - 1];
+		// var currentWebview=page.$getAppWebview();
+		// setTimeout(function(){
+		//   var web_view= currentWebview.children();
+		//   console.log("111",web_view)
+		//   var w=plus.nativeUI.showWaiting();
+		//   console.log("222",w)
+		// 	web_view[0].addEventListener("loading",function(){
+		// 		w.show();
+		// 	},false);
+			
+		// 	web_view[0].addEventListener("loaded",function(){
+		// 		w.close();
+		// 		w=null;
+		// 	},false);
+		// },600)
+		//设置电池栏高度
+		const currentWebview = this.$mp.page.$getAppWebview(); //获取当前web-view
+		setTimeout(function() {
+		const wv = currentWebview.children()[0];
+		wv.setStyle({ //设置web-view距离顶部的距离以及自己的高度，单位为px
+			top: uni.getSystemInfoSync().statusBarHeight,
+		})
+		}, 1000);
+	
     
   },
   //  onShow(){

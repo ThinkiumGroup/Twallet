@@ -59,6 +59,7 @@ const store = new Vuex.Store({
 	},
 	actions: {
 		async getContractAddresses({ commit, state, dispatch }){
+			console.log('去获取ContractAddresses');
 			let address = state.defaultWallet.address && state.defaultWallet.address.toLowerCase();
 			if(!address){
 				return;

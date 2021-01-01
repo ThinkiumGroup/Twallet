@@ -1,18 +1,21 @@
 <template>
-	<view class="nav-bar-container" :style="{...containerStyle, paddingTop: customBar + 27 + 'rpx'}">
-		  <view v-if="isgoBack" @click="goBack" class="nav-bar-placeholder-left">
-				<icon-font src="return" width="17rpx" height="32rpx"/>
-			</view>
-			<view v-if="$slots.leftBtn" class="nav-bar-placeholder-left" >
-				<slot  name="leftBtn"/>
-			</view>
-			<view  v-if="$slots.title">
+	<view class="nav-bar-container" :style="{...containerStyle, paddingTop: customBar  + 'px'}">
+		  <view class="nav-bar-content">
+				<view v-if="isgoBack" @click="goBack" class="nav-bar-placeholder-left">
+					<icon-font src="return" width="17rpx" height="32rpx"/>
+				</view>
+				<view v-if="$slots.leftBtn" class="nav-bar-placeholder-left" >
+					<slot  name="leftBtn"/>
+				</view>
+				<view  v-if="$slots.title">
 					<slot name="title"></slot>
+				</view>
+				<text v-else class="nav-bar-title">{{title}}</text>
+				<view v-if="$slots.rightBtn" class="nav-bar-placeholder-right" >
+					<slot  name="rightBtn"></slot>
+				</view>
 			</view>
-			<text v-else class="nav-bar-title">{{title}}</text>
-			<view v-if="$slots.rightBtn" class="nav-bar-placeholder-right" >
-				<slot  name="rightBtn"></slot>
-			</view>
+
 	</view>
 </template>
 
@@ -37,7 +40,7 @@
 					return {}
 				}
 			}
-			
+
 		},
 		data() {
 			return {
@@ -61,15 +64,19 @@
 <style lang="scss" scoped>
 	.nav-bar-container {
 		width: 100%;
-		display: flex;
-		font-size: 36rpx;
-		align-items: center;
-		justify-content: center;
-		padding: 27rpx 32rpx;
-		background: #fff;
 		box-sizing: border-box;
 		box-shadow: 0rpx 4rpx 10rpx 0rpx #E8EBEF;
 		position: relative;
+		background: #fff;
+		.nav-bar-content{
+			display: flex;
+			font-size: 36rpx;
+			align-items: center;
+			justify-content: center;
+			padding: 0 32rpx;
+			position: relative;
+			height: 88rpx;
+		}
 		.nav-bar-placeholder-left {
 			position: absolute;
 			left: 32rpx;

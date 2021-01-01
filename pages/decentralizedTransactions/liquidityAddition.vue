@@ -1,96 +1,118 @@
 <template>
-    <view class="app">
-        <nav-bar :title="this.$lan('提供兑换池')"/>
-        <view class="_block" style="margin-top: 21rpx;">
-            <template>
-                <view class="trade-type-description" v-if="transferType === 'stable'">
-                    {{$lan('采用市场定价策略时，提供兑换池仅需提供TKM。')}}
-                </view>
-                <view class="trade-type-description" v-else-if="pairStatus === 2">
-                    {{$lan('恭喜您成为该兑换池第一个通证提供者，您将设置初始兑换比例，一旦您对比例满意，请单击按钮进行添加。')}}
-                </view>
-            </template>
-            <view class="transaction-select">
-                <view class="transaction-direction transaction-from">
-                    <view class="nav-row-between-center" style="margin-bottom: 24rpx;">
-                        <view class="transaction-direction-text">{{$lan('添加')}}</view>
-                        <view
-                            class="tips-for-not-enough"
-                            v-show="checkIfBalanceIsExceeded(dataA, 'A')"
-                            @click="toTransfer">
-                            {{$lan('您的dataBTokenName不足,请先跨链转入').replace('dataBTokenName', dataA.tokenName)}}
-                        </view>
+    <view class="container">
+        <nav-bar :title="this.$lan('提供兑换池')">
+            <view slot="rightBtn" class="header-right" @click="jumpPage('/pages/decentralizedTransactions/myTokenPools')">
+                {{$lan('我的通证池')}}
+            </view>
+        </nav-bar>
+        <view class="_block_2">
+            <view class="_block_2_content">
+                <view class="transaction-select">
+                    <view class="token-exchange">
+                        <icon-font src="wallet-p-add"  width="77rpx" height="77rpx"/>
                     </view>
-                    <view class="input-area">
-                        <input
-                            v-model="dataA.amountsInput"
-                            @input="handleAmountInput1('A')"
-                            :placeholder="dataA.type && !disabledEdit('A') ? $lan('请输入数量') : ''"
-                            type="number"
-                            class="amounts-input"
-                            :disabled="disabledEdit('A')"
-                            :class="{'amounts-input-disabled': disabledEdit('A')}"/>
-                        <view class="nav-row-start-center data-type" @click="showTokenSelector('A')">
-                            <view v-if="dataA.type" class="nav-row-start-center">
+
+                    <view class="transaction-direction transaction-from nav-row-start-center bottom_border">
+                        <view class="nav-row-center-center token-type" @click="showTokenSelector('A')">
+                            <view v-if="dataA.type" class="nav-column-center-center">
                                 <image class="TZ-image" :src="dataA.iconUrl" v-show="dataA.iconUrl"/>
                                 <text class="TZ-name">{{dataA.tokenName}}</text>
                             </view>
-                            <text v-else class="TZ-name">{{$lan('选择通证')}}</text>
-                            <icon-font icon="thk-s-right-arrow" style="margin-left: 13rpx"/>
+                            <text v-else class="TZ-name">{{$lan('请选择通证')}}</text>
+                            <icon-font src="wallet-p-arrow-down" width="21rpx" height="12rpx" style="margin-left: 35rpx"/>
+                        </view>
+                        <view class="input-area" :class="{'input-disabled': disabledEdit('A')}">
+                            <view class="transaction-direction-text">{{$lan('添加')}}</view>
+                            <view
+                                class="tips-for-not-enough"
+                                v-if="checkIfBalanceIsExceeded(dataA, 'A')"
+                                @click="toTransfer">
+                                <view v-if="dataA.type=== 'main'">
+                                    {{$lan('您的dataATokenName不足,请先').replace('dataATokenName',dataA.tokenName)}}
+                                    <text class="__btn">
+                                        {{$lan('跨链转入')}}
+                                    </text>
+                                </view>
+                                <view v-else>
+                                    {{$lan('您的dataATokenName不足').replace('dataATokenName',dataA.tokenName)}}
+                                </view>
+                            </view>
+                            <input
+                                v-model="dataA.amountsInput"
+                                @input="handleAmountInput1('A')"
+                                :placeholder="disabledEdit('A') ? '' : $lan('输入数量')"
+                                type="number"
+                                class="amounts-input"
+                                :disabled="disabledEdit('A')"/>
+                        </view>
+                    </view>
+                    <view class="transaction-direction transaction-to nav-row-start-center ">
+                        <view class="nav-row-center-center token-type" @click="showTokenSelector('B')">
+                            <view v-if="dataB.type" class="nav-column-center-center">
+                                <image class="TZ-image" :src="dataB.iconUrl" v-show="dataB.iconUrl"/>
+                                <text class="TZ-name">{{dataB.tokenName}}</text>
+                            </view>
+                            <text v-else class="TZ-name">{{$lan('请选择通证')}}</text>
+                            <icon-font src="wallet-p-arrow-down" width="21rpx" height="12rpx" style="margin-left: 35rpx"/>
+                        </view>
+                        <view class="input-area" :class="{'input-disabled': disabledEdit('B')}">
+                            <view class="transaction-direction-text">{{$lan('添加')}}</view>
+                            <view
+                                class="tips-for-not-enough"
+                                v-if="checkIfBalanceIsExceeded(dataB, 'B')"
+                                @click="toTransfer">
+                                <view v-if="dataB.type=== 'main'">
+                                    {{$lan('您的dataATokenName不足,请先').replace('dataATokenName',dataB.tokenName)}}
+                                    <text class="__btn">
+                                        {{$lan('跨链转入')}}
+                                    </text>
+                                </view>
+                                <view v-else>
+                                    {{$lan('您的dataATokenName不足').replace('dataATokenName',dataB.tokenName)}}
+                                </view>
+                            </view>
+                            <input
+                                v-model="dataB.amountsInput"
+                                @input="handleAmountInput1('B')"
+                                :placeholder="disabledEdit('B') ? '' : $lan('输入数量')"
+                                type="number"
+                                class="amounts-input"
+                                :disabled="disabledEdit('B')">
                         </view>
                     </view>
                 </view>
-                <view class="transaction-direction transaction-to">
-                    <view class="nav-row-between-center" style="margin-bottom: 24rpx;">
-                        <view class="transaction-direction-text">{{$lan('添加为')}}</view>
-                        <view
-                            class="tips-for-not-enough"
-                            v-show="checkIfBalanceIsExceeded(dataB, 'B')"
-                            @click="toTransfer">
-                            {{$lan('您的dataBTokenName不足,请先跨链转入').replace('dataBTokenName', dataB.tokenName)}}
+                <view class="description top_border" v-if="dataA.contractAddress && dataB.contractAddress">
+                    <view class="description-item" v-if="pairPriceText">
+                        <view class="label">
+                            {{$lan('兑换比例')}}
+                        </view>
+                        <view class="value">
+                            {{pairPriceText}}
                         </view>
                     </view>
-                    <view class="input-area">
-                      <input
-                          v-model="dataB.amountsInput"
-                          @input="handleAmountInput1('B')"
-                          :placeholder="dataB.type && !disabledEdit('B') ? $lan('请输入数量') : ''"
-                          type="number"
-                          class="amounts-input"
-                          :disabled="disabledEdit('B')"
-                          :class="{'amounts-input-disabled': disabledEdit('B')}"/>
-                      <view class="nav-row-start-center data-type" @click="showTokenSelector('B')">
-                        <view v-if="dataB.type" class="nav-row-start-center">
-                          <image class="TZ-image" :src="dataB.iconUrl" v-show="dataB.iconUrl"/>
-                          <text class="TZ-name">{{dataB.tokenName}}</text>
+                    <view class="description-item">
+                        <view class="label">
+                            {{$lan('gas费')}}
                         </view>
-                        <text v-else class="TZ-name">{{$lan('选择通证')}}</text>
-                        <icon-font icon="thk-s-right-arrow" style="margin-left: 13rpx"/>
-                      </view>
+                        <view class="value">
+                            {{gasFeeNeeded}}TKM
+                        </view>
                     </view>
                 </view>
             </view>
-            <view class="description" v-if="pairStatus === 1 && pairPriceText">
-                <view class="description-item">
-                    <view class="label">
-                        {{$lan('当前兑换比例')}}
-                    </view>
-                    <view class="value">
-                        {{pairPriceText}}
-                    </view>
-                </view>
-                <view class="description-item">
-                    <view class="label">
-                        {{$lan('gas费')}}
-                    </view>
-                    <view class="value">
-                        {{gasFeeNeeded}}TKM
-                    </view>
-                </view>
-            </view>
+
         </view>
 
-        <allBtn :text="this.$lan('确定添加')" @click="toAddLiquidity" :containerStyle="{width: '686rpx', height: '84rpx', marginTop: '120rpx'}" :disabled="!addLiquidityValid()"/>
+        <template>
+            <view class="trade-type-description" v-if="transferType === 'stable'">
+                {{$lan('采用市场定价策略时，提供兑换池仅需提供TKM。')}}
+            </view>
+            <view class="trade-type-description" v-else-if="pairStatus === 2">
+                {{$lan('恭喜您成为该兑换池第一个通证提供者，您将设置初始兑换比例，一旦您对比例满意，请单击按钮进行添加。')}}
+            </view>
+        </template>
+
+        <allBtn :text="this.$lan('确定添加')" @click="toAddLiquidity" :containerStyle="{width: '686rpx', height: '90rpx', marginTop: '87rpx'}" :disabled="!addLiquidityValid()"/>
 
         <!-- 通证选择器-->
         <tokenSelector ref="tokenSelector" @select="handleTokenSelect"/>
@@ -144,6 +166,7 @@
                 inputType: '',  // A,B
                 priceBToOneA: 0,  // 1个A对应的B的兑换比例
                 priceAToOneB: 0,  // 1个B对应的A的兑换比例
+                tokenList: [],
                 xtoList: [],
                 otherTokenList: [
                     {   contractAddress: '',
@@ -183,18 +206,46 @@
                     this.transferType = '';
                 }
                 await this.getData();
+
+                //要放在 this.getData 之后
+                let pairDataWaitingToAdd = uni.getStorageSync('pairDataWaitingToAdd') || {};
+                this.selectExchangePairsAuto(pairDataWaitingToAdd.tokenA, pairDataWaitingToAdd.tokenB);
+                uni.setStorageSync('pairDataWaitingToAdd', "")
+            },
+            // 自动选择兑换对,入参为两个Address
+            selectExchangePairsAuto(tokenA, tokenB){
+                const dataA = this.tokenList.find((item) => {
+                    return item.contractAddress === tokenA;
+                });
+
+                const dataB = this.tokenList.find((item) => {
+                    return item.contractAddress === tokenB;
+                });
+
+                if(dataA){
+                    console.log('--dataA', dataA);
+                    this.handleTokenSelect({source: 'A', data: dataA});
+                }
+                if(dataB){
+                    console.log('--dataB', dataB);
+                    this.handleTokenSelect({source: 'B', data: dataB});
+                }
+
             },
             getData(){
                 uni.showLoading({
                     title: '',
                     mask: true,
                 });
-                return Promise.all([this.getTokenList(), this.getAccount()]).then(() => {
+                return Promise.all([this.getTokenData()]).then(() => {
                     uni.hideLoading();
                 });
             },
             getTransferType(dataA, dataB){
                 if(dataA.contractAddress && dataB.contractAddress && dataA.contractAddress !== dataB.contractAddress){
+                    console.log('---tokenList', this.tokenList);
+                    console.log('dataA', dataA);
+                    console.log('dataB', dataB);
                     if((dataA.coinType == 1 && dataB.type === 'main') || (dataB.coinType == 1 && dataA.type === 'main')){
                         return 'stable'   // 结算凭证兑换
                     }else if(dataA.type === 'xto' && dataB.type !== 'xto'){
@@ -288,7 +339,6 @@
             },
             // 查看输入值是否超出余额
             checkIfBalanceIsExceeded(data, type){
-                console.log(data);
                 if(data.amountInput <= 0 || !data.contractAddress){
                     return false
                 }
@@ -317,6 +367,37 @@
             async handleAmountInput(){
                 this.transform()
             },
+            async getTokenData(){
+                const [result, resultB] = await Promise.all([this.getTokenList(), this.getAccount()]);
+
+                let tokenList = result && result.data.data || [];
+
+                this.tokenList = tokenList.filter((item) => {
+                    return item.index >= 0 || item.index == contractIndexEnum.WTKM || item.index == contractIndexEnum.FLASH_SWAP
+                }).map((item) => {
+                    if(item.index > 0){
+                        item.type = 'xto';
+                    }else if (item.index == contractIndexEnum.WTKM) {
+                        item.type = 'main';
+                    }else{
+                        item.type = 'other';
+                    }
+
+                    if( item.index == contractIndexEnum.FLASH_SWAP ){
+                        item.coinType = 1;
+                    }
+                    item.amount = aboutWallet.toRegularNumber(item.amount);
+                    return item;
+                });
+
+                let index = this.tokenList.findIndex((item) => { return item.type === 'main'});
+                if(this.tokenList[index]){
+                    this.tokenList[index].amountBig = resultB.toString();
+                    this.tokenList[index].amount = aboutWallet.toRegularNumber(resultB);
+                }
+
+                console.log('this.tokenList',  this.tokenList);
+            },
             async getTokenList() {
                 let address = this.defaultWallet.address && this.defaultWallet.address.toLowerCase();
                 if(!address){
@@ -330,76 +411,51 @@
                     rows: 10000,
                     xtoName: '',
                 };
-                let result = await decentralizedTransactionsApi.getTokenList(params);
-                let tokenList = result && result.data.data || [];
 
-                this.xtoList = tokenList.filter((item) => {
-                    return item.index > 0;
-                }).map((item) => {
-                    item.type = 'xto';
-                    item.amount = aboutWallet.toRegularNumber(item.amount);
-                    return item;
-                });
-
-                this.otherTokenList = tokenList.filter((item) => {
-                    return item.index == 0 || item.index == contractIndexEnum.WTKM || item.index == contractIndexEnum.FLASH_SWAP;
-                }).map((item) => {
-                    if (item.index == contractIndexEnum.WTKM) {
-                        item.type = 'main';
-                    } else {
-                        item.type = 'other';
-                    }
-
-                    if( item.index == contractIndexEnum.FLASH_SWAP ){
-                        item.coinType = 1;
-                    }
-                    item.amount = aboutWallet.toRegularNumber(item.amount);
-                    return item;
-                });
-
-
-                console.log('xtoList', this.xtoList);
-                console.log('otherTokenList', this.otherTokenList);
-
-
+                return decentralizedTransactionsApi.getTokenList(params);
             },
             showTokenSelector(source){  // 可以传入A B
-                let index = this.otherTokenList.findIndex((item) => { return item.type === 'main'});
-                if(this.otherTokenList[index]){
-                    this.otherTokenList[index].amountBig = this.accountBalance;
-                    this.otherTokenList[index].amount = aboutWallet.toRegularNumber(this.accountBalance);
+
+                let tokenList = _.cloneDeep(this.tokenList);
+                if((source === 'A' && this.dataB.type) || (source === 'B' && this.dataA.type)){
+                    let data0;
+                    if(source === 'A'){
+                        data0 = this.dataB;
+                    }else{
+                        data0 = this.dataA;
+                    }
+
+                    tokenList = tokenList.filter((item) => {
+                        return item.contractAddress !== data0.contractAddress;
+                    });
+
+                    console.log('data0', data0);
+                    console.log('tokenList1', tokenList);
+
+                    if(data0.type === 'xto'){
+                        tokenList = tokenList.filter((item) => {
+                            return item.type !== 'xto';
+                        })
+                    }
                 }
 
-                let xtoTokenData = {
-                    name: 'MTO/BTO',
-                    list: this.xtoList,
-                    method: 'xto',
-                };
-
-                let otherTokenData = {
-                    name: this.$lan('其他通证'),
-                    list: this.otherTokenList,
-                    method: 'other',
-                };
-
-                console.log('xtoTokenData', xtoTokenData);
-                console.log('otherTokenData', otherTokenData);
-
-                let data;
-                if((source === 'A' && this.dataB.type === 'xto') || (source === 'B' && this.dataA.type === 'xto')){
-                    data = [otherTokenData];
-                }else {
-                    data = [xtoTokenData, otherTokenData]
+                let tokenData = {
+                    name: '',
+                    list: tokenList,
+                    method: '',
                 }
-                this.$refs.tokenSelector.showPop(data, source);
+
+                console.log('----tokenData', tokenData);
+                this.$refs.tokenSelector.showPop([tokenData], source);
             },
             async handleTokenSelect(e){
                 if(e.source === 'A'){
-                    this.dataA = Object.assign({}, this.dataA, e.data);
+                    this.dataA = e.data;
 
                 }else if (e.source === 'B'){
-                    this.dataB = Object.assign({}, this.dataB,  e.data);
+                    this.dataB = e.data;
                 }
+
 
                 if(this.dataA.type === 'xto'){
                     this.inputType = 'A';
@@ -432,6 +488,7 @@
                 }
                 let result = await walletApi.getAccount(liquidChainId, address);
                 this.accountBalance = result.balance;
+                return result.balance;
             },
             // 查看token余额
             checkTokenBalance(){
@@ -532,6 +589,7 @@
                 }
                 return true;
             },
+
             // 去添加兑换池
             toAddLiquidity(){
                 this.$refs.passwordPopup.showPasswordPopup({
@@ -587,7 +645,7 @@
                     if(result){
                         this.$showToast(this.$lan(`兑换池添加成功`));
                         setTimeout(() => {
-                            this.init(2);
+                            uni.navigateBack();
                         }, 1000)
                     }else{
                         this.$showToast(this.$lan(`兑换池添加失败，请稍后再试`));
@@ -736,6 +794,9 @@
                 walletApi.setVal(aboutWallet.toBigNumber(dataNewA.amountsInput));
                 return contractObj.deposit();
             },
+            jumpPage(path){
+                uni.navigateTo({url: path})
+            },
         },
         onShow(){
             this.init();
@@ -751,6 +812,10 @@
     *{
         box-sizing: border-box;
     }
+    .container{
+        height: 100%;
+        background: #fff;
+    }
     ._block{
         width: 686rpx;
         background: #fff;
@@ -758,104 +823,201 @@
         border-radius: 20rpx;
         padding: 56rpx 32rpx 63rpx;
     }
+    ._block_2{
+        width: 650rpx;
+        margin: 40rpx auto 0;
+        position: relative;
+        &:before{
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            -webkit-transform: scale(0.5);
+            transform: scale(0.5);
+            border: solid 1px #E4E6EA;
+            /*border: solid 1px red;*/
+            border-radius: 40rpx;
+            z-index: 1;
+            box-sizing: border-box;
+        }
+        ._block_2_content{
+            position: relative;
+            z-index: 10;
+            border-radius: 20rpx;
+            border: 1px solid rgba(0,0,0,0);
+            overflow: hidden;
+        }
+    }
     .trade-type-description{
-        color: #707070;
+        color: #aaa;
         font-size: 26rpx;
         line-height: 40rpx;
         vertical-align: center;
-        border-bottom: 50rpx;
         overflow: hidden;
-        margin-bottom: 50rpx;
-
-        &:before{
-            content: '';
-            display: inline-block;
-            width: 14rpx;
-            height: 14rpx;
-            border-radius: 50%;
-            background: $main-color;
-            margin-right: 20rpx;
-            transform: translate(0, -30%);
-        }
+        width: 650rpx;
+        margin:  30rpx auto 0;
     }
     .transaction-select{
         margin: 0 auto;
         background: #FFF;
         overflow: hidden;
+        position: relative;
+        .token-exchange{
+            position: absolute;
+            top: 174rpx;
+            left: 198rpx;
+            z-index: 9;
+        }
         .transaction-from{
-
 
         }
         .transaction-to{
-            margin-top: 31rpx;
+            height: 211rpx;
         }
 
-        .transaction-direction-text{
-            font-size: 26rpx;
-            color: #333;
-            line-height: 25rpx;
+
+        .transaction-direction{
+            height: 210rpx;
         }
-        .tips-for-not-enough{
-            font-size: 24rpx;
-            color: #ED1923;
-            line-height: 24rpx;
+
+
+        .token-type{
+            height: 100%;
+            width: 239rpx;
+            background: #EDEFF3;
         }
         .input-area{
-            width: 100%;
-            height: 80rpx;
-            border: 1rpx solid #AAA;
-            border-radius: 8rpx;
+            flex: 1;
+            height: 100%;
             position: relative;
             overflow: hidden;
+            padding-left: 64rpx;
+            .transaction-direction-text{
+                font-size: 26rpx;
+                color: #666;
+                line-height: 25rpx;
+                position: absolute;
+                top: 35rpx;
+            }
+            .tips-for-not-enough{
+                font-size: 24rpx;
+                color: #999;
+                line-height: 24rpx;
+                position: absolute;
+                top: 85rpx;
+                .__btn{
+                    color: $main-color;
+                }
+            }
             .amounts-input{
-                width: 100%;
-                height: 100%;
-                padding: 0 100rpx 0 50rpx;
                 color: #333;
-                font-size: 30rpx;
+                font-size: 34rpx;
                 font-weight: 600;
+                line-height: 34rpx;
+                height: 34rpx;
+                position: absolute;
+                top: 134rpx;
+
                 &.amounts-input-disabled{
                     background: #eee;
                 }
+
+                ::-webkit-input-placeholder { /* WebKit, Blink, Edge */    color:  #aaa; }
+
+                :-moz-placeholder { /* Mozilla Firefox 4 to 18 */   color: #aaa; }
+
+                ::-moz-placeholder { /* Mozilla Firefox 19+ */   color: #aaa; }
+
+                :-ms-input-placeholder { /* Internet Explorer 10-11 */   color:#aaa; }
             }
-            .data-type{
-                position: absolute;
-                top: 50%;
-                right: 24rpx;
-                transform: translate(0, -50%);
+            &.input-disabled{
+                background: #E4E6EA;
             }
         }
 
         .TZ-image{
-            width: 32rpx;
-            height: 32rpx;
-            margin-right: 16rpx;
+            width: 56rpx;
+            height: 56rpx;
+            margin-bottom: 23rpx;
+            border-radius: 10rpx;
+
         }
         .TZ-name{
             font-size: 30rpx;
+            line-height: 23rpx;
             color: #333;
             font-weight: 600;
+
         }
     }
     .description{
-        margin-top: 40rpx;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 36rpx 21rpx;
         .description-item{
-            height: 83rpx;
+            width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            line-height: 25rpx;
+            font-size: 26rpx;
             .label{
                 color: #555;
-                font-size: 26rpx;
             }
             .value{
-                color: #222;
-                font-size: 26rpx;
+                color: #999;
+                font-weight: 600;
             }
         }
-       /* .description-item+.description-item{
-            border-top: 1px solid #E0E0E0;
-        }*/
+        .description-item+.description-item{
+            margin-top: 25rpx;
+        }
+    }
+
+    .top_border{
+        position: relative;
+        &:before{
+            content: " ";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 1px;
+            border-top: 1px solid #D3D7DD;
+            -webkit-transform-origin: 0 0;
+            transform-origin: 0 0;
+            -webkit-transform: scaleY(0.5);
+            transform: scaleY(0.5);
+        }
+
+    }
+
+
+    .bottom_border{
+        position: relative;
+        &:before{
+            content: " ";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 1px;
+            border-top: 1px solid #D3D7DD;
+            -webkit-transform-origin: bottom center;
+            transform-origin: bottom center;
+            -webkit-transform: scaleY(0.5);
+            transform: scaleY(0.5);
+        }
+
+    }
+
+    .header-right{
+        font-size: 30rpx;
+        color: #333;
     }
 
 </style>

@@ -411,7 +411,7 @@ import systemManagement from "../../components/systemManagement";
 
 <style lang="scss" scoped>
 	.content{
-		width: 100%;
+		width: 750rpx;
 		height: 100%;
 		// background-color: #FFFFFF;
 		.myCont{
@@ -420,9 +420,9 @@ import systemManagement from "../../components/systemManagement";
 		}
 		.myTop {
 			width: 100%;
-			height: 400rpx;
+			height: 455rpx;
 			margin: 0 auto;
-			margin-bottom: 16rpx;
+			// margin-bottom: 16rpx;
 			/* border-radius: 28rpx; */
 			background-image: url(../../static/image/my/myBanner.png);
 			background-repeat: no-repeat;
@@ -430,24 +430,27 @@ import systemManagement from "../../components/systemManagement";
 			background-size: cover;
 			color: #FFFFFF;
 			display: flex;
-			justify-content: center;
-			align-items: center;
+			// justify-content: center;
+			// align-items: center;
 
 			.top {
-				width: 88%;
-				margin: 0px auto;
-				height: 130rpx;
+				// width: 88%;
+				margin: 150rpx 126rpx 176rpx 48rpx;
+				height: 129rpx;
+				line-height: 129rpx;
 				/* margin-bottom: 14rpx; */
 				display: flex;
 				// justify-content: flex-start;
-				justify-content: space-around;
-				align-items: center;
+				// justify-content: space-around;
+				// align-items: center;
 
 				.topImg {
 					background-color: #FFFFFF;
-					width: 130rpx;
-					height: 130rpx;
+					width: 129rpx;
+					height: 129rpx;
 					border-radius: 50%;
+					margin-left: 16rpx;
+					margin-right: 28rpx;
 					image{
 						width: 100%;
 						height: 100%;
@@ -458,23 +461,26 @@ import systemManagement from "../../components/systemManagement";
 
 					display: flex;
 					// flex: 1;
-					width: 72%;
-					margin-left: 28rpx;
+					// width: 72%;
+					// margin-left: 28rpx;
 					flex-direction: column;
-					justify-content: flex-start;
+					// justify-content: flex-start;
 					// align-items: center;
 					// width: 130rpx;
-					height: 130rpx;
+					height: 129rpx;
 
 					.topTxt_top {
-						width: 100%;
-						margin: 0 auto;
+						// width: 100%;
+						max-width: 169rpx;
+						min-height: 28rpx;
+						line-height: 28rpx;
+						// margin: 0 auto;
 						display: flex;
+						justify-content: flex-start;
 						font-size: 36rpx;
-						margin-top: 4rpx;
-						margin-bottom: 20rpx;
-
-						text-align: center;
+						margin: 9rpx 250rpx 38rpx 0rpx;
+						// margin-bottom: 20rpx;
+						// text-align: center;
 						white-space:nowrap;
 						overflow:hidden;
 						text-overflow:ellipsis;
@@ -482,9 +488,12 @@ import systemManagement from "../../components/systemManagement";
 
 					.topTxt_bottom {
 						display: flex;
-						margin-top: 10rpx;
+						align-items: center;
+						height: 40rpx;
+						line-height: 40rpx;
+						// margin-top: 10rpx;
 
-						// margin-bottom: 4rpx;
+						margin-bottom: 14rpx;
 						image {
 							width: 40rpx;
 							height: 40rpx;
@@ -494,7 +503,12 @@ import systemManagement from "../../components/systemManagement";
 						text {
 							font-size: 28rpx;
 							width: 362rpx;
-							height: 40rpx;
+							height: 27rpx;
+							line-height: 27rpx;					
+							font-size: 28rpx;
+							font-family: PingFang SC;
+							font-weight: 300;
+							color: #FFFFFF;
 							overflow: hidden;
 							text-overflow: ellipsis;
 							white-space: nowrap;
@@ -508,18 +522,26 @@ import systemManagement from "../../components/systemManagement";
 		.myNav {
 			width: 686rpx;
 			height: 180rpx;
-			margin: 0 auto;
-			margin-top: -100rpx;
-			margin-bottom: 20rpx;
+			line-height: 180rpx;
+			margin: 0 32rpx;
+			margin-top: -95rpx;
+			margin-bottom: 32rpx;
 			display: flex;
 			border-radius: 20rpx;
 			justify-content: space-around;
-			align-items: center;
+				
+
+			// align-items: center;
 			background-color: #FFFFFF;
 			.nav{
+				// width: 117rpx;
+				height: 98rpx;
+				line-height: 98rpx;
+				margin-top:49rpx;
+				margin-bottom:35rpx;
 				display: flex;
 				flex-direction: column;
-				justify-content: space-between;
+				// justify-content: space-between;
 				align-items: center;
 				image{
 					// margin-bottom: 10rpx;
@@ -527,7 +549,9 @@ import systemManagement from "../../components/systemManagement";
 					height: 40rpx;
 				}
 				text{
-					margin-top: 24rpx;
+					height: 29rpx;
+					line-height: 29rpx;
+					margin-top: 27rpx;
 					color: #333333;
 					font-size: 30rpx;
 					}
@@ -536,44 +560,57 @@ import systemManagement from "../../components/systemManagement";
 		.myMain,.myMains{
 			border-radius: 12rpx;
 			width: 686rpx;
-			margin: 0rpx auto;
-			margin-top: 30rpx;
-			display: flex;
-			flex-direction: column;
-			justify-content: space-around;
-			align-items: center;
+			margin: 0rpx 32rpx;
+			// margin-top: 30rpx;
+			// display: flex;
+			// flex-direction: column;
+			// justify-content: space-around;
+			// align-items: center;
 			background-color: #FFFFFF;
 			font-size: 30rpx;
 			color: #343434;
 			.main{
-				width: 88%;
-				height: 100rpx;
-				margin: 0 auto;
-				padding-right: 40rpx;
-				margin-right: -2rpx;
+				margin-left: 52rpx;
+				// width: 550rpx;
+				height: 40rpx;
+				line-height: 40rpx;
+				padding: 35rpx 0rpx;
+				
+
+				// margin: 35rpx 32rpx 35rpx 52rpx;
+				// padding-right: 40rpx;
+				// margin-right: -2rpx;
 
 				// padding-bottom: 18rpx;
 				display: flex;
 				// flex-direction: column;
-				justify-content: space-between;
-				align-items: center;
+				// justify-content: space-between;
+				// align-items: center;
 				.main_left{
-					height: 100rpx;
+					height: 40rpx;
+					line-height: 40rpx;
 					display: flex;
 					// flex-direction: column-reverse;
-					justify-content: space-between;
+					// justify-content: space-between;
 					align-items: center;
+					// margin-left: 52rpx;
 					image{
 						width: 40rpx;
 						height: 40rpx;
-						margin-right: 14rpx;
+						margin-right: 32rpx;
 					}
-
+					text{
+						min-width: 147rpx;
+						height: 28rpx;
+						line-height: 28rpx;
+						padding-right: 371rpx;
+					}
 				}
 				.main_right{
+
 					image{
 
-						width: 16rpx;
+						width: 14rpx;
 						height: 26rpx;
 					}
 				}
