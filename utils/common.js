@@ -1,10 +1,11 @@
 import enums from "./data/enums";
+import {BigNumber} from 'bignumber.js';
 
 const aboutPay = (method, data) => {
 	return new Promise((resolve, reject) => {
 		uni.requestPayment({
 			provider: method, // alipay wxpay
-			orderInfo: data, //微信、支付宝订单数据
+			orderInfo: data, //WeChat, Alipay order data
 			success: function(res) {
 				console.log('success:' + JSON.stringify(res));
 				resolve();
@@ -36,7 +37,7 @@ export const toPay = (payType, data) => {
 		return aboutPay('wxpay', params);
 	}
 };
-//复制适用H5
+//Copy applicable H5
 export function copyToClipboard(content) {
   if (window.clipboardData) {
     window.clipboardData.setData('text', content);
@@ -69,35 +70,35 @@ export function copy(data) {
 
 }
 
-// 保存图片
+// save Picture
 export function saveHeadImgFile(base64, quality) {
 	const bitmap = new plus.nativeObj.Bitmap("test");
 	const time = new Date().getTime()
 	return new Promise((resolve, reject) => {
-		// 从本地加载Bitmap图片
+		// Load Bitmap image from local
 		bitmap.loadBase64Data(base64, function() {
-			const url = "_doc/" + time + ".png"; // url为时间戳命名方式
+			const url = "_doc/" + time + ".png"; //url is the time stamp naming method
 			bitmap.save(url, {}, (i) => {
 				uni.saveImageToPhotosAlbum({
 					filePath: url,
 					success: function() {
 						resolve({
 							code: 0,
-							msg: '保存成功',
+							msg: 'Saved successfully',
 							filePath: url
 						});
 					}
 				});
 			}, (e) => {
-				reject('保存图片失败：' + JSON.stringify(e));
+				reject('Failed to save picture：' + JSON.stringify(e));
 			});
 		}, (e) => {
-			reject('加载图片失败：' + JSON.stringify(e));
+			reject('Failed to load image：' + JSON.stringify(e));
 		});
 	})
 }
 
-//打乱数组
+//Shuffle the array
 export function randomArraySort (array){
     let len = array.length;
     let arr = [...array];
@@ -110,14 +111,14 @@ export function randomArraySort (array){
     return arr;
 }
 
-//将对象值组成数组
+//Group object values into array
 export function groupObjValToList(obj = {}){
   return Object.keys(obj).map((item) => {
   	return obj[item];
 	})
 }
 
-// 防抖
+// Anti-shake
 export function _debounce(fn, delay) {
 
 	var delay = delay || 200;
@@ -135,7 +136,7 @@ export function _debounce(fn, delay) {
 	};
 }
 
-// 节流
+//Throttling
 export function _throttle(fn, interval) {
 	var last;
 	var timer;
@@ -157,7 +158,7 @@ export function _throttle(fn, interval) {
 	}
 }
 
-// 整理输入的数字
+// Sort the entered numbers
 export function clearNoNum(number, type) {
 	if(!(number - 0)){
      return 0;
@@ -166,18 +167,18 @@ export function clearNoNum(number, type) {
 	if(type === 'int'){
 		return parseInt(number);
 	}
-	number = number.replace(/[^\d.]/g, ""); //清除“数字”和“.”以外的字符
-	number = number.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
+	number = number.replace(/[^\d.]/g, ""); //Clear characters other than "number" and "."
+	number = number.replace(/\.{2,}/g, "."); //Keep only the first one. Clear the extra
 	number = number.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
-	// number = number.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'); //只能输入两个小数
-	if (number.indexOf(".") < 0 && number != "") { //以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
+	// number = number.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'); //Only two decimals can be entered
+	if (number.indexOf(".") < 0 && number != "") { //The above has been filtered, and what is controlled here is that if there is no decimal point, the first place cannot be an amount similar to 01, 02
 		number = parseFloat(number);
 	}
 
 	return number;
 }
 
-// 整理数字
+// Sort the numbers
 export function arrangeNum(number, type = 'auto', n = 6){
 	if(!(number - 0)){
 		return 0;
@@ -206,13 +207,13 @@ export function arrangeNum(number, type = 'auto', n = 6){
 	return numberReturn
 }
 
-// 获得百分比, 以num2 为基数
+// Get the percentage, using num2 as the base
 export function getPercentage(num1, num2, type, n = 2){
 	console.log(num1, num2);
   let ratio = (num1 - num2)/num2;
   let percentage;
 
-  if(type === 'positive'){  // 获得正数
+  if(type === 'positive'){  // Get a positive number
 		percentage =  (Math.abs(ratio)*100).toFixed(n);
 	}else{
 		percentage =  (ratio*100).toFixed(n);
@@ -226,13 +227,20 @@ export function getPercentage(num1, num2, type, n = 2){
 }
 
 /**
- * 查看是否过期
- * @param lastTime 上次记录的时间 毫秒
- * @param range 过期时长
+ * Check if it has expired
+ * @param lastTime Last recorded time in milliseconds
+ * @param range Expiration time
  */
 export function isTimeInvalid(lastTime, range){
 	let currentTime = new Date().getTime();
   return currentTime - lastTime - range  > 0
+};
+
+
+// Determine whether it is a very small number
+export function isMinimalNumber(number){
+	number = new BigNumber(number);
+	return !number.isEqualTo(0) && !number.isGreaterThan(0.00000000001);
 };
 
 

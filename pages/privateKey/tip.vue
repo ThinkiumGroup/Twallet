@@ -1,55 +1,55 @@
 <template>
 	<view class="page-wrap">
-		<nav-bar :title="type == 1 ? $lan('备份助记词'): $lan('导出私钥')" style="position: fixed;top:0;z-index: 999"></nav-bar>
+		<nav-bar :title="type == 1 ? $lan('backupMnemonic'): $lan('exportPrivateKey')" style="position: fixed;top:0;z-index: 999"></nav-bar>
 		<view class="content-wrap" v-if="type == 1">
 			<image class="private-key-img" src="../../static/image/wallet/privateKey.png" mode=""></image>
-			<text class="tip-label">{{$lan('提示')}}</text>
+			<text class="tip-label">{{$lan('prompt')}}</text>
 			<view class="tip-value">
-				{{$lan('拥有助记词可用于备份和生成整个钱包，拥有助记词等于拥有钱包资产所有权。')}}
+				{{$lan('theUseOfMnemonics')}}
 			</view>
 			<view class="tip-title">
-				{{$lan('备份助记词')}}
+				{{$lan('backupMnemonic')}}
 			</view>
 			<view class="tip-content">
-				{{$lan('请按顺序将助记词抄写在纸上并妥善保管，如果您的设备丢失、损坏、被盗等，拥有助记词可以随时恢复您的资产。')}}
+				{{$lan('copyTheMnemonicWordsOnPaper2')}}
 			</view>
 			<view class="tip-title">
-				{{$lan('保管助记词')}}
+				{{$lan('keepMnemonicWords')}}
 
 			</view>
 			<view class="tip-content">
-				{{$lan('请在线下妥善保管助记词至隔离网络的安全地方，请勿将助记词在联网环境下分享及存储，例如社交应用、邮箱、相册等，请勿截屏分享和存储，防止资产损失。')}}
+				{{$lan('pleaseKeepTheMnemonicPhraseProperly')}}
 			</view>
 			<view class="tip-footer">
-				{{$lan('注：官方客服不会以任何形式索要您的助记词')}}
+				{{$lan('WonotAskForPrivateKey')}}
 			</view>
 			<view class="next-btn" @click="handleNextBtnClick">
-				{{$lan('下一步')}}
+				{{$lan('nextStep')}}
 			</view>
 		</view>
 		<view class="content-wrap" v-if="type == 2">
 			<image class="private-key-img" src="../../static/image/wallet/privateKey.png" mode=""></image>
-			<text class="tip-label">{{$lan('提示')}}</text>
+			<text class="tip-label">{{$lan('prompt')}}</text>
 			<view class="tip-value">
-				{{$lan('拥有私钥可用于备份和生成整个钱包，拥有私钥等于拥有钱包资产所有权')}}
+				{{$lan('theUseOfPrivateKeys')}}
 			</view>
 			<view class="tip-title">
-				{{$lan('备份私钥')}}
+				{{$lan('backupPrivateKey')}}
 			</view>
 			<view class="tip-content">
-				{{$lan('请将私钥抄写在纸上并妥善保管，如果您的设备丢失、损坏、被盗等，拥有私钥可以随时恢复您的资产')}}
+				{{$lan('pleaseCopyThePrivateKeyOnPaper')}}
 			</view>
 			<view class="tip-title">
-				{{$lan('保管私钥')}}
+				{{$lan('keepPrivateKey')}}
 			</view>
 			<view class="tip-content">
-				{{$lan('请在线下妥善保管私钥至隔离网络的安全地方，请勿将私钥在联网环境下分享及存储，例如社交应用、邮箱、相册等，请勿截屏分享和存储，防止资产损失')}}
+				{{$lan('pleaseKeepThePrivateKeyProperly')}}
 			</view>
 			<view class="tip-footer">
-				{{$lan('注：官方客服不会以任何形式索要您的私钥')}}
+				{{$lan('willNotAskForPrivateKey')}}
 			</view>
 			<view class="next-btn" @click="handleNextBtnClick">
-				{{$lan('下一步')}}
+				{{$lan('nextStep')}}
 			</view>
 		</view>
 
@@ -67,7 +67,7 @@
 		components: { PasswordPopup },
 		data() {
 			return {
-				type: '', // 1 助记词， 2 私钥
+				type: '', // 1 mnemonic word, 2 private key
 			}
 		},
 		computed: {
@@ -100,7 +100,7 @@
 		},
 		onLoad(option){
 			if(!option.type){
-         throw new Error(this.$lan('链接中缺少type属性'))
+         throw new Error('The type attribute is missing in the link')
 			}
 			this.type = option.type
 		}

@@ -2,7 +2,7 @@ import Crypto from "crypto";
 
 const crypto = require('crypto');
 
-// 获得随机iv
+// Get random iv
 const getRandomIV = () => {
   let random = parseInt(Math.random()*1000000000000);
   const hash = Crypto.createHash('sha256')
@@ -10,7 +10,7 @@ const getRandomIV = () => {
   return iv;
 };
 
-// 加密
+// encryption
 const encryptData = (data, password, iv, algorithm = 'aes-256-cbc') => {
   if (!data) throw new Error('Data must not be null')
   const hash = Crypto.createHash('sha256')
@@ -23,7 +23,7 @@ const encryptData = (data, password, iv, algorithm = 'aes-256-cbc') => {
   return sign;
 };
 
-// 解密
+// Decrypt
 const decryptData = (encryptedData, password, iv, algorithm = 'aes-256-cbc') => {
   if (!encryptedData) throw new Error('Data must not be null');
   const hash = Crypto.createHash('sha256');
@@ -36,7 +36,7 @@ const decryptData = (encryptedData, password, iv, algorithm = 'aes-256-cbc') => 
   return src;
 };
 
-// 获得密钥的key
+// Get key
 const formatPasswordToKey = (password, iv) => {
   if(!password){
     throw new Error('password must not be null');

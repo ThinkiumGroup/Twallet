@@ -1,7 +1,7 @@
 import request from "../utils/request";
 
   /**
-	 * @param {Number} userId  用户id
+	 * @param {Number} userId 
 	 * */
  export function getAddress(data) {
     return request({

@@ -3,7 +3,7 @@
     <block v-if="type == 'circle' || type == 'dashboard'">
       <view class="cmd-progress cmd-progress-default" :class="setStatusClass">
         <view class="cmd-progress-inner" :style="setCircleStyle">
-          <!-- 绘制圈 start -->
+          <!-- Draw circles start -->
           <!-- #ifdef H5 -->
           <svg viewBox="0 0 100 100" class="cmd-progress-circle">
             <path :d="setCirclePath" stroke="#f3f3f3" :stroke-linecap="strokeShape" :stroke-width="strokeWidth"
@@ -15,8 +15,8 @@
           <!-- #ifndef H5 -->
           <text :style="setCircle"></text>
           <!-- #endif -->
-          <!-- 绘制圈 end -->
-          <!-- 状态文本 start -->
+          <!-- Draw circles end -->
+          <!-- Status text start -->
           <block v-if="showInfo">
             <text class="cmd-progress-text" :title="setFormat">
               <block v-if="status != 'success' && status != 'exception' && setProgress < 100">{{setFormat}}</block>
@@ -35,21 +35,21 @@
               <!-- #endif -->
             </text>
           </block>
-          <!-- 状态文本 end -->
+          <!-- Status text end -->
         </view>
       </view>
     </block>
 
     <block v-if="type == 'line'">
-      <!-- 进度条 start -->
+      <!-- progress bar start -->
       <view class="cmd-progress-outer">
         <view class="cmd-progress-inner" :style="{'border-radius': strokeShape == 'square' ? 0 : '100px'}">
           <view class="cmd-progress-bg" :style="setLineStyle"></view>
           <view v-if="successPercent" class="cmd-progress-success-bg" :style="setLineSuccessStyle"></view>
         </view>
       </view>
-      <!-- 进度条 end -->
-      <!-- 进度条是否显示信息 start -->
+      <!-- progress bar end -->
+      <!-- Does the progress bar display information start -->
       <block v-if="showInfo">
         <text class="cmd-progress-text" :title="setFormat">
           <block v-if="status != 'success' && status != 'exception' && setProgress < 100">{{setFormat}}</block>
@@ -68,27 +68,28 @@
           <!-- #endif -->
         </text>
       </block>
-      <!-- 进度条是否显示信息 end -->
+      <!-- Does the progress bar display information end -->
     </block>
   </view>
 </template>
 
 <script>
   /**  
-   * 进度条组件  
-   * @description 显示一个操作完成的百分比时，为用户显示该操作的当前进度和状态。  
+   * Progress bar component  
+   * @description 
+		When the completion percentage of an operation is displayed, the current progress and status of the operation are displayed for the user.  
    * @tutorial https://ext.dcloud.net.cn/plugin?id=259  
-   * @property {String} type 进度类型 - 线型：line、圆圈形：circle、仪表盘：dashboard，默认线型：line  
-   * @property {Number} percent 进度百分比值 - 显示范围0-100 ，可能数比较大就需要自己转成百分比的值  
-   * @property {Number} success-percent 进度已完成的百分几 - 仅支持进度线型：line  
-   * @property {String} status 进度状态 - 涌动：active（仅支持线型：line）、正常：normal、完成：success、失败：exception，默认正常：normal  
-   * @property {Boolean} show-info 进度状态信息 - 是否显示进度数值或状态图标，默认true  
-   * @property {Number} stroke-width 进度线条的宽度 - 建议在条线的宽度范围：1-50，与进度条显示宽度有关，默认8  
-   * @property {String} stroke-color 进度线条的颜色 - 渐变色仅支持线型：line  
-   * @property {String} stroke-shape 进度线条两端的形状 - 圆：round、方块直角：square，默认圆：round  
-   * @property {Number} width 进度画布宽度 - 仅支持圆圈形：circle、仪表盘：dashboard，默认80  
-   * @property {String} gap-degree 进度圆形缺口角度 - 可取值 0 ~ 360,仅支持圆圈形：circle、仪表盘：dashboard  
-   * @property {String} gap-position 进度圆形缺口位置 - 可取值'top', 'bottom', 'left', 'right',仅支持圆圈形：circle、仪表盘：dashboard  
+   * @property {String} Type progress type - linetype: line, circle, dashboard: dashboard, default linetype: Line 
+   * @property {Number} Percentage progress percentage value - the display range is 0-100. If the number is relatively large, you need to convert it to a percentage value by yourself9  
+   * @property {Number} success-percent Percentage of progress completed - only support progress line type: Line
+   * @property {String} status Progress status - surge: active (only line type is supported), normal: normal, completion: success, failure: exception, normal by default  
+   * @property {Boolean} show-info Progress status information - whether to display progress value or status icon, true by default 
+   * @property {Number} stroke-width Width of progress line - it is recommended that the width range of the line is 1-50, which is related to the display width of the progress bar. The default is 8 
+   * @property {String} Stroke color the color gradient of a progress line only supports line type: line 
+   * @property {String} Stroke shape the shape of both ends of the progress line - Circle: round, square right angle: square, default circle: round 
+   * @property {Number} width Progress canvas width - only support circle, dashboard, 80 by default  
+   * @property {String} gap-degree Progress circular notch angle - can be 0 ~ 360, only circle and dashboard are supported  
+   * @property {String} gap-position Round gap position of progress - values of 'top', 'bottom', 'left' and 'right' are allowed. Only circle and dashboard are supported  
    * @example <cmd-progress :percent="30"></cmd-progress>  
    */
   export default {
@@ -96,7 +97,7 @@
 
     props: {
       /**
-       * 类型默认：line，可选 line circle dashboard
+       * Default type: line, optional line circle dashboard
        */
       type: {
         validator: val => {
@@ -105,28 +106,28 @@
         default: 'line'
       },
       /**
-       * 百分比
+       * percentage
        */
       percent: {
         type: Number,
         default: 0
       },
       /**
-       * 已完成的分段百分，仅支持类型line
+       * Percentage of segments completed, only type line is supported
        */
       successPercent: {
         type: Number,
         default: 0
       },
       /**
-       * 是否显示进度数值或状态图标
+       * Display progress value or status icon
        */
       showInfo: {
         type: Boolean,
         default: true
       },
       /**
-       * 进度状态，可选：normal success exception （active仅支持类型line
+       * Progress status, optional: normal success exception (active only supports type line)
        */
       status: {
         validator: val => {
@@ -135,21 +136,22 @@
         default: 'normal'
       },
       /**
-       * 条线的宽度1-50，与width有关
+       * The width of the line is 1-50, which is related to the width
        */
       strokeWidth: {
         type: Number,
         default: 6
       },
       /**
-       * 条线的颜色，渐变色仅支持类型line
+       * 
+					The color of the line. The gradient only supports the type line
        */
       strokeColor: {
         type: String,
         default: ''
       },
       /**
-       * 条线两端的形状 可选：'round', 'square'
+       * The shapes of the two ends of the line are 'round', 'Square'
        */
       strokeShape: {
         validator: val => {
@@ -158,21 +160,22 @@
         default: 'round'
       },
       /**
-       * 圆形进度条画布宽度,支持类型circle dashboard
+       * The canvas width of the round progress bar supports the type circle dashboard
        */
       width: {
         type: Number,
         default: 80
       },
       /**
-       * 圆形进度条缺口角度，可取值 0 ~ 360,支持类型circle dashboard
+       * The gap angle of the round progress bar can be 0 ~ 360, and the type of circle dashboard is supported
        */
       gapDegree: {
         type: Number,
         default: 0
       },
       /**
-       * 圆形进度条缺口位置,可取值'top', 'bottom', 'left', 'right' ,支持类型circle dashboard
+       * 
+				The gap position of the round progress bar can be 'top', 'bottom', 'left' and 'right'. The type of circle dashboard is supported
        */
       gapPosition: {
         validator: val => {
@@ -184,13 +187,13 @@
 
     computed: {
       /**
-       * 如果需要自定义格式就在这改
+       * If you need to customize the format, change it here
        */
       setFormat() {
         return `${this.setProgress}%`;
       },
       /**
-       * 设置显示进度值，禁止小于0和超过100
+       * Set the display progress value, forbid less than 0 and more than 100
        */
       setProgress() {
         let percent = this.percent;
@@ -202,7 +205,7 @@
         return percent;
       },
       /**
-       * 进度圈svg大小
+       * Svg size of progress circle
        */
       setCircleStyle() {
         return `width: ${this.width}px;
@@ -210,7 +213,7 @@
 				fontSize: ${this.width * 0.15 + 6}px;`
       },
       /**
-       * 圈底色
+       *Circle background color
        */
       setCircleTrailStyle() {
         const radius = 50 - this.strokeWidth / 2;
@@ -221,7 +224,7 @@
 				transition: stroke-dashoffset 0.3s ease 0s, stroke-dasharray 0.3s ease 0s, stroke 0.3s;`
       },
       /**
-       * 圈进度
+       * Circle progress
        */
       setCirclePathStyle() {
         const radius = 50 - this.strokeWidth / 2;
@@ -233,7 +236,7 @@
 				transition: stroke-dashoffset 0.3s ease 0s, stroke-dasharray 0.3s ease 0s, stroke 0.3s, stroke-width 0.06s ease 0.3s;`
       },
       /**
-       * 绘制圈
+       * Draw circles
        */
       setCirclePath() {
         const radius = 50 - this.strokeWidth / 2;
@@ -266,18 +269,18 @@
       },
       // #ifndef H5
       /**
-       * 非H5端，绘制进度圈svg转base URL
+       * Non H5 end, draw progress circle SVG to base URL
        */
       setCircle() {
         const radius = 50 - this.strokeWidth / 2;
         const len = Math.PI * 2 * radius;
         const gapDeg = this.gapDegree || (this.type === 'dashboard' && 75);
         let currentColor = '#108ee9'
-        // 异常进度
+        // Abnormal progress
         if (this.status == 'exception') {
           currentColor = '#f5222d'
         }
-        // 完成进度
+        // Completion schedule
         if (this.status == 'success' || this.setProgress >= 100 || this.strokeColor) {
           currentColor = this.strokeColor || '#52c41a'
         }
@@ -289,18 +292,18 @@
 				${this.setCircleStyle}`;
       },
       /**
-       * 设置进度圈状态图标
+       * Set progress circle status icon
        */
       setCircleIcon() {
         let currentColor = '#108ee9'
         let svgToBase = ''
-        // 异常进度
+        // Abnormal progress
         if (this.status == 'exception') {
           currentColor = '#f5222d'
           svgToBase =
             `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='64 64 896 896' data-icon='close' width='1em' height='1em' fill='${escape(currentColor)}' aria-hidden='true'%3E %3Cpath d='M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 0 0 203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z'%3E%3C/path%3E %3C/svg%3E`;
         }
-        // 完成进度
+        // Completion schedule
         if (this.status == 'success' || this.setProgress >= 100) {
           currentColor = this.strokeColor || '#52c41a'
           svgToBase =
@@ -314,7 +317,7 @@
       },
       // #endif
       /**
-       * 设置进度条样式
+       * Set progress bar style
        */
       setLineStyle() {
         return `width: ${this.setProgress}%;
@@ -323,7 +326,7 @@
 				border-radius: ${this.strokeShape === 'square' ? 0 : '100px'};`;
       },
       /**
-       * 设置已完成分段进度
+       * Set the progress of completed segments
        */
       setLineSuccessStyle() {
         let successPercent = this.successPercent;
@@ -338,18 +341,18 @@
       },
       // #ifndef H5
       /**
-       * 设置进度条状态图标
+       * Set progress bar status icon
        */
       setLineStatusIcon() {
         let currentColor = '#108ee9'
         let svgToBase = ''
-        // 异常进度
+        // Abnormal progress
         if (this.status == 'exception') {
           currentColor = '#f5222d'
           svgToBase =
             `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='64 64 896 896' data-icon='close-circle' width='1em' height='1em' fill='${escape(currentColor)}' aria-hidden='true'%3E %3Cpath d='M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm165.4 618.2l-66-.3L512 563.4l-99.3 118.4-66.1.3c-4.4 0-8-3.5-8-8 0-1.9.7-3.7 1.9-5.2l130.1-155L340.5 359a8.32 8.32 0 0 1-1.9-5.2c0-4.4 3.6-8 8-8l66.1.3L512 464.6l99.3-118.4 66-.3c4.4 0 8 3.5 8 8 0 1.9-.7 3.7-1.9 5.2L553.5 514l130 155c1.2 1.5 1.9 3.3 1.9 5.2 0 4.4-3.6 8-8 8z'%3E%3C/path%3E %3C/svg%3E`;
         }
-        // 完成进度
+        // Completion schedule
         if (this.status == 'success' || this.setProgress >= 100) {
           currentColor = this.strokeColor || '#52c41a'
           svgToBase =
@@ -363,31 +366,31 @@
       },
       // #endif
       /**
-       * 状态样式
+       * State style
        */
       setStatusClass() {
         let statusClass = [];
-        // 异常进度
+        // Abnormal progress
         if (this.status == 'exception') {
           statusClass.push('cmd-progress-status-exception')
         }
-        // 完成进度
+        // Completion schedule
         if (this.status == 'success' || this.setProgress >= 100) {
           statusClass.push('cmd-progress-status-success')
         }
-        // 活动进度条
+        // Activity progress bar
         if (this.status == 'active') {
           statusClass.push('cmd-progress-status-active')
         }
-        // 是否显示信息
+        // Display information
         if (this.showInfo) {
           statusClass.push('cmd-progress-show-info')
         }
-        // 进度条类型
+        // Progress bar type
         if (this.type === 'line') {
           statusClass.push('cmd-progress-line')
         }
-        // 进度圈、仪表盘类型
+        // Progress circle, dashboard type
         if (this.type === 'circle' || this.type === 'dashboard') {
           statusClass.push('cmd-progress-circle')
         }

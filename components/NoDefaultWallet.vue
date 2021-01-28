@@ -4,10 +4,10 @@
       <view class="no_content">
         <view class="no_left">
             <view class="left_top">
-                <text>暂无钱包</text>
+                <text>{{$lan('noWallet')}}</text>
                 <image src="../static/image/home/jt.png"></image>
             </view>
-             <text class="left_bottom">创建新钱包</text>
+             <text class="left_bottom">{{$lan('createNewWallet')}}</text>
         </view>
         <view class="no_right">
             <image src="../static/image/home/no.png"></image>
@@ -18,10 +18,10 @@
       <view class="no_content">
         <view class="no_left">
             <view class="left_top">
-                <text>已有钱包</text>
+                <text>{{$lan('alreadyHaveAWallet')}}</text>
                 <image src="../static/image/home/jt.png"></image>
             </view>
-             <text class="left_bottom">导入其他钱包</text>
+             <text class="left_bottom">{{$lan('importOtherWallets')}}</text>
         </view>
         <view class="no_right">
             <image src="../static/image/home/has.png"></image>

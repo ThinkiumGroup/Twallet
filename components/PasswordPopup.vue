@@ -30,19 +30,20 @@
 	import UniPopup from '@/components/uni-popup/uni-popup.vue'
 	import { aboutWallet } from '@/utils/businessCommon.js'
 	import { mapState } from 'vuex'
+	import lan from '../Framework/language'
 	export default {
 		props: {
 			title: {
 				type: String,
-				default: '输入密码'
+				default: lan('inputPassword')
 			},
 			placeholder: {
 				type: String,
-				default: '请输入您的密码'
+				default: lan('pleaseEnterYourPassword')
 			},
 			cancelText: {
 				type: String,
-				default: '取消'
+				default: lan('cancel')
 			},
 			isCancel: {
 				type: Boolean,
@@ -54,7 +55,7 @@
 			},
 			sureText: {
 				type: String,
-				default: '确定'
+				default: lan('determine')
 			}
 		},
 		components: {
@@ -85,11 +86,11 @@
 				this.$emit('click', {status: false, password: this.password })
 			},
 			saveSubmit() {
-				//获取今日0点的时间戳
+				//Get the time stamp of 0:00 today
 				const toDayTimes = new Date(new Date().toLocaleDateString()).getTime();
-				//判断是否冻结
+				//Judge whether to freeze or not
 				if(toDayTimes < this.defaultWallet.lastPassWordTime) {
-						this.$showToast('您的钱包已被冻结，请明天操作!')
+						this.$showToast(this.$lan('walletHasBeenFrozen'))
 						return
 				}
 
@@ -99,14 +100,14 @@
 					this.$store.commit('setPasswordErrorNum', ++this.defaultWallet.passwordErrorNum)
 
 					if(this.defaultWallet.passwordErrorNum < 3) {
-						this.$showToast(`密码错误请重新输入,您还有${3-this.defaultWallet.passwordErrorNum}次机会, `)
+						this.$showToast(this.$lan('opportunityToEnterPassword').replace('$remainingTimes', 3-this.defaultWallet.passwordErrorNum))
 					} else {
-						this.$showToast('您的钱包已被冻结，请明天操作')
+						this.$showToast(this.$lan('walletHasBeenFrozen'))
 					}
 
-					//判断输入错误次数是否累计3次
+					//Judge whether the number of input errors is accumulated for 3 times
 					if(this.defaultWallet.passwordErrorNum == 3) {
-						const times = new Date().getTime(); //记录最后一次提交时间
+						const times = new Date().getTime(); //Record the last submission time
 						this.$store.commit('setLastPassWordTime', times)
 						this.a_fail && this.a_fail();
 					}
@@ -114,7 +115,7 @@
 					return
 				}
 
-				//密码正确操作
+				//Correct password operation
 				this.a_success && this.a_success(this.password);
 				this.$emit('click', {status: true, password: this.password })
 				this.closePasswordPopup()

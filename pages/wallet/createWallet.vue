@@ -1,18 +1,18 @@
 <template>
 	<div class="page-wrap">
-		<nav-bar :title="this.$lan('创建钱包')" ></nav-bar>
+		<nav-bar :title="this.$lan('createWallet')" ></nav-bar>
 		<view class="password-wrap">
-			<input type="text" v-model="walletName" :placeholder="this.$lan('请输入钱包名称')"  />
-			<input type="password"  v-model="password" :placeholder="this.$lan('请设置钱包密码（不少于6位）')"  />
-			<input type="password"  v-model="repeatPassword" :placeholder="this.$lan('重复密码')" />
+			<input type="text" v-model="walletName" :placeholder="this.$lan('pleaseEnterTheWalletName')"  />
+			<input type="password"  v-model="password" :placeholder="this.$lan('pleaseSetWalletPassword2')"  />
+			<input type="password"  v-model="repeatPassword" :placeholder="this.$lan('repeatPassword')" />
 		</view>
 		<view class="create-btn" @tap="beginCreate">
-			{{$lan('开始创建')}}
+			{{$lan('startCreating')}}
 		</view>
 		<view class="tip-wrap">
-			<text>{{$lan('温馨提示：')}}</text>
+			<text>{{$lan('tips')}}</text>
 			<view>
-				{{$lan('Twallet不会存储用户密码，无法提供密码找回功能和重置功能，请合理设置密码强度，并妥善保管密码')}}
+				{{$lan('setThePasswordLengthReasonably')}}
 			</view>
 		</view>
 	</div>
@@ -34,28 +34,28 @@
 			beginCreate() {
 				if(!this.walletName) {
 					uni.showToast({
-						title:this.$lan("请输入钱包名称"),
+						title:this.$lan("pleaseEnterTheWalletName"),
 						icon: "none"
 					})
 					return false
 				}
 				if(!this.password || this.password.length < 6) {
 					uni.showToast({
-						title:this.$lan("请输入钱包密码且不少于6位"),
+						title:this.$lan("noLessThan6Digits"),
 						icon: "none"
 					})
 					return false
 				}
 				if(!this.repeatPassword) {
 					uni.showToast({
-						title:this.$lan("请再次输入钱包密码"),
+						title:this.$lan("pleaseEnterTheWalletPasswordAgain"),
 						icon: "none"
 					})
 					return false
 				}
 				if(this.password != this.repeatPassword) {
 					uni.showToast({
-						title:this.$lan("两次密码不一致,请重新输入"),
+						title:this.$lan("thTwoPasswordsAreInconsistent"),
 						icon: "none"
 					})
 					return false
@@ -73,7 +73,7 @@
 	}
 </script>
 
-<style lang="scss" scoped> 
+<style lang="scss" scoped>
 	.page-wrap {
 		width: 100%;
 		height: 100%;
@@ -98,7 +98,7 @@
 				font-weight: 400;
 			}
 		}
-		
+
 		.create-btn {
 			width: 686rpx;
 			height: 90rpx;
@@ -114,7 +114,7 @@
 			margin-top: 122rpx;
 			border-radius: 20rpx;
 		}
-		
+
 		.tip-wrap {
 			width: 686rpx;
 			margin-top: 122rpx;

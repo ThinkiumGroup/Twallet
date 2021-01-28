@@ -14,7 +14,7 @@
 					:class="transferType == 1 && 'transfer-type-item-active'"
 					@click="transferTypeChange"
 				>
-					{{$lan('给他人转账')}}
+					{{$lan('transferMoneyToOthers')}}
 				</text>
 				<!-- v-if="false" -->
 				<text
@@ -23,16 +23,16 @@
 					:class="transferType == 2 && 'transfer-type-item-active'"
 					@click="transferTypeChange"
 				>
-					{{$lan('跨链转账')}}
+					{{$lan('crossChainTransfer')}}
 				</text>
 			</view>
 		</view>
 		<view class="transfer-body">
-			<!-- 转账金额 -->
+			<!-- TransferAmount -->
 			<view class="transfer-content block">
 				<view class="transfer-cross-chain" v-if="transferType == 2">
 					<view class="cross-chain-item">
-						<text class="cross-chain-title">{{$lan('转出链')}}</text>
+						<text class="cross-chain-title">{{$lan('chainTransferredOut')}}</text>
 						<Select
 							:list="fromChainList"
 							v-model="chainId"
@@ -40,7 +40,7 @@
 						/>
 					</view>
 					<view class="cross-chain-item" style="margin-bottom: 44rpx;">
-						<text class="cross-chain-title">{{$lan('转入链')}}</text>
+						<text class="cross-chain-title">{{$lan('chainTransferredIn')}}</text>
 						<Select
 							:list="toChainList"
 							v-model="toChainId"
@@ -50,38 +50,38 @@
 				</view>
 
 				<view class="transfer-moeny-title title">
-					<text>{{$lan('转账金额')}}</text>
-					<text v-if="transferType == 1" class="transfer-moeny-remark">{{$lan('| 给他人转账仅支持在账户链内进行')}}</text>
+					<text>{{$lan('TransferAmount')}}</text>
+					<text v-if="transferType == 1" class="transfer-moeny-remark">{{$lan('restrictionsOnTransferringMoneyToOthers')}}</text>
 				</view>
 
 				<view class="transfer-frame">
 					<input
 						class="transfer-input"
-						:placeholder="this.$lan('请输入金额')"
+						:placeholder="this.$lan('pleaseEnterTheAmount')"
 						type="text"
 						v-model="amount"
 					/>
-					<text class="transfer-btn" @click="amount = getToken.amount">{{$lan('全部')}}</text>
+					<text class="transfer-btn" @click="amount = balance">{{$lan('All')}}</text>
 				</view>
 
 				<view class="transfer-balance">
-					{{$lan('余额：')}}
+					{{$lan('balance')}}：
 					{{this.balance}}
 					{{transferType == 2 ? 'TKM' : getToken.text}}
 				</view>
-				<view class="gas-remark">{{$lan('预估手续费用GAS：')}}{{gasPrice}} TKM
+				<view class="gas-remark">{{$lan('estimatedHandlingFeeGAS')}}：{{gasPrice}} TKM
 				</view>
 			</view>
-			<!-- 收款地址 -->
+			<!-- receiving Address -->
 			<view class="block">
 				<template v-if="transferType == 1">
 					<view class="title">
-						<text>{{$lan('收款地址')}}</text>
+						<text>{{$lan('receivingAddress')}}</text>
 					</view>
 					<view class="transfer-frame" style="margin-bottom: 30rpx;">
 						<input
 							class="transfer-input"
-							:placeholder="this.$lan('请输入地址')"
+							:placeholder="this.$lan('pleaseEnterTheAddress')"
 							type="text"
 							v-model="toAddress"
 						/>
@@ -90,12 +90,12 @@
 						</view>
 					</view>
 				</template>
-				<view class="transaction-note">{{$lan('注意：')}}</view>
+				<view class="transaction-note">{{$lan('note')}}</view>
 				<view class="transaction-note">
-					{{$lan('1、gas费用为本交易预估的最高收费，实际gas费用由实际交易情况收取，会略低于显示值')}}
+					1、{{$lan('gasFeeDesc')}}
 				</view>
 				<view class="transaction-note">
-					{{$lan('2、gas费用需要您在对应发起链账户中有足够的TKM才能支付，否则您将不能交易')}}
+					2、{{$lan('gasConsumptionPlace')}}
 				</view>
 			</view>
 			<view
@@ -103,12 +103,12 @@
 				:class="isEmpty && 'transaction-submit-disabled'"
 				@click="transferSubmit"
 			>
-				{{$lan('转账')}}
+				{{$lan('transfer')}}
 			</view>
 		</view>
 		<PasswordPopup ref="passwordPopup" @click="popupChange"></PasswordPopup>
 		<AgainPasswordPopup
-			:placeholder="this.$lan('上笔交易未完成,请继续交易')"
+			:placeholder="this.$lan('pleaseContinueTheTransaction')"
 			ref="againPasswordPopup"
 			@click="againpopupChange"
 			:isCancel="false"
@@ -118,39 +118,41 @@
 </template>
 
 <script>
-	// 注意参数类型
+	// Note the parameter type
 	/*
-	跨链转账流程-先取款生成支票，再使用支票跨链存款
-	    ① 生成支票
-					1.  生成支票信息input     web3.CashCheque.encode
-	        2.  取款参数签名          web3.thk.signTransaction；
-	        3.  取款交易              web3.thk.SendTx；
-	        4.  查询取款hash结果      web3.thk.GetTransactionByHash;
+	Cross chain transfer process - withdraw money to generate a check, and then use the check to cross chain deposit
+	    ① Generate check
+					1.  Generate check information input     web3.CashCheque.encode
+	        2.  Signature of withdrawal parameters   web3.thk.signTransaction；
+	        3.  Withdrawal transaction               web3.thk.SendTx；
+	        4.  Query withdrawal hash result         web3.thk.GetTransactionByHash;
 
-	    ② 兑现支票
-					6.  生成支票证明input      web3.thk.RpcMakeVccProof；
-	        7.  存款参数签名          web3.thk.signTransaction；
-					8.  存款交易              web3.thk.SendTx；
-	        9.  查询存款hash结果      web3.thk.GetTransactionByHash;
-	    ③ 撤销支票，若存款失败执行退款流程
-	        10.  撤销支票证明          web3.thk.MakeCCCExistenceProof；
-	        11.  退款参数签名          web3.thk.signTransaction；
-	        12.  退款交易              web3.thk.SendTx；
-	        13.  查询退款hash结果     web3.thk.GetTransactionByHash;
+	    ② Cash a check
+					6.  Generate check proof input           web3.thk.RpcMakeVccProof；
+	        7.  Deposit parameter signature          web3.thk.signTransaction；
+					8.  Deposit transaction                  web3.thk.SendTx；
+	        9.  Query deposit hash result      	     web3.thk.GetTransactionByHash;
+	    ③ Cancel the check. If the deposit fails, 	 execute the refund process
+	        10.  Cancellation of check certificate   web3.thk.MakeCCCExistenceProof；
+	        11.  Refund parameter signature          web3.thk.signTransaction；
+	        12.  Refund transaction              		 web3.thk.SendTx；
+	        13.  Query refund hash result     			 web3.thk.GetTransactionByHash;
 	*/
-	/* 继续交易或退款流程
-	    判断支票是否是否过期（超过指定块高）终止交易或继续存款交易
-	    终止交易
-	    1.  获取取消支票证明          web3.thk.MakeCCCExistenceProof
-	    2.  退款参数签名          web3.thk.signTransaction；
-	    3.  退款交易              web3.thk.SendTx；
-	    4.  查询退款hash结果     web3.thk.GetTransactionByHash;
+	/* Continue the transaction or refund process
 
-	    继续交易
-	    1.  获取存款证明       web3.thk.RpcMakeVccProof；
-	    5.  存款参数签名          web3.thk.signTransaction；
-	    6.  存款交易              web3.thk.SendTx；
-	    7.  查询存款hash结果      web3.thk.GetTransactionByHash;
+	   Judge whether the check is overdue (beyond the specified block height) to
+		 terminate the transaction or continue the deposit transaction
+	    Termination of transaction
+	    1.  Obtain proof of cancellation          	web3.thk.MakeCCCExistenceProof
+	    2.  Refund parameter signature         			web3.thk.signTransaction；
+	    3.  Refund transaction              				web3.thk.SendTx；
+	    4.  Query refund hash result        				web3.thk.GetTransactionByHash;
+
+	    Keep trading
+	    1.  Obtain certificate of deposit       		web3.thk.RpcMakeVccProof；
+	    5.  Deposit parameter signature          		web3.thk.signTransaction；
+	    6.  Deposit transaction              				web3.thk.SendTx；
+	    7.  Query deposit hash result      					web3.thk.GetTransactionByHash;
 	*/
 	import msDropdownMenu from '@/components/ms-dropdown/dropdown-menu'
 	import msDropdownItem from '@/components/ms-dropdown/dropdown-item'
@@ -185,25 +187,25 @@
 				list: [],
 				fromChainList:chainList,
 				toChainList:chainList,
-				transferType: 1, //1给他人转账 2跨链转账
-				balance: 0, //余额
-				chainId: '1', //转出方链id
+				transferType: 1, //1 transfer to others 2 cross chain transfer
+				balance: 0, //balance
+				chainId: '1', //Transfer out party Chain ID
 				toChainId: '1',
-				toChaininitValue:this.$lan('奖励链'),
+				toChaininitValue:this.$lan('rewardChain'),
 				nonce: '',
-				amount: '', //余额
-				toAddress: '', //目标地址
+				amount: '', //balance
+				toAddress: '', //Destination address
 				withdrawalToAddress: '0x0000000000000000000000000000000000020000',
 				saveToAddress: '0x0000000000000000000000000000000000030000',
 				returnToAddress: '0x0000000000000000000000000000000000040000',
-				expireHeight: '', //块高
-				privateKey: '' ,//私钥
+				expireHeight: '', //Block height
+				privateKey: '' ,//Private key
 			}
 		},
 
 		computed: {
 			...mapState(['defaultWallet']),
-			//给他人转账 跨链转账 验证输入不为空
+			//Transfer to others cross chain transfer verification input is not empty
 			isEmpty() {
 				if (this.transferType == 1) {
 					return this.toAddress == '' || this.amount == ''
@@ -212,13 +214,13 @@
 				}
 
 			},
-			//预估gas费用
+			//Estimated gas cost
 			gasPrice() {
 				return this.transferType == 1 ? gasCost['USER_CHAIN_TRANSFER'] : gasCost['CROSS_CHAIN_TRANSFER']
 			},
-			//获取当前token信息
+			//Get the current token information
 		 getToken() {
-				//TKM余额重新获取
+				//TKM balance recapture
 				if(this.tokenType == 0) {
 					 this.getAccount()
 				}
@@ -237,7 +239,7 @@
 			this.tokenType = tokenType
 		},
 		mounted() {
-			//判断是否有未执行完成的跨链交易如果有继续交易
+			//Judge whether there is an unfinished cross chain transaction, and if so, continue the transaction
 			const input = uni.getStorageSync('input')
 			if (input) {
 				this.transferType = 2
@@ -252,25 +254,27 @@
 		},
 		watch: {
 			transferType() {
-				//对应的跨链可选择的链
+				//Corresponding cross chain optional chain
 				this.toChainList = chainList.filter(v => v.id != '1')
 			}
 		},
 		methods: {
 
-			// 切换交易类型 (跨链 普通)
+			// Switch transaction type (cross chain common)
 			transferTypeChange() {
 				if(this.transferType == 1 && this.tokenType == 0) {
 					this.transferType = 2
 					this.toChainId = '2'
 				} else {
 					this.transferType = 1
+					this.chainId = '1'
 					this.toChainId = '1'
-
+					this.getAccount()
 				}
+				this.amount = '' //Clear input amount
 			},
 
-			//获取token列表
+			//Get token list
 			async getTokenList() {
 				const obj = {
 					chainId: 103,
@@ -296,11 +300,11 @@
 				this.list = list
 			},
 
-			//转出链切换
+			//Transfer out chain switching
 			chainChangeOut(e) {
 				this.chainId = e.id
 				this.getAccount()
-					//对应的跨链可选择的链
+					//Corresponding cross chain optional chain
 				if(this.chainId == '2' || this.chainId == '103') {
 					this.toChainId = '1'
 					this.toChainList = chainList.filter(v => v.id == '1')
@@ -310,88 +314,88 @@
 				}
 			},
 
-			//转入链切换
+			//Transfer in chain switching
 			chainChangeIn(e) {
 				this.toChainId = e.id
 			},
 
-			//获取账户余额
+			//Get account balance
 			async getAccount() {
 				const {	balance, nonce } = await walletApi.getAccount(this.chainId, this.defaultWallet.address)
 				this.balance = aboutWallet.toRegularNumber(balance)
 				this.nonce = nonce
 			},
 
-			//提交并校验输入参数
+			//Submit and verify input parameters
 			async transferSubmit() {
 				if (this.isEmpty) {
 					return
 				}
 				const reg = /^\d+(\.\d+)?$/;
 				if(!reg.test(this.amount)){
-					this.$showToast('请输入正确格式金额')
+					this.$showToast('pleaseEnterTheCorrectFormatAmount')
 					return;
 				}
 				if(this.amount.indexOf('.')!==-1 && this.amount.split('.')[1].length > 6){
-					this.$showToast('输入金额小数点后不得超过六位')
+					this.$showToast(this.$lan('amountWithNoMoreThanSixDecimalPlaces'))
 					return;
 				}
 				if(Number(this.amount) <= 0){
-					this.$showToast('转账金额不得小于零，请输入正确的金额')
+					this.$showToast(this.$lan('transferAmountCannotBeLessThanZero'))
 					return;
 				}
 
-				//type为xto时查询商业链的tkm余额是否大于手续费
+				//When type is XTO, query whether the TKM balance of the e-commerce chain is greater than the handling charge
 				if(this.tokenType) {
 					const { balance } = await walletApi.getAccount('103', this.defaultWallet.address)
 					if (this.gasPrice > balance) {
-						this.$showToast(this.$lan('商业链余额不足手续费用'))
+						this.$showToast(this.$lan('ecommerceChainBalanceIsInsufficient'))
 						return
 					}
 					if ((this.amount * 1) > this.balance) {
-						this.$showToast(this.$lan('余额不足'))
+						this.$showToast(this.$lan('insufficientBalance'))
 						return
 					}
 				} else {
 					if ((this.amount * 1 + this.gasPrice) > this.balance) {
-						this.$showToast(this.$lan('余额不足'))
+						this.$showToast(this.$lan('insufficientBalance'))
 						return
 					}
 				}
 
 				console.log(aboutWallet.checkAddress(this.toAddress))
 
-				//地址校验
+				//Address verification
 				if(this.transferType == 1 && !aboutWallet.checkAddress(this.toAddress)) {
-					this.$showToast(this.$lan('输入地址不正确'))
+					this.$showToast(this.$lan('IncorrectAddressEntered'))
 					return
 				}
 
 				this.$refs.passwordPopup.showPasswordPopup()
 			},
 
-			//接收弹框组件组件点击的是取消还是继续返回的状态
+			//Receive the status of "Cancel" or "continue to return" that the pop-up component clicks
 			async popupChange({ status,	password }) {
 				if (!status) {
 					return
 				}
-				await this.getPrivateKey(password) //获取私钥
+				await this.getPrivateKey(password) //Get private key
 
 				if (this.transferType == 1) {
-					//给他人转账分为TKM和xto转账
+					//Transfer to others is divided into TKM and XTO transfer
 					this.tokenType == 0 ? this.userChaintransfer() : this.xtoTransfer()
 				} else {
 					this.crossChainTransfer()
 				}
 			},
 
-			//继续交易密码弹框
+			//Continue trading password pop-up box
 			async againpopupChange({ password }) {
 				await this.getPrivateKey(password)
 				uni.showLoading({
-					title:this.$lan('转账中...')
+					title:this.$lan('transferring')
 				});
-				//根据块高判断 继续存款或者退款
+				//Continue to deposit or refund according to the block height
 				const input = uni.getStorageSync('input')
 				const currentHeight = await walletApi.getExpireHeight(this.toChainId) - 200
 				const cheque = walletApi.decodeInput(input);
@@ -399,14 +403,14 @@
 				currentHeight > cheque.ExpireHeight ? this.returnTransfer(input) : this.saveTransfer(input)
 			},
 
-			//获取私钥
+			//Get private key
 			async getPrivateKey(password) {
 				this.privateKey = await aboutWallet.getWalletPrivateKey(this.defaultWallet.address, password)
 			},
 
-			//给他人链内转账
+			//Transfer to others within the chain
 			async userChaintransfer() {
-				//转账交易参数
+				//Transfer transaction parameters
 				const obj = {
 					chainId: this.chainId,
 					fromChainId: this.chainId,
@@ -420,7 +424,7 @@
 				}
 
 				uni.showLoading({
-					title:this.$lan('转账中...')
+					title:this.$lan('transferring')
 				});
 				const {
 					TXhash
@@ -432,20 +436,20 @@
 				this.getAccount()
 				this.getTokenList()
 				if(!status) {
-					this.$showToast(this.$lan('转账失败'))
+					this.$showToast(this.$lan('transferFailed'))
 					return
 				}
-				this.$showToast(this.$lan('转账成功'))
+				this.$showToast(this.$lan('successfulTransfer'))
 				this.goHome()
 
 			},
 
-			//给他人转账xto转账
+			//Transfer to others XTO transfer
 			async xtoTransfer() {
 				uni.showLoading({
-					title: '转账中...'
+					title: this.$lan('transferring')
 				});
-				//获取103链nonce
+				//Get 103 chain nonce
 				const { nonce } = await walletApi.getAccount('103', this.defaultWallet.address)
 				uni.setStorageSync('amounts', this.getToken.amount)
 				const amount = aboutWallet.toBigNumber(this.amount)
@@ -456,7 +460,7 @@
 					fromChainId: '103',
 					toChainId: '103',
 					from: this.defaultWallet.address,
-					to: this.getToken.contractAddress, //合约地址
+					to: this.getToken.contractAddress, //contract address
 					nonce,
 					value: '0',
 					input: '0x' + encoded.toString("hex"),
@@ -466,7 +470,7 @@
 				walletApi.setVal('0')
 				const { TXhash } = await walletApi.sendTx(obj)
 				const { status } = await this.asyncTask(() => walletApi.getTransactionByHash('103', TXhash))
-			 //账户xto余额查询会有延时
+			 //Account XTO balance query will be delayed
 				let	num = 0
 				let timeTask = null
 				const befaultAmount = uni.getStorageSync('amounts')
@@ -478,24 +482,24 @@
 						uni.removeStorageSync('amounts')
 						uni.hideLoading()
 						if(!status) {
-							this.$showToast(this.$lan('转账失败'))
+							this.$showToast(this.$lan('transferFailed'))
 							return
 						}
-						this.$showToast(this.$lan('转账成功'))
+						this.$showToast(this.$lan('successfulTransfer'))
 						this.goHome()
 					}
 				},1000)
 			},
 
-			//跨链转账
+			//Cross chain transfer
 			async crossChainTransfer() {
 				uni.showLoading({
-					title:this.$lan('转账中...')
+					title:this.$lan('transferring')
 				});
 
-				//------取款-------
-				this.expireHeight = await walletApi.getExpireHeight(this.toChainId) //获取快高
-				const cashCheque = { //生成支票参数
+				//------withdraw money-------
+				this.expireHeight = await walletApi.getExpireHeight(this.toChainId) //Get fast high
+				const cashCheque = { //Generate check parameters
 					FromChain: this.chainId,
 					FromAddress: this.defaultWallet.address,
 					Nonce: this.nonce,
@@ -505,8 +509,8 @@
 					ExpireHeight: this.expireHeight,
 				}
 				console.log(cashCheque, 999992)
-				const input = walletApi.cashCheque(cashCheque) //生成input
-				//取款交易参数
+				const input = walletApi.cashCheque(cashCheque) //generate input
+				//Withdrawal transaction parameters
 				const withdrawlObj = {
 					chainId: this.chainId,
 					fromChainId: this.chainId,
@@ -519,33 +523,32 @@
 					privateKey: this.privateKey,
 				}
 
-				//发起交易以及查询结果
+				//Initiate transactions and query results
 				const withdrawlHash = await walletApi.sendTx(withdrawlObj)
 				const withdrawlReturn = await this.asyncTask(() => walletApi.getTransactionByHash(this.chainId, withdrawlHash.TXhash))
 				if (withdrawlReturn.status != 1) {
-					this.$showToast(this.$lan('转账失败'))
+					this.$showToast(this.$lan('transferFailed'))
 					uni.hideLoading()
-					console.log(this.$lan('取款失败---------------'))
+					console.log(this.$lan('Withdrawal failed---------------'))
 					return
 				}
-				//----取款成功----
+				//----Successful withdrawal----
 
-				//取款成功后 将input缓存起来 重新打开继续交易 继续执行
+				//After the withdrawal is successful, the input will be cached and reopened to continue the transaction
 				uni.setStorageSync('input', withdrawlReturn.tx.input)
 				uni.setStorageSync('chainId', this.chainId)
 				uni.setStorageSync('toChainId', this.toChainId)
-				//传入取款生成支票的input
+				//Input of check generated by incoming withdrawal
 				const saveResult = await this.saveTransfer(input)
 				if (saveResult) {
 					return
 				}
-				//退款
+				//refund
 				await this.returnTransfer(input)
 			},
 
-			//存款
 			async saveTransfer(input) {
-				//-----存款-----
+				//-----deposit-----
 				const cheque = walletApi.decodeInput(input);
 				console.log(cheque, 90000008)
 				const proofParam = {
@@ -558,16 +561,16 @@
 					expireheight: cheque.ExpireHeight.toString(),
 					nonce: cheque.Nonce.toString()
 				}
-				//生成支票证明
+				//Generate check proof
 				const proofResult = await this.asyncTask(() => walletApi.rpcMakeVccProof(proofParam), 5)
-				if (!proofResult || proofResult.errMsg) { //支票证明生成错误
-					this.$showToast(this.$lan('转账失败'))
+				if (!proofResult || proofResult.errMsg) { //Check proof generation error
+					this.$showToast(this.$lan('transferFailed'))
 					uni.hideLoading()
 					return
 				}
-				//获取目标链的nonce
+				//Get the nonce of the target chain
 				const { nonce } = await walletApi.getAccount(this.toChainId, this.defaultWallet.address)
-				const saveObj = { //存款交易参数
+				const saveObj = { //Deposit transaction parameters
 					chainId: this.toChainId,
 					fromChainId: this.toChainId,
 					toChainId: this.toChainId,
@@ -585,16 +588,16 @@
 				if (saveReturn.status == 1) {
 					uni.hideLoading()
 					this.clearSotrage()
-					this.$showToast(this.$lan('转账成功'))
+					this.$showToast(this.$lan('successfulTransfer'))
 					this.getAccount()
 					this.goHome()
-					console.log(this.$lan('存款成功---------------'))
+					console.log('Successful deposit-------')
 					return true
 				}
 				return false
 			},
 
-			//退款
+			//Refund
 			async returnTransfer(input) {
 				console.log(input, 999239293)
 				const cheque = walletApi.decodeInput(input);
@@ -610,8 +613,8 @@
 				}
 				console.log(cheque, 90000288888)
 				const proofCancel = await walletApi.makeCCCExistenceProof(cancelProofParam)
-				if (proofCancel && !proofCancel.errMsg) { //退款生成支票成功,执行退款流程
-					await this.getAccount() //重新获取账户的noce值
+				if (proofCancel && !proofCancel.errMsg) { //The refund is successfully generated, and the refund process is executed
+					await this.getAccount() //Re-obtain the noce value of the account
 					const cancelObj = {
 						chainId: this.chainId,
 						fromChainId: this.chainId,
@@ -629,21 +632,21 @@
 					if (cancelReturn.status == 1) {
 						uni.hideLoading()
 						this.clearSotrage()
-						this.$showToast(this.$lan('转账失败'))
+						this.$showToast(this.$lan('transferFailed'))
 						this.getAccount()
-						console.log(this.$lan('退款成功---------------'))
+						console.log('Refund successfully---------------')
 					}
 				}
 			},
 
-			//清除存储的值
+			//Clear stored value
 			clearSotrage() {
 				uni.removeStorageSync('input')
 				uni.removeStorageSync('toChainId')
 				uni.removeStorageSync('chainId')
 			},
 
-			//异步任务
+			//Asynchronous task
 			asyncTask(fn, n = 7) {
 				const promise = new Promise((resolve, reject) => {
 					let timeOut = null
@@ -660,7 +663,7 @@
 				return promise
 			},
 
-			//通往地址簿
+			//To the address book
 			goAddressBook() {
 				uni.navigateTo({
 					url: `/pages/transaction/addressBook?amount=${this.amount}&tokenType=${this.tokenType}`

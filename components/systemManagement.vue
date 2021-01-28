@@ -4,15 +4,15 @@
     <UniPopup ref="passwordPopup" type="center" :maskClick="false">
        <view class="container">
          <view class="nav-row-start-center item">
-           <text>环境</text>
+           <text>Environmental Science</text>
            <view class="nav-row-start-center">
-             <ARadio :value="'dev'" :isChecked="env === 'dev'" @click="handleEnvChange('dev')"><text class="__content">测试环境</text></ARadio>
-             <ARadio :value="'pro'" :isChecked="env === 'pro'" @click="handleEnvChange('pro')"><text class="__content">正式环境</text></ARadio>
-             <ARadio :value="'other'" :isChecked="env === 'other'"><text class="__content">其他</text></ARadio>
+             <ARadio :value="'dev'" :isChecked="env === 'dev'" @click="handleEnvChange('dev')"><text class="__content">Development</text></ARadio>
+             <ARadio :value="'pro'" :isChecked="env === 'pro'" @click="handleEnvChange('pro')"><text class="__content">Production</text></ARadio>
+             <ARadio :value="'other'" :isChecked="env === 'other'"><text class="__content">other</text></ARadio>
            </view>
          </view>
          <view class="close" @click="hideModal">
-           关闭
+           close
          </view>
        </view>
     </UniPopup>

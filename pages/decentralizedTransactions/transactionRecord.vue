@@ -1,7 +1,7 @@
 <template>
   <view class="app" :style="{paddingTop: customBar + 105 + 'rpx'}">
     <view style="position: fixed; top: 0;left: 0; width: 100%; z-index: 99">
-      <nav-bar :title="$lan('兑换记录')"/>
+      <nav-bar :title="$lan('exchangeRecord')"/>
     </view>
     <view class="record-list">
       <view v-for="(item,index) in recordList" class="record-item" :key="index">
@@ -13,24 +13,30 @@
            <view class="right">
              <template v-if="lodash.get(item, 'swap')">
                <text class="trade-type trade-type-blue" v-if="lodash.get(item, 'swap.swapType') == 0">
-                 {{ $lan('出兑MTO、BTO')}}
+                 {{ $lan('exchangeXTO')}}
                </text>
                <text class="trade-type trade-type-orange" v-else-if="lodash.get(item, 'swap.swapType') == 1">
-                 {{ $lan('兑入MTO、BTO')}}
+                 {{ $lan('redeemXto')}}
                </text>
                <text class="trade-type trade-type-purple" v-else>
-                 {{$lan('其他兑换')}}
+                 {{$lan('otherExchange')}}
                </text>
              </template>
              <template v-if="lodash.get(item, 'liquidity')">
                <text class="trade-type trade-type-blue" v-if="lodash.get(item, 'liquidity.type') == 1">
-                 {{ $lan('添加通证兑换池')}}
+                 {{ $lan('addATokenExchangePool')}}
                </text>
                <text class="trade-type trade-type-blue" v-else-if="lodash.get(item, 'liquidity.type') == 2">
-                 {{ $lan('添加结算凭证兑换池')}}
+                 {{ $lan('addSettlementVoucherExchangePool')}}
+               </text>
+               <text class="trade-type trade-type-blue" v-else-if="lodash.get(item, 'liquidity.type') == 3">
+                 {{ $lan('exitTheTokenExchangePool')}}
+               </text>
+               <text class="trade-type trade-type-blue" v-else-if="lodash.get(item, 'liquidity.type') == 4">
+                 {{ $lan('exitTheSettlementVoucherExchangePool')}}
                </text>
                <text class="trade-type trade-type-blue" v-else>
-                 {{$lan('其他')}}
+                 {{$lan('other')}}
                </text>
              </template>
            </view>
@@ -39,29 +45,29 @@
          <view class="record-item-body">
            <template v-if="item.swap">
              <view class="nav-row-start-start" v-if="item.swap.swapVOS">
-               <view class="label">{{$lan('出兑：')}}</view>
+               <view class="label">{{$lan('cashOut')}}:</view>
                <view class="value">{{lodash.get(item, 'swap.swapVOS[0].value') | $toRegularNumber}}&nbsp;{{lodash.get(item, 'swap.swapVOS[0].name')}}</view>
              </view>
              <view class="nav-row-start-start" v-if="item.swap.swapVOS">
-               <view class="label">{{$lan('获得：')}}</view>
+               <view class="label">{{$lan('obtain')}}</view>
                <view class="value">{{lodash.get(item, 'swap.swapVOS[1].value') | $toRegularNumber}}&nbsp;{{lodash.get(item, 'swap.swapVOS[1].name')}}</view>
              </view>
            </template>
            <template v-else-if="item.liquidity">
              <view class="nav-row-start-start" v-if="item.liquidity.liquidityVOS">
-               <view class="label">{{$lan('添加：')}}</view>
+               <view class="label">{{ lodash.get(item, 'liquidity.type') == 1 || lodash.get(item, 'liquidity.type') == 2 ? $lan('addTo') : $lan('dropOut')}}：</view>
                <view class="value">
                  <text>
                    {{lodash.get(item, 'liquidity.liquidityVOS[0].amount')  | $toRegularNumber}}&nbsp;{{lodash.get(item, 'liquidity.liquidityVOS[0].tokenName')}}
                  </text>
                  <text v-if="lodash.get(item, 'liquidity.liquidityVOS[1]')">
-                   及{{lodash.get(item, 'liquidity.liquidityVOS[1].amount')  | $toRegularNumber}}&nbsp;{{lodash.get(item, 'liquidity.liquidityVOS[1].tokenName')}}
+                   {{$lan('and')}}{{lodash.get(item, 'liquidity.liquidityVOS[1].amount')  | $toRegularNumber}}&nbsp;{{lodash.get(item, 'liquidity.liquidityVOS[1].tokenName')}}
                  </text>
                </view>
              </view>
            </template>
             <view class="nav-row-start-start">
-              <view class="label" >{{$lan('兑换hash：')}}</view>
+              <view class="label" >{{$lan('exchangeHash')}}</view>
               <view class="value" style="width: 320rpx" @longtap="copyData(item.tradingHash)">{{item.tradingHash}}</view>
             </view>
          </view>
@@ -99,7 +105,7 @@
     computed: {
       ...mapState(['defaultWallet', '_contractAddress']),
     },
-    onReachBottom(){//uniapp 监听下拉加载生命周期
+    onReachBottom(){//uniapp Monitor drop-down load life cycle
       this.getData(2)
     },
     methods: {
@@ -107,7 +113,7 @@
         this.tables = _.cloneDeep(this.recordList.slice(this.recordList.length -10, this.recordList.length))
         this.tables = this.tables.map(item => item = {chainId:item.chainId, tableName:item.tableName, tableId:item.tableId})
       },
-      async getData(type){  // 2是上划刷新
+      async getData(type){  // 2It's a stroke up refresh
         if(this.pagination.total != 0 &&this.pagination.total <= this.recordList.length){
           return;
         }
@@ -146,7 +152,7 @@
       copyData(data) {
         copy(data)
         uni.showToast({
-          title: this.$lan('复制成功'),
+          title: this.$lan('copySuccessfully'),
           icon: 'none',
           duration: 2000
         });

@@ -1,13 +1,13 @@
 <template>
   <view class="app">
-    <nav-bar :title="$lan('退出通证池')"/>
+    <nav-bar :title="$lan('exitTheTokenPool')"/>
     <view class="_block">
       <view class="caption">
-        {{$lan('退出份额')}}
+        {{$lan('exitShare')}}
       </view>
       <view class="input-area bottom-border nav-row-between-center">
         <text v-show="!ratioInput" class="input-area-placeholder">
-          {{$lan('请输入1-100的整数')}}
+          {{$lan('PleaseEnterAnIntegerFrom1_100')}}
         </text>
         <input class="input" type="number" v-model="ratioInput" @input="handleInput"/>
         <text class="mark">
@@ -25,7 +25,7 @@
       <view class="caption-middle nav-row-center-center">
         <icon-font src="caption-bg-left" width="24rpx" height="24rpx"/>
         <text style="margin: 0 20rpx">
-          {{$lan('预计获得')}}
+          {{$lan('expectedToGet')}}
         </text>
         <icon-font src="caption-bg-right" width="24rpx" height="24rpx"/>
       </view>
@@ -35,7 +35,7 @@
           <view class="right">{{lodash.get(pairData, 'contentA.getExpected') || 0}}</view>
         </view>
         <view class="get-item-bottom">
-<!--          (包含手续费收益：0.5555)-->
+<!--          (Including commission income：0.5555)-->
         </view>
       </view>
       <view class="get-item" v-if="transferType !== 'stable'">
@@ -44,12 +44,12 @@
           <view class="right">{{lodash.get(pairData, 'contentB.getExpected')  || 0}}</view>
         </view>
         <view class="get-item-bottom">
-<!--          (包含手续费收益：0.5555)-->
+<!--          (Including commission income：0.5555)-->
         </view>
       </view>
       <view class="other-description top-border nav-row-between-center" v-if="pairPriceText">
         <view class="left">
-          {{$lan('当前兑换比例')}}
+          {{$lan('currentEchangeRatio')}}
         </view>
         <view class="right">
           {{pairPriceText}}
@@ -58,10 +58,10 @@
     </view>
     <view class="btn-list nav-row-between-center">
       <view class="btn-item btn-item-transparent" @click="goBack">
-        {{$lan('我再想想')}}
+        {{$lan('thinkAgain')}}
       </view>
       <view class="btn-item btn-item-blue" @click="confirmExit">
-        {{$lan('确认退出')}}
+        {{$lan('confirm')}}
       </view>
 
     </view>
@@ -90,9 +90,9 @@
   const liquidChainId = '103';
 
 
-  const gasFeeApprove = 0.5;                    // 进行申请的gas费
-  const gasFeeExitForFlashSwapPool = 1.5;       // 退出闪兑池的TKM的gas费
-  const gasFeeExitForThkSwap = 1.5;             // 退出ThkSwap的gas费
+  const gasFeeApprove = 0.5;                    // Gas fee for applicationgas费
+  const gasFeeExitForFlashSwapPool = 1.5;       // Gas fee of TKM exiting flash cash pool
+  const gasFeeExitForThkSwap = 1.5;             // Gas fee for exiting thkswap
 
   export default {
     components: { TransferLoading, PasswordPopup },
@@ -119,7 +119,7 @@
         this.pairPriceText = await this.getPairPriceText();
         await this.getAccount();
       },
-      // 查看 tkm余额
+      // View TKM balance
       async getAccount(){
         let address = this.defaultWallet.address && this.defaultWallet.address.toLowerCase();
         if(!address){
@@ -130,7 +130,7 @@
         console.log('--accountBalance', this.accountBalance);
         return result.balance;
       },
-      // 获得对价(去除掉兑换费用及溢价), 非stable
+      // Gain consideration (excluding exchange fee and premium), not stable
       async getPurePairPrice(amounts, tokenA, tokenB){
         if(!amounts){
           return '';
@@ -144,10 +144,10 @@
         const contractObj = await walletApi.callContract(params);
         walletApi.setVal('0');
         let price =  await contractObj.quote(aboutWallet.toBigNumber(amounts), tokenA, tokenB );
-        console.log('原始对价', aboutWallet.toRegularNumber(price));
+        console.log('Original consideration', aboutWallet.toRegularNumber(price));
         return price.toString();
       },
-      // 查看结算凭证的对价,stable
+      // View the consideration of settlement voucher, stable
       async getPairPriceForStableCoin(){
         let params = {
           contractAbi: flashSwapAbi,
@@ -158,7 +158,7 @@
         const contractObj = await walletApi.callContract(params);
         walletApi.setVal('0');
         let price = await contractObj.rmbPrice();
-        console.log('查看对价', price && price.toString());
+        console.log('View consideration', price && price.toString());
         return price;
       },
       handleInput(){
@@ -211,10 +211,10 @@
           return gasFeeApprove + gasFeeExitForThkSwap;
         }
       },
-      // 判断是否可以退出
+      // Judge whether you can exit
       exitExchangePairValid(showToast = true){
         if(!this.ratioInput){
-           showToast &&this.$showToast(this.$lan('请输入退出份额'));
+           showToast &&this.$showToast(this.$lan('pleaseEnterExitShare'));
            return false;
         }
 
@@ -222,7 +222,7 @@
         console.log('accountBalance', this.accountBalance);
         console.log('gasFeeNeeded', aboutWallet.toBigNumber(gasFeeNeeded));
         if(new BigNumber(this.accountBalance).minus(aboutWallet.toBigNumber(gasFeeNeeded)).toString() - 0 < 0){
-          showToast &&this.$showToast(this.$lan('您的gas费不足，无法退出，请先跨链转入。'));
+          showToast &&this.$showToast(this.$lan('insufficientGasFee'));
           return false;
         }
 
@@ -248,7 +248,7 @@
         });
       },
       async exitExchangePairGroupFuc(privateKey, walletAddress){
-        this.$refs.TransferLoading.show({text: this.$lan('兑换池退出中，预计将于1分钟内完成，为避免退出未完成造成财产损失，完成前请勿关闭app'), show: true,});
+        this.$refs.TransferLoading.show({text: this.$lan('exchangePoolIsExiting')});
 
         let result;
         if(this.transferType !== 'stable'){
@@ -257,7 +257,7 @@
           console.log('--approveResult', approveResult);
           if(approveResult !== 'isOk'){
             this.$refs.TransferLoading.hide();
-            this.$showToast(this.$lan(`申请退出兑换池额度失败，请稍后再试`));
+            this.$showToast(this.$lan(`failedToExitTheExchangePool`));
             return;
           }
 
@@ -267,12 +267,12 @@
           let value = new BigNumber(this.pairData.balanceOf).multipliedBy(this.ratioInput / 100).toFixed(0, 1);
           result = await this.exitStableExchangePair(privateKey, walletAddress, value)
         }
-        // 查hash
+        // Check hash
         if(result.TXhash){
           let hashResult = await getTransactionResultByHashCircularly(liquidChainId, result.TXhash);
           if(hashResult){
             setTimeout(() => {
-              this.$showToast(this.$lan(`兑换池退出成功`));
+              this.$showToast(this.$lan(`exchangePoolExitedSuccessfully`));
               setTimeout(() => {
                 uni.navigateBack();
               }, 1000)
@@ -286,17 +286,43 @@
           console.log(this.$lan('hash没有生成'));
           this.handleExitFaild()
         }
+
       },
       handleExitFaild(){
         this.$refs.TransferLoading.hide();
-        this.$showToast(this.$lan(`兑换池退出失败，请稍后再试`));
+        this.$showToast(this.$lan(`failedToExitTheRedemptionPool`));
         setTimeout(() => {
           uni.navigateBack();
         }, 1000)
       },
 
+      // Check if the token is xto and has an integer balance
+      async isXTOAndIntBalance(tokenAddress, index){
+        if(index <= 0){
+          return false;
+        }
+        let balance = await this.checkTokenBalance(tokenAddress);
+        balance = new BigNumber(balance).div("1e+18").toString();
+        return !(balance%1)
+      },
 
-      // 查看是否批准、进行批准(组合方法)
+      // View token balance
+      async checkTokenBalance(address){
+        console.log('--address', address);
+        let params = {
+          contractAbi: ERC20Abi,
+          contractAddress: address,
+          address: this.defaultWallet.address.toLowerCase(),
+          chainId: liquidChainId
+        };
+        const contractObj = await walletApi.callContract(params);
+        walletApi.setVal('0');
+        let balanceOf = await contractObj.balanceOf(this.defaultWallet.address.toLowerCase());
+        return  balanceOf.toString() || '';
+      },
+
+
+     // Check whether to approve or not (combined method)
       async checkAndApproved(privateKey, walletAddress, pairAddress, value ){
         if(!await this.checkPairIfApproved(privateKey, walletAddress, pairAddress, value)){
           await this.toPairContractForApproval(privateKey, walletAddress, pairAddress);
@@ -310,7 +336,8 @@
           return 'isOk';
         }
       },
-      // 查有没有批准,返回 boolean
+
+      // Check whether it is approved and return to Boolean
       async checkPairIfApproved(privateKey, walletAddress, pairAddress, value){
         let params = {
           contractAbi: ERC20Abi,
@@ -326,7 +353,7 @@
         console.log('approve-check', result.toString());
         return new BigNumber(result).minus(value).toString() - 0 >= 1;
       },
-      // 循环查询 有没有批准,返回 boolean
+      // Loop to check whether there is approval and return Boolean
       async checkPairIfApprovedCircularly(privateKey, walletAddress, pairAddress, value){
         return new Promise((resolve, reject) => {
           let times = 0;
@@ -342,7 +369,7 @@
           }, 1000)
         });
       },
-      // 去配对合约进行批准
+      // To approve the contract
       async toPairContractForApproval(privateKey, walletAddress, pairAddress, value = 1 + '0'.repeat(32)){
         let params = {
           contractAbi: ERC20Abi,
@@ -352,13 +379,13 @@
           chainId: liquidChainId
         };
         const contractObj = await walletApi.callContract(params);
-        console.log(this.$lan('去批准的参数'), this._contractAddress.CONTRACT_ROUTER, value);
+        console.log('Approved parameters', this._contractAddress.CONTRACT_ROUTER, value);
         walletApi.setVal('0');
         let approveResult = await contractObj.approve(this._contractAddress.CONTRACT_ROUTER, value);
         console.log('approveResult', approveResult);
       },
 
-      // 退出 非stable
+      // sign out non stable
       async exitExchangePair(privateKey, walletAddress, pairAddress, dataA, dataB, value){
         console.log('--dataA', dataA);
         console.log('--dataB', dataB);
@@ -405,9 +432,9 @@
           return contractObj.removeLiquidity(...groupObjValToList(data));
         }
       },
-      // 退出 stable
+      // sign out stable
       async exitStableExchangePair(privateKey, walletAddress, value){
-        console.log('退出 stable, value', value);
+        console.log('sign out stable, value', value);
         let params = {
           privateKey,
           contractAbi: flashSwapPool,
@@ -420,6 +447,190 @@
         console.log('value', value);
         return contractObj.withdraw(value);
       },
+
+
+
+
+      // Go and add the exchange pool
+      async toAddLiquidity(privateKey, walletAddress, tokenA, tokenB, amountA){
+        let price = await this.getPurePairPrice('1', tokenA,  tokenB);
+        let amountB = new BigNumber(price).div('1e+18').multipliedBy(amountA).toString();
+        let data = {
+          privateKey,
+          walletAddress,
+          tokenA,
+          tokenB,
+          tokenAIndex,
+          tokenBIndex,
+          amountA,
+          amountB
+        };
+        let result = await this.addLiquidityGroupFuc(data);
+
+        return !!result;
+      },
+
+
+
+      // Add exchange pool (combination method) and return to Boolean
+      async addLiquidityGroupFuc({privateKey, walletAddress, tokenA, tokenB, tokenAIndex, tokenBIndex, amountA, amountB}){
+        let addResult;
+        if(this.transferType === 'stable' ){
+          // addResult = await this.addStableCoin(privateKey, walletAddress, this.dataA, this.dataB);
+        }else{
+          // Check whether it has been approved
+          if(tokenAIndex > 0){
+            let result = await this.checkAndApprovedFromTokenContract(privateKey, walletAddress, tokenA, amountA);
+            if(result !== 'isOk'){
+              this.$refs.TransferLoading.hide();
+              this.$showToast(this.$lan('failedToApplyForTokenQuota').replace('tokenName', this.dataA.tokenName));
+              return false;
+            }
+          }
+          if(tokenBIndex > 0){
+            let result = await this.checkAndApprovedFromTokenContract(privateKey, walletAddress, tokenB, amountB);
+            if(result !== 'isOk'){
+              this.$refs.TransferLoading.hide();
+              this.$showToast(this.$lan('failedToApplyForTokenQuota').replace('tokenName', this.dataB.tokenName));
+              return false;
+            }
+          }
+
+          // Add exchange pool
+          let data = {privateKey, walletAddress, tokenA, tokenB, tokenAIndex, tokenBIndex, amountA, amountB}
+          addResult = await this.addLiquidity(data);
+        }
+
+
+        // Check hash
+        if(addResult.TXhash){
+          let result = await getTransactionResultByHashCircularly(liquidChainId, addResult.TXhash);
+          if(result){
+            // this.$showToast(this.$lan(`exchangPoolAddedSuccessfully`));
+            return true;
+          }else{
+            // this.$showToast(this.$lan(`failedToAddRedemptionPool`));
+            return false;
+          }
+        }else{
+          console.log('hash Not generated');
+          // this.$showToast(this.$lan(`failedToAddRedemptionPool`));
+          return false;
+
+        }
+
+      },
+
+      // Check whether the token contract is approved or not (combination method)
+      async checkAndApprovedFromTokenContract(privateKey, walletAddress, tokenAddress, amounts ){
+        if(!await this.checkTokenIfApproved(privateKey, walletAddress, tokenAddress, amounts)){
+          await this.toTokenContractForApproval(privateKey, walletAddress, tokenAddress, amounts);
+          let result = await this.checkTokenIfApprovedCircularly(privateKey, walletAddress, tokenAddress, amounts);
+          if(result){
+            return 'isOk';
+          }else{
+            return 'isNotOk';
+          }
+        }else{
+          return 'isOk';
+        }
+      },
+      // Check whether it is approved and return to Boolean
+      async checkTokenIfApproved(privateKey, walletAddress, tokenAddress, amounts){
+        let params = {
+          contractAbi: ERC20Abi,
+          contractAddress: tokenAddress,
+          privateKey,
+          address: walletAddress,
+          chainId: liquidChainId
+        };
+        const contractObj = await walletApi.callContract( params );
+        console.log('11111-----', tokenAddress);
+        walletApi.setVal('0');
+        const result = await contractObj.allowance(walletAddress, this._contractAddress.CONTRACT_ROUTER);
+        console.log('approve-check', aboutWallet.toRegularNumber(result));
+        return aboutWallet.toRegularNumber(result) - amounts >= 1;
+      },
+      // Loop to check whether there is approval and return Boolean
+      async checkTokenIfApprovedCircularly(privateKey, walletAddress, tokenAddress, amounts){
+        return new Promise((resolve, reject) => {
+          let times = 0;
+          this.checkTokenInterval = setInterval(async () => {
+            let result = await this.checkTokenIfApproved(privateKey, walletAddress, tokenAddress, amounts);
+            if (result || times > 8) {
+              clearInterval(this.checkTokenInterval);
+              this.checkTokenInterval = null;
+              resolve(result);
+            } else {
+              times++
+            }
+          }, 1000)
+        });
+      },
+      // Go to token contract for approval
+      async toTokenContractForApproval(privateKey, walletAddress, tokenAddress, amounts){
+        let params = {
+          contractAbi: ERC20Abi,
+          contractAddress: tokenAddress,
+          privateKey,
+          address: walletAddress,
+          chainId: liquidChainId
+        };
+        const contractObj = await walletApi.callContract(params);
+        console.log( 'Approved parameters', this._contractAddress.CONTRACT_ROUTER, aboutWallet.toBigNumber(amounts - 0 + 10));
+        walletApi.setVal('0');
+        let approveResult = await contractObj.approve(this._contractAddress.CONTRACT_ROUTER, aboutWallet.toBigNumber(amounts  - 0 + 10));
+        console.log('approveResult', approveResult);
+      },
+
+      // Add exchange pool
+      async addLiquidity({privateKey, walletAddress, tokenA, tokenB, tokenAIndex, tokenBIndex, amountA, amountB}) {
+        let params = {
+          contractAbi: thkSwapRouterAbi,
+          contractAddress: this._contractAddress.CONTRACT_ROUTER,
+          privateKey,
+          address: walletAddress,
+          chainId: liquidChainId
+        };
+        const contractObj = await walletApi.callContract(params);
+
+        if(tokenBIndex === contractIndexEnum.WTKM){
+          [tokenA, tokenB, tokenAIndex, tokenBIndex, amountA, amountB] = [tokenB, tokenA, tokenBIndex, tokenAIndex, amountB, amountA]
+        }
+
+        if(tokenAIndex === contractIndexEnum.WTKM){
+          let data = {
+            token: tokenB,
+            amountTokenDesired: aboutWallet.toBigNumber(amountB),
+            amountTokenMin: '0',
+            amountTKMMin: '0',
+            to: walletAddress.toLowerCase(),
+            deadline: parseInt((new Date().getTime() + 5 * 60 * 1000) / 1000).toString(),
+          };
+          console.log('Go to add exchange pool 1', data);
+          walletApi.setVal(aboutWallet.toBigNumber(amountA));
+          return contractObj.addLiquidityTKM(...groupObjValToList(data));
+        }else{
+          let data = {
+            tokenA: tokenA,
+            tokenB: tokenB,
+            amountADesired: aboutWallet.toBigNumber(amountA),
+            amountBDesired: aboutWallet.toBigNumber(amountB),
+            amountAMin: '0',
+            amountBMin: '0',
+            to: walletAddress.toLowerCase(),
+            deadline: parseInt((new Date().getTime() + 5 * 60 * 1000) / 1000).toString(),
+          };
+          console.log('Go to add exchange pool 2', data);
+          walletApi.setVal('0');
+          return contractObj.addLiquidity(...groupObjValToList(data));
+        }
+      },
+
+
+
+
+
       goBack(){
         uni.navigateBack();
 

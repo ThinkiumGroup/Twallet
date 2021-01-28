@@ -1,67 +1,67 @@
-# 说明
+# Description
 
-## 1、所需工具
+## 1、Tools needed
 Hbuilder (2.8.13)   AndroidStudio    Xcode
 
-## 2、关于项目
-### （1）项目地址
+## 2、About the project
+### （1）Project address
 https://github.com/ThinkiumGroup/Twallet.git
-### （2）项目目录
-![项目目录](http://qn-data.chainopen.cn/pic%2Fb8554666f57f4379a7f383c3e85125fa.jpg "项目目录")
-## 3、启动
-### （1） h5启动
-- 将项目导入到Hbuilder。
-- 在左侧文件目录上选中项目中的任意文件。
-- 菜单栏选中 运行 -> 运行到浏览器 -> 选择电脑中安装的浏览器。
-- 等待编译器编译（如果浏览器没自动打开，请在HBuilder控制台上查看 ‘App running at:’, 有标明项目启动的域名和端口)。
+### （2）Project directory
+![项目目录](https://thinkium-data.s3-us-west-2.amazonaws.com/twallet-eng.png "项目目录")
+## 3、start up
+### （1） start h5 
+- Import the project into Hbuilder.
+- Select any file in the project on the left file directory.
+- In the menu bar, select Run -> Run to browser -> Select the browser installed on the computer.
+- Wait for the compiler to compile (if the browser does not open automatically, please check ‘App running at:’ on the HBuilder console, which indicates the domain name and port of the project start).
 
-### （2） android/iOS启动
-- 数据线连上手机，或电脑启动手机模拟器
-- 菜单栏选中 运行 -> 运行到手机或模拟器->选择启动的手机或模拟器
+### （2） start android/iOS
+- Connect the data cable to the mobile phone, or start the mobile phone simulator on the computer
+- Select Run in the menu bar -> Run to phone or emulator -> select the phone or emulator to start
 
-### （3）配置请求域名和端口
-#### 相关文件位置 Twallet-app/utils/host.js相关文件位置 Twallet-app/utils/host.js
-#### 配置数据请求域名
-- 默认： 测试环境域名+端口
-- 方式1：在storage里设置 key:'baseUrl', value: 你的域名+接口，使用方法uni.getStorageSync('baseUrl', 你的域名+端口);
-- 方式2：在storage里设置 key:'env', value: 'dev'/'pro',（dev:测试环境，pro:正式环境）
-- 方式3：如果是h5，通过网页的域名和端口来匹配测试或者正式环境域名
-- 方式4：如果是h5，并且方式3没有匹配到配置的域名，那么会自动获取网页配置的域名和端口，来进行接口的调用
-#### 配置rpc域名
-- 默认： 测试环境rpc
-- 方式1：在storage里设置 key:'rpcUrl', value: 你的rpc，使用方法uni.getStorageSync('rpcUrl', 你的域名+端口);
-- 方式2：在storage里设置 key:'env', value: 'dev'/'pro',（dev:测试环境，pro:正式环境）；
-- 方式3：如果是h5，通过网页的域名和端口来匹配测试或者正式环境域名rpc
+### （3）Configure request domain name and port
+#### Related file location Twallet-app/utils/host.js
+#### Configure data request domain name
+- Default: test environment domain name + port
+- Method 1: Set key:'baseUrl', value: your domain name + interface in storage, use uni.getStorageSync('baseUrl', your domain name + port);
+- Method 2: Set key:'env', value:'dev'/'pro' in storage, (dev: test environment, pro: formal environment)
+- Method 3: If it is h5, match the test or official environment domain name through the domain name and port of the webpage
+- Method 4: If it is h5 and method 3 does not match the configured domain name, then the domain name and port configured on the web page will be automatically obtained to call the interface
+#### Configure rpc domain name
+- Default: test environment rpc
+- Method 1: Set key:'rpcUrl', value: your rpc in storage, use uni.getStorageSync('rpcUrl', your domain name + port);
+- Method 2: Set key:'env', value:'dev'/'pro' in storage, (dev: test environment, pro: formal environment);
+- Method 3: If it is h5, match the test through the domain name and port of the webpage or the official environment domain name rpc
 
-### （4）配置国际化
-#### 文件位置Framework/language
-- 文件夹中包含的 获取 系统语言的方法，英、日、韩三国语言
-- 全局配置了$lan方法，在vue页面和组件上通过 this.$lan(text) 方法进行语言翻译的调用，模板里直接使用$lan(text) 
-## 4、打包
+### （4）Configure internationalization
+#### File location Framework/language
+- The method of obtaining the system language contained in the folder, in English, Japanese and Korean
+- The $lan method is globally configured, and the language translation is called through the this.$lan(text) method on the vue page and components, and the $lan(text) is used directly in the template
+## 4、Bale
 ### （1）android
-- 下载 AndroidStudio
-- 下载 android 打包基座   https://thinkium-data.s3-us-west-2.amazonaws.com/Twallet-android.zip
-#### HBuilder中的操作
-- HBuilder中获取uni-app的AppID       位置manifest.json中的基础配置，点击重新获取，获取一次之后，之后的AppID 可以不用再次获取。
-- HBuilder菜单栏选中  发行-> 原生APP-本地打包 -> 生成本地打包APP资源-> 等待打包->控制台点击生成APP资源的本地链接。
-#### AndroidStudio中的操作
-- 导入android的打包基座。
-- 更改项目中的AppID， 文件位置  app/src/main/assets/data/dcloud_control.xml ,将其中的id 更改为hbuilder中获得的appid。
--  app/src/main/assets/apps 下的文件夹替换为 在HBuilder中 打包的app资源。
-- 更改包名和app名称 需在打包基座中进行设置。
-- 菜单栏选中 Build->Build Bundle(s)/APK(s) -> Build APK(s)。
-- 等待打包结果，点击Event  Log下的  ‘ locate’,  文件 app-debug.apk，即为打包结果，可以发到android手机进行安装。
+- Download AndroidStudio
+- Download android package dock   https://thinkium-data.s3-us-west-2.amazonaws.com/Twallet-android.zip
+#### Operations in HBuilder
+- Obtain the AppID of the uni-app in HBuilder. The basic configuration in manifest.json is clicked to obtain again. After obtaining it once, the subsequent AppID does not need to be obtained again.
+- In the HBuilder menu bar, select Release -> Native APP-Local Packaging -> Generate Local Packaged APP Resources -> Waiting for Packaging -> Click the local link to generate APP resources on the console.
+#### Operation in AndroidStudio
+- Import the Android packaging base.
+- Change the AppID in the project, the file location is app/src/main/assets/data/dcloud_control.xml, and change the id in it to the appid obtained in hbuilder.
+- The folders under app/src/main/assets/apps are replaced with app resources packaged in HBuilder.
+- Changing the package name and app name needs to be set in the packaging dock.
+- Select Build->Build Bundle(s)/APK(s) -> Build APK(s) in the menu bar.
+- Wait for the packaging result, click ‘locate’ under Event Log, the file app-debug.apk, which is the packaging result, which can be sent to the android phone for installation.
 
 ### （2）IOS
-- 下载 Xcode
-- 下载 iOS 打包基座  https://thinkium-data.s3-us-west-2.amazonaws.com/Twallet-iOS.zip
-#### HBuilder中的操作
-- HBuilder中获取uni-app的AppID       位置manifest.json中的基础配置，点击重新获取，获取一次之后，之后的AppID 可以不用再次获取
-- HBuilder菜单栏选中  发行-> 原生APP-本地打包 -> 生成本地打包APP资源-> 等待打包->控制台点击生成APP资源的本地链接
-#### xCode中的操作
-- 双击文件Twallet.xcodeproj ，即可在xCode中导入iOS的打包基座
-- 配置Xcode 项目私钥
-- 更改项目中的AppID， 文件位置HBuilder-Hello/pandora/Supporting Files/control.xml ,将其中的appid 更改为HBuilder中获得的AppID
-- HBuilder-Hello/pandora/apps  下的文件夹替换为 在HBuilder中 打包的app资源
-- Xcode 选中Generic IOS Device ，菜单栏选中Product->archive等待打包。
-- 弹出对话框中 选中刚刚打包的文件，依次点击  Distribute APP->  Ad Hoc -> next  一直next，输入密码，即可导出ipa文件
+- Download Xcode
+- Download the iOS packaging dock https://thinkium-data.s3-us-west-2.amazonaws.com/Twallet-iOS.zip
+#### Operations in HBuilder
+- Obtain the AppID of uni-app in HBuilder. The basic configuration in manifest.json, click to get it again. After obtaining it once, the subsequent AppID does not need to be obtained again
+- In the HBuilder menu bar, select Release -> Native APP-Local Packaging -> Generate Local Packaged APP Resources -> Waiting for Packaging -> Click the local link to generate APP resources on the console
+#### Operations in xCode
+- Double click the file Twallet.xcodeproj to import the iOS packaging dock in xCode
+- Configure Xcode project private key
+- Change the AppID in the project, the file location is HBuilder-Hello/pandora/Supporting Files/control.xml, and change the appid to the AppID obtained in HBuilder
+- Replace the folders under HBuilder-Hello/pandora/apps with the app resources packaged in HBuilder
+- Xcode selects Generic IOS Device, and selects Product->archive in the menu bar to wait for packaging.
+- In the pop-up dialog box, select the file you just packaged, and click Distribute APP-> Ad Hoc -> next and continue to next, enter the password, and you can export the ipa file

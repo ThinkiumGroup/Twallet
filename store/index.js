@@ -23,7 +23,7 @@ const store = new Vuex.Store({
 		},
 	},
 	mutations: {
-		// 设置当前默认钱包
+		// Set the current default wallet
 		setDefaultWallet(state, walletData) {
 			uni.setStorageSync('defaultWallet',walletData);
 			state.defaultWallet = walletData;
@@ -59,7 +59,7 @@ const store = new Vuex.Store({
 	},
 	actions: {
 		async getContractAddresses({ commit, state, dispatch }){
-			console.log('去获取ContractAddresses');
+			console.log('Go get ContractAddresses');
 			let address = state.defaultWallet.address && state.defaultWallet.address.toLowerCase();
 			if(!address){
 				return;

@@ -2,7 +2,7 @@ var UniProvider = function (host, timeout) {
     this.host = host || 'http://localhost:8545';
     this.timeout = timeout || 0;
 };
-/*同步请求*/
+/*Sync request*/
 UniProvider.prototype.send = async function (payload) {
     const _this = this;
     try {
@@ -22,7 +22,7 @@ UniProvider.prototype.send = async function (payload) {
     }
     return res.data;
 };
-/*异步请求*/
+/*Asynchronous request*/
 UniProvider.prototype.sendAsync = function (payload, callback) {
     const _this = this;
     uni.request({

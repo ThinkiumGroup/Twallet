@@ -5,7 +5,7 @@
         <text class="title">{{title}}</text>
       </view>
       <button @click="createWallet">
-        {{$lan('创建钱包')}}
+        {{$lan('createWallet')}}
       </button>
       <view class="block">
         {{$lan('助记词：')}}{{mnemonicWords}}
@@ -17,7 +17,7 @@
         {{$lan('公钥：')}}{{publicKey}}
       </view>
       <view class="block">
-        {{$lan('地址：')}}{{address}}
+        {{$lan('address：')}}{{address}}
       </view>
       <button @click="addWalletToList">{{$lan('将创建的钱包加入内存列表')}}</button>
 
@@ -34,7 +34,7 @@
       <button @click="changeWalletNanme">{{$lan('更改钱包名称')}}</button>
 
       <button @click="checkPassword">{{$lan('校验密码')}}</button>
-      <button @click="deleteWallet">{{$lan('删除钱包')}}</button>
+      <button @click="deleteWallet">{{$lan('deleteWallet')}}</button>
       <button @click="changePassword">{{$lan('更改密码')}}</button>
     </scroll-view>
   </view>
@@ -75,7 +75,7 @@
       },
 
       async addWalletToList() {
-        // 设置密码
+        // Set password
         let password = this.password;
         let walletData = {
           // mnemonic: this.mnemonicWords,
@@ -93,7 +93,7 @@
         console.log('result', result);
       },
       async getWalletPrivateKey(address) {
-        // 假定已输入密码
+        // Assume that the password has been entered
         let password = this.password;
         let privateKey = await aboutWallet.getWalletPrivateKey(address, password);
         console.log('privateKey', privateKey);

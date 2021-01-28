@@ -6,7 +6,7 @@
                     <input
                         v-model="tokenNameInput"
                         @input="handleTokenNameInput"
-                        :placeholder="$lan('输入通证名称')"
+                        :placeholder="$lan('enterTheTokenName')"
                         class="token-input"/>
                     <swiper class="transfer-swiper" :current="tabIndex" @change="swiperChange">
                         <swiper-item  v-for="(pageData, index) in tabList">
@@ -19,7 +19,7 @@
                                                 <view class="token-name">{{item.tokenName}}</view>
                                             </template>
                                             <template v-else>
-                                                <view class="token-name">没有该通证</view>
+                                                <view class="token-name">{{$lan('noSuchToken')}}</view>
                                             </template>
                                         </view>
                                     </view>
@@ -49,7 +49,7 @@
                          ]
                     },
                     {
-                        name: this.$lan('其他通证'),
+                        name: this.$lan('otherTokens'),
                         type: 'other',
                         list: [{image: '', tokenName: 'TKM', type: 'other',},
                                {image: '', tokenName: 'TKM', type: 'other',},]
@@ -95,7 +95,7 @@
                     return tokenName.indexOf(tokenNameInput) > -1
                 })
                 if(!this.tokenList.length){
-                    this.tokenList = [{_status: -1}] //没有筛选出通证
+                    this.tokenList = [{_status: -1}] //token was not screened out
                 }
             },
         }

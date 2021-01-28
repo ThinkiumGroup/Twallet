@@ -1,60 +1,60 @@
 <template>
     <view class="container">
-        <nav-bar :title="this.$lan('导出私钥')" :containerStyle="{boxShadow: '0 0'}"/>
+        <nav-bar :title="$lan('exportPrivateKey')" :containerStyle="{boxShadow: '0 0'}"/>
         <EasyTab :tabList="tabList" v-model="type"/>
         <swiper class="transfer-swiper" :current="type" @change="swiperChange">
             <swiper-item class="swiper-item">
                 <view class="content">
                     <view class="label">
-                        {{$lan('离线保存')}}
+                        {{$lan('saveOffline')}}
                     </view>
                     <view class="text">
-						{{$lan('请离线保存私钥，切勿保存至邮箱、记事本、聊天工具等')}}
+						{{$lan('pleaseSaveThePrivateKeyOffline')}}
                     </view>
                     <view class="label">
-						{{$lan('切勿使用网络传输')}}
+						{{$lan('doNotUseNetworkTransmission')}}
 
                     </view>
                     <view class="text">
-						{{$lan('切勿通过网络工具传播您的私钥，易被黑客窃取造成严重损失，建议使用离线设备扫描二维码导入私钥')}}
+						{{$lan('doNotSpreadYourPrivateKeyTips')}}
 
                     </view>
                     <view class="label">
-                        {{$lan('使用密码工具保存')}}
+                        {{$lan('saveWithPasswordTool')}}
                     </view>
                     <view class="text">
-                        {{$lan('建议您使用密码管理工具保存您的私钥')}}
+                        {{$lan('suggestionsForSavingPrivateKeys')}}
                     </view>
                     <view class="label">
-                        {{$lan('您的私钥：')}}
+                        {{$lan('yourPrivateKey')}}
                     </view>
                     <view class="private-key-area">
                         {{ privateKey }}
                     </view>
-                    <allBtn :text="this.$lan('复制私钥')"  :containerStyle="{marginTop: '150rpx', marginBottom: '50rpx'}" @click="toCopy(privateKey)"/>
+                    <allBtn :text="this.$lan('copyPrivateKey')"  :containerStyle="{marginTop: '150rpx', marginBottom: '50rpx'}" @click="toCopy(privateKey)"/>
                 </view>
             </swiper-item>
             <swiper-item class="swiper-item">
                 <scroll-view class="content" scroll-y="true">
                     <view class="label">
-                        {{$lan('仅供扫描使用')}}
+                        {{$lan('forScanningOnly')}}
                     </view>
                     <view class="text">
-						{{$lan('二维码切勿保存、截图、拍照，仅供用户在绝对安全环境下直接扫描方便导入钱包')}}
+						{{$lan('doNotSaveQRCode')}}
 
                     </view>
                     <view class="label">
-						{{$lan('请在绝对安全环境下使用')}}
+						{{$lan('pleaseUseInAnAbsolutelySafeEnvironment')}}
 
                     </view>
                     <view class="text">
-						{{$lan('请在确保四周无人且无摄像头的情况下使用，二维码一旦被他人获取将造成无法挽回的财产损失')}}
+						{{$lan('doNotRevealTheQRCode')}}
                     </view>
                     <view class="code-area">
                         <image src="/static/image/privateKey/hideCode.png" v-show="!showCode" style="width: 316rpx; height: 162rpx;"></image>
                         <image :src="codePath" v-show="showCode" style="width: 385rpx;height: 385rpx;"></image>
                     </view>
-                    <allBtn :text="this.$lan('显示二维码')" :containerStyle="{marginTop: '102rpx', marginBottom: '50rpx'}" @click="showCode = !showCode"/>
+                    <allBtn :text="this.$lan('displayQRCode')" :containerStyle="{marginTop: '102rpx', marginBottom: '50rpx'}" @click="showCode = !showCode"/>
                 </scroll-view>
             </swiper-item>
         </swiper>
@@ -78,15 +78,15 @@
             return {
                 tabList: [
                     {
-                        prop:this.$lan('导出私钥'),
+                        prop:this.$lan('exportPrivateKey'),
                         value: 0
                     },
                     {
-                        prop:this.$lan('二维码'),
+                        prop:this.$lan('QRCode'),
                         value: 1
                     },
                 ],
-                type: 0, // 1正常导出页面 2二维码页面
+                type: 0, // 1 normal export page 2 QR code page
                 privateKey: '',
                 codePath: '',
                 showCode: false,
@@ -99,7 +99,7 @@
             toCopy(text){
                 copy(text);
                 uni.showToast({
-                    title:this.$lan('复制成功'),
+                    title:this.$lan('copySuccessfully'),
                     icon: 'none',
                     duration: 2000
                 });
@@ -110,7 +110,7 @@
                 this.createCode();
             },
 
-            // 制作二维码
+            // Making QR code
             async createCode(){
                 const {windowWidth, windowHeight} = uni.getSystemInfoSync();
                 let size = 385 * windowWidth / 750;
@@ -140,7 +140,7 @@
         },
         onLoad(option){
             if(!option.address || !option.password){
-                throw new Error(this.$lan('连接中缺少地址和密码数据'));
+                throw new Error('Address and password data missing in the connection');
             }
             this.getPrivateKey(option.address, option.password)
         }

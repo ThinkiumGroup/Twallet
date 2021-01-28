@@ -2,13 +2,13 @@
   <view class="app">
     <CustomBar class="topBar" :styles="{background: '#fff'}"/>
     <NoDefaultWallet v-if="!hasDefaultWallet"></NoDefaultWallet>
-    <web-view 
-			v-else  
-			:webview-styles="webviewStyles" 
+    <web-view
+			v-else
+			:webview-styles="webviewStyles"
 			:src="src"
 			@message="handleMessage"
 		 ></web-view>
-     
+
   </view>
 </template>
 <script>
@@ -20,22 +20,19 @@ export default {
     return {
       src: "https://browser.thinkium.io/phone?public",
        webviewStyles: {
-                     progress: false //必须要设置为false
-                    // progress: {
-                    //     color: '#FF3333'
-                    // }
+                     progress: false //Must be set to false
                 }
     };
   },
   onShow() {
-      
-      
-      
+
+
+
 		// 		 var pages = getCurrentPages();
 		// var page = pages[pages.length - 1];
 		// console.log("page",page)
 		// console.log("pages",pages)
-		
+
 		// var currentWebview=page.$getAppWebview();
 		// console.log("currentWebview",currentWebview)
 		// setTimeout(function(){
@@ -46,21 +43,21 @@ export default {
 		// 	web_view[0].addEventListener("loading",function(){
 		// 		w.show();
 		// 	},false);
-			
+
 		// 	web_view[0].addEventListener("loaded",function(){
 		// 		w.close();
 		// 		w=null;
 		// 	},false);
 		// },600)
-			
+
     },
     onReady(){
       console.log("this",this)
     },
 		onLoad(option) {
 		if(option.src) this.src = option.src;
-   
-		
+
+
 		// var pages = getCurrentPages();
 		// var page = pages[pages.length - 1];
 		// var currentWebview=page.$getAppWebview();
@@ -72,27 +69,27 @@ export default {
 		// 	web_view[0].addEventListener("loading",function(){
 		// 		w.show();
 		// 	},false);
-			
+
 		// 	web_view[0].addEventListener("loaded",function(){
 		// 		w.close();
 		// 		w=null;
 		// 	},false);
 		// },600)
-		//设置电池栏高度
-		const currentWebview = this.$mp.page.$getAppWebview(); //获取当前web-view
+		//Set battery bar height
+		const currentWebview = this.$mp.page.$getAppWebview(); //Get the current web view
 		setTimeout(function() {
 		const wv = currentWebview.children()[0];
-		wv.setStyle({ //设置web-view距离顶部的距离以及自己的高度，单位为px
+		wv.setStyle({ //Set the distance between the web view and the top and your own height in PX
 			top: uni.getSystemInfoSync().statusBarHeight,
 		})
 		}, 1000);
-	
-    
+
+
   },
   //  onShow(){
   //           uni.setTabBarItem({
   //           index: 2,
-  //           text:this.$lan('浏览器')
+  //           text:this.$lan('browser')
   //       });
   //       },
   computed: {
@@ -105,37 +102,9 @@ export default {
   },
   methods:{
     handleMessage(){
-      
+
     }
-			// onPostMessage(){
-			// 	console.log('xxxonPostMessage')
-			// },
-			// demo(){
-			// 	console.log('xxxxxxxxxx')
-			// },
-			// message(event){
-			// 	console.log('触发事件')
-			// 	const data = event.detail.data[0]
-			// 	console.log(data)
-			// 	console.log('___________')
-			// 	const action = data.action
-			// 	console.log(action)
-			// 	console.log('messagemessagemessagemessagemessage')
-			// 	uni.showModal({
-			// 	    title: '提示',
-			// 	    content: data.type,
-			// 	    success: function (res) {
-			// 	        if (res.confirm) {
-			// 	            console.log('用户点击确定');
-			// 	        } else if (res.cancel) {
-			// 	            console.log('用户点击取消');
-			// 	        }
-			// 	    }
-			// 	});
-			// 	console.log(event)
-			// 	console.log('xxx')
-			// }
-		}
+  }
 };
 </script>
 

@@ -29,7 +29,7 @@ export default {
      props: {
        text: {
                 type: String,
-                default: '转账'
+                default: 'transfer accounts'
             },
        containerStyle: {
 

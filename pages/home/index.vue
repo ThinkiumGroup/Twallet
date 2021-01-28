@@ -2,7 +2,7 @@
 	<view class="home-container">
 		<CustomBar />
 		<NoDefaultWallet v-if="!hasDefaultWallet"></NoDefaultWallet>
-		<!-- 头部 -->
+		<!-- head -->
 		<view v-else class="home-cont">
 			<view class="h_top">
 				<view class="top_left" @click="toWalletManage">
@@ -18,7 +18,7 @@
 
 
 				</view>
-				<!-- h5端暂不支持扫码 -->
+				<!--The H5 terminal does not support code scanning temporarily-->
 				<!-- #ifndef H5-->
 				<view class="top_right" @click="searchCode">
 					<image src="../../static/image/home/icon_sys.png"></image>
@@ -29,7 +29,7 @@
 			<view class="banner" @click="goRece">
 				<!-- <view class="banner-cont"> -->
 					<view class="ban_top">
-						<text>{{$lan('总资产')}}</text>
+						<text>{{$lan('totalAssets')}}</text>
 					</view>
 					<view class="ban_mid">
 
@@ -38,28 +38,28 @@
 					</view>
 					<view class="ban_bottom">
 						<text class="ban_bottom_cont">{{ $toTHAddress(defaultWallet.address) }}</text>
-						<view @click="copyData($toTHAddress(defaultWallet.address))">{{$lan('复制')}}</view>
+						<view @click="copyData($toTHAddress(defaultWallet.address))">{{$lan('copy')}}</view>
 					</view>
 				<!-- </view> -->
 
 			</view>
-			<!-- 收款，转账 -->
+			<!-- Collection, transfer -->
 			<view class="banner_bottom">
 				<view class="sk" @click="goReceiveMoney">
 					<image src="../../static/image/home/icon_sk.png" mode=""></image>
-					<text>{{$lan('收款')}}</text>
+					<text>{{$lan('receivePayment')}}</text>
 				</view>
 				<view class="zj" @click="goTransfer">
 					<image src="../../static/image/home/icon_zj.png" mode=""></image>
-					<text>{{$lan('转账')}}</text>
+					<text>{{$lan('transfer')}}</text>
 				</view>
 			</view>
-			<!-- 资产列表 -->
+			<!-- Asset list -->
 			<view  class="zclbTop">
-				<text class=zclb_topTxt>{{$lan('资产列表')}}</text>
+				<text class=zclb_topTxt>{{$lan('assetList')}}</text>
 				<image class=zclb_topImg src="../../static/image/home/icon_lb.png"></image>
 			</view>
-				
+
 				<view class="zclb">
 				<view class="zclb_box1"  @tap="goTransactionRecord(0)">
 					<view class="tkm">
@@ -86,10 +86,10 @@
 						</view>
 					</view>
 				</view>
-			
-			
-				
-				
+
+
+
+
 			</view>
 				<view
 					class="zclb_box2"
@@ -107,8 +107,8 @@
 						</view>
 					</view>
 				</view>
-				
-				
+
+
 		</view>
 
 	</view>
@@ -138,8 +138,8 @@
 	export default {
 		data() {
 			return {
-				homeText: this.$lan('这是首页'),
-				data: "", //复制的内容
+				homeText: this.$lan('thisIsTheHomepage'),
+				data: "", //Copied content
 				accountAddress: "",
 				contractAddress: "",
 				page: 1,
@@ -154,9 +154,9 @@
 				xtoList: [],
 
 				contentText: {
-					contentdown: this.$lan('上拉显示更多'),
-					contentrefresh: this.$lan('正在加载...'),
-					contentnomore: this.$lan('没有更多数据了')
+					contentdown: this.$lan('pullUpToShowMore'),
+					contentrefresh: this.$lan('loading'),
+					contentnomore: this.$lan('noMoreData')
 				}
 			}
 		},
@@ -165,13 +165,13 @@
 			if(this.defaultWallet!=''){
 				this.page=1
 				uni.showLoading({
-				        title: '加载中',
+				        title: this.$lan('loading'),
 				        mask: true,
 					});
 				this.getHomeDate()
 				this.BottomFun()
 				}else{
-					// console.log("暂无钱包")
+					// console.log("No wallet")
 					return
 				}
 
@@ -189,9 +189,7 @@
 
 		},
 		onReady(){
-			// uni.setNavigationBarTitle({
-      		// 	title: "新的标题"
-    		// });
+
 		},
 		computed: {
 
@@ -212,19 +210,14 @@
     },
 		 onPullDownRefresh() {
 
-		console.log('下拉刷新11');
+		console.log('Drop down refresh');
 		setTimeout(function () {
-			// uni.showLoading({
-            //         title: '加载中',
-            //         mask: true,
-			// 	});
 			 uni.startPullDownRefresh();
         }, 1000);
 		this.getHomeDate()
 		this.BottomFun()
     },
 		// onPullDownRefresh() {
-		// 	console.log('下拉刷新2');
 		// 	setTimeout(function () {
 		//     uni.stopPullDownRefresh();
 		// }, 1000);
@@ -234,7 +227,7 @@
 			if(this.defaultWallet==''){
 
 			}else{
-				console.log("触底加载")
+				console.log("Bottom loading")
 			this.BottomFun()
 			}
 		},
@@ -252,12 +245,12 @@
 				if (this.total <= this.addList.length) {
 					// if(this.total==0){
 					// 	uni.showToast({
-					// 	title: this.$lan('暂无数据'),
+					// 	title: this.$lan('noData'),
 					// 	duration: 2000
 					// });
 					// }else{
 					// 	uni.showToast({
-					// 	title: this.$lan('已是最新'),
+					// 	title: this.$lan('isUpToDate'),
 					// 	duration: 2000
 					// });
 					// return
@@ -282,9 +275,9 @@
 					this.addList = this.addList.concat(res.data.data)
 
 					// for(var i=res.data.data.length;i<res.data.data.total;i++){
-					// xtoList =this.xtoList.concat(res.data.data[i-1]);//将数据拼接在一起
+					// xtoList =this.xtoList.concat(res.data.data[i-1]);//Stitch data together
 					// }
-					console.log("首页xto数据", res.data)
+					console.log("Home xto data", res.data)
 				});
 			},
 			goTransactionRecord(tokenType){
@@ -294,7 +287,7 @@
 			},
 			getHomeDate() {
 				this.page=1
-				//首页banner区的数据
+				//Data in banner area of home page
 				getAddress({
 					address: this.defaultWallet.address
 				}).then(res => {
@@ -305,28 +298,17 @@
 					this.tkmList = res.data.taskChains
 					let len = res.data.taskChains.length
 					let numArr = []
-					// let zong = 0
-					// console.log("00000000000000",len)
 					for (let i = 0; i < len; i++) {
 						let num = Number(res.data.taskChains[i].currencyAmount)
 						numArr.push(num)
-						// console.log("iii", i, num)
-						// console.log("11iii",i, numArr)
 					}
-					// console.log("数组",numArr)
 					 this.zong = numArr.reduce(function(accumulator, currentValue, currentIndex, array){
 							  return  accumulator + currentValue;
 						});
-						// console.log("总数",this.zong)
-					// this.sum = Number(num) + Number(this.sum)
-					// console.log("每个数", typeof(this.sum),this.sum)
-					// console.log("111sum", this.sum)
-					// console.log("首页banner数据", res)
-					// console.log("首页TKM数据", res.data.taskChains)
 				}).catch(() => {
 					uni.hideLoading()
 				});
-				//资产列表下的数据
+				//Data under the asset list
 				getAddressList({
 					"chainId": 103,
 					"accountAddress": this.defaultWallet.address,
@@ -337,15 +319,12 @@
 					this.page=1
 					this.addList = res.data.data;
 					this.total = res.data.total
-					console.log("page2", this.page)
-
-					console.log("111首页xto数据", res.data)
 				});
 			},
 			copyData(data) {
 				copy(data)
 				uni.showToast({
-					title: this.$lan('复制成功'),
+					title: this.$lan('copySuccessfully'),
 					icon: 'none',
 					duration: 2000
 				});
@@ -457,13 +436,13 @@
 						align-items: center;
 
 						text {
-							
-							
+
+
 							// height: 20rpx;
 							// line-height: 20rpx;
 							// margin-left: -12rpx;
 							// display: flex;
-							
+
 							padding-left: 21rpx;
 							// text-align: left;
 							white-space:nowrap;
@@ -476,7 +455,7 @@
 
 			}
 
-			
+
 		}
 
 		//总资产模块
@@ -564,7 +543,7 @@
 			font-size: 30rpx;
 			height: 100rpx;
 			display: flex;
-			color: #333333;		
+			color: #333333;
 			font-weight: 500;
 			// justify-content: space-between;
 
@@ -616,7 +595,7 @@
 			margin-bottom: 35rpx;
 			line-height: 35rpx;
 			.zclb_topTxt {
-				font-size: 36rpx; 
+				font-size: 36rpx;
 				font-weight: bold;;
 				// margin-bottom: 35rpx;
 				color: #555555;
@@ -643,7 +622,7 @@
 			// box-shadow: 0px 3rpx 10rpx 0rpx rgba(185, 196, 231, 0.3);
 			border-radius: 10rpx;
 			box-shadow: 0px 3rpx 10rpx 0px rgba(185, 196, 231, 0.3);
-			
+
 			.zclb_box1 {
 				width: 100%;
 				min-height: 402rpx;
@@ -669,7 +648,7 @@
 				justify-content: space-between;
 				align-items: center;
 				border-bottom: 1rpx solid #DEDEDE;
-				
+
 
 				.tkm_left {
 					display: flex;
@@ -678,7 +657,7 @@
 
 					text {
 						font-size: 34rpx;
-						color: #333333;	
+						color: #333333;
 						font-weight: bold;
 						font-family: PingFang SC;
 						// font-weight: 700;
@@ -715,7 +694,7 @@
 				// margin: 0 45rpx 0 39rpx;
 				// padding-bottom: 33rpx;
 				height: 70rpx;
-				
+
 
 				.zcl1_cont {
 					// width: 100%;
@@ -755,7 +734,7 @@
 				}
 			}
 
-			
+
 
 		}
 		.zclb_box2 {
@@ -792,7 +771,7 @@
 						align-items: center;
 						text {
 							font-size: 34rpx;
-						color: #333333;	
+						color: #333333;
 						font-weight: bold;
 						font-family: PingFang SC;
 							// font-weight: 700;

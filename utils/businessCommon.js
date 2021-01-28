@@ -12,7 +12,7 @@ var web3 = new Web3();
 
 export const aboutWallet = {
   /**
-   * 设置默认钱包
+   * Set default wallet
    * @param walletAddress
    * @returns {Promise<{msg: string, status: number}>}
    */
@@ -26,25 +26,25 @@ export const aboutWallet = {
       store.commit('setDefaultWallet', walletData);
       return {
         status: 1,
-        msg: '设置成功'
+        msg: 'Set successfully'
       };
     } else {
       return {
         status: 0,
-        msg: '没有存储该钱包'
+        msg: 'The wallet is not stored'
       };
     }
   },
   /**
-   * 添加新钱包
+   * Add new wallet
    * @param newWallet  newWallet={name, mnemonic, privateKey, address} mnemonic, privateKey, address传任何一个就行，按地址导入的，只能查看数据，不能进行交易
    * @param passWord
-   * @param method  1,添加钱包，2，更换已有钱包
+   * @param method  1. Add wallet, 2. Replace existing wallet
    * @returns {Promise<{msg: string, status: number}|{status: number}>}
    */
   async addNewWallet( newWallet, passWord, method = 1){
     if(!newWallet.name){
-      return {status: 0, msg: '请传入钱包名称'};
+      return {status: 0, msg: 'Please pass in the wallet name'};
     }
     passWord += '';
     let privateKey, publicKey, address, type;
@@ -63,7 +63,7 @@ export const aboutWallet = {
       newWallet.name += '-byAddress';
       address = newWallet.address.trim();
     } else {
-      return {status: 0, msg: '请传入助记词/私钥/地址'};
+      return {status: 0, msg: 'Please pass in the mnemonic/private key/address'};
     }
 
     let walletList = uni.getStorageSync('walletList') || [];
@@ -71,10 +71,10 @@ export const aboutWallet = {
     for (let key in walletList) {
       if (type !== 'address' && walletList[key] && walletList[key].address === address) {
         if (method == 1) {
-          console.log('已存入该钱包');
+          console.log('Deposited in this wallet');
           return {
             status: 0,
-            msg: '已导入过该钱包'
+            msg: 'The wallet has been imported'
           };
         } else if (method == 2) {
           walletIndex = key
@@ -118,7 +118,7 @@ export const aboutWallet = {
     return {status: 1};
   },
   /**
-   * 校验密码
+   * Verify password
    * @param walletAddress
    * @param passWord
    * @returns {boolean}
@@ -134,7 +134,7 @@ export const aboutWallet = {
     return key === walletData.passHash;
   },
   /**
-   * 获取钱包私钥，用来进行交易 输出 Buffer 格式
+   * Obtain the wallet private key, which is used for transactions. Output Buffer format
    * @param walletAddress
    * @param password
    * @returns {Promise<Buffer>}
@@ -148,7 +148,7 @@ export const aboutWallet = {
     return privateKey;
   },
   /**
-   * 获取钱包助记词、私钥、公钥、地址
+   * Get wallet mnemonic, private key, public key, address
    * @param walletAddress
    * @param password
    * @returns {Promise<{}>}
@@ -173,7 +173,7 @@ export const aboutWallet = {
   },
 
   /**
-   * 删除钱包
+   * Delete wallet
    * @param walletAddress
    * @returns {Promise<{status: number}>}
    */
@@ -190,7 +190,7 @@ export const aboutWallet = {
     };
   },
   /**
-   * 删除钱包，并设置默认钱包
+   * Delete the wallet and set the default wallet
    * @param walletAddress
    * @returns {Promise<void>}
    */
@@ -204,7 +204,7 @@ export const aboutWallet = {
     }
   },
   /**
-   * 更改密码
+   * change the password
    * @param walletAddress
    * @param oldPassword
    * @param newPassword
@@ -223,17 +223,17 @@ export const aboutWallet = {
     }
   },
   /**
-   * 更改钱包名称
+   * Change wallet name
    * @param walletAddress
    * @param newName
    * @returns {Promise<{status: number}>}
    */
   async changeWalletName(walletAddress, newName){
     if(!walletAddress){
-      throw new Error('更改钱包名称， 缺少钱包地址');
+      throw new Error('Change wallet name, wallet address is missing');
     }
     if (!newName) {
-      throw new Error('更改钱包名称， 缺少钱包新名称');
+      throw new Error('Change wallet name, new wallet name is missing');
     }
 
     let walletList = uni.getStorageSync('walletList') || [];
@@ -252,7 +252,7 @@ export const aboutWallet = {
     return { status: 1 };
   },
   /**
-   * 转换为0x地址
+   * Convert to 0x address
    * @param address
    * @returns {string}
    */
@@ -260,7 +260,7 @@ export const aboutWallet = {
 		return web3.Iban.toAddress(address).toLowerCase()
 	},
   /**
-   * 转换为TH地址
+   * Convert to TH address
    * @param THaddress
    * @returns {string}
    */
@@ -268,7 +268,7 @@ export const aboutWallet = {
     return web3.Iban.toIban(THaddress)
   },
   /**
-   * 变大数字, 输出字符串
+   * Increase number, output string
    * @param nums
    * @returns {string}
    */
@@ -276,12 +276,12 @@ export const aboutWallet = {
     nums -= 0;
 		return new BigNumber(`${nums}`).multipliedBy('1e+18').toString(10)
 	},
-	//变大数字
+	//Increase the number
 	toBigNumber16(nums) {
 		return new BigNumber(`${nums}`).multipliedBy('1e+18').toString(16)
 	},
   /**
-   * 大数变成常规数字
+   * Large numbers become regular numbers
    * @param number
    * @param type (ceil, floor, origin, auto 默认auto)
    * @param n 保留位数
@@ -291,7 +291,8 @@ export const aboutWallet = {
 	  if(!(number - 0)){
 	    return 0;
 	  }
-	  let regularNumber = new BigNumber(number).div("1e+18").toString(10);
+    let bigNumber = new BigNumber(number).div("1e+18");
+	  let regularNumber = bigNumber.toString(10);
 
     if (type === 'origin') {
 
@@ -312,6 +313,11 @@ export const aboutWallet = {
       regularNumber =  parseFloat(regularNumber / Math.pow(10, n))
     }
 
+
+    if(!bigNumber.isEqualTo(0) && !bigNumber.isGreaterThan(Math.pow(0.1, n))){
+      regularNumber = bigNumber.toString()
+    }
+
     if(regularNumber - 999999999 > 0){
       regularNumber = regularNumber.toExponential(n);
     }
@@ -320,7 +326,7 @@ export const aboutWallet = {
     return regularNumber;
   },
 	/**
-	 * 校验地址
+	 * Check address
 	 * @param address
 	 */
 	checkAddress(address) {
@@ -329,13 +335,13 @@ export const aboutWallet = {
 };
 
 /**
- * 格式化助记词
+ * Format mnemonic
  * @param mnemonicWords
  * @returns {string}
  */
 export function formatMnemonicWords(mnemonicWords = ''){
   if(!mnemonicWords.trim()){
-    console.log('传入的助记词为空');
+    console.log('The incoming mnemonic is empty');
     return;
   }
   let reg = /[^a-zA-Z]+/g
@@ -344,7 +350,7 @@ export function formatMnemonicWords(mnemonicWords = ''){
 }
 
 /**
- * 循环查询交易状态
+ * Cycle query transaction status
  * @param chainId
  * @param hash
  * @param delay
@@ -361,7 +367,7 @@ export async function getTransactionResultByHashCircularly(chainId, hash, delay)
         clearInterval(interval);
         interval = null;
         if (result.status != 1) {
-          console.log('交易失败，hash：', hash);
+          console.log('transaction failed，hash：', hash);
         }
         resolve(result.status == 1);
       } else {
@@ -385,7 +391,7 @@ export function searchCode(method){
           obj[item.split('=')[0]] = item.split('=')[1]
           return obj
         }, {})
-        if(!Object.values(resiltObj)[0]){ //扫不到东西的时候，重新打开相机
+        if(!Object.values(resiltObj)[0]){  //When nothing can be scanned, turn on the camera again
           searchCode(method).then((res) => {
             resolve(res);
           });
@@ -410,7 +416,7 @@ export function searchCode(method){
         }
       },
       fail(err){
-        console.log('出错啦啦啦啦');
+        console.log('Something went wrong');
       }
     });
   })

@@ -28,19 +28,19 @@
 			console.log("App Launch");
 			uni.setTabBarItem({
 				index: 0,
-				text: this.$lan('首页')
+				text: this.$lan('home')
 			});
 			uni.setTabBarItem({
 				index: 1,
-				text: this.$lan('闪兑')
+				text: this.$lan('flashRedemption')
 			});
 			uni.setTabBarItem({
 				index: 2,
-				text: this.$lan('浏览器')
+				text: this.$lan('browser')
 			});
 			uni.setTabBarItem({
 				index: 3,
-				text: this.$lan('我的')
+				text: this.$lan('mine')
 			});
 			// #ifdef H5
 			//在页面加载时读取sessionStorage里的状态信息

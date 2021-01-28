@@ -21,7 +21,7 @@
 					<image src="../../static/image/my/tx.png"></image>
 				</view>
 				<view class="topTxt">
-					<view class="topTxt_top">{{Object.keys(defaultWallet).length > 0 ? defaultWallet.name : '未创建钱包'}}</view>
+					<view class="topTxt_top">{{Object.keys(defaultWallet).length > 0 ? defaultWallet.name : $lan('noWalletCreated')}}</view>
 					<view class="topTxt_bottom" v-if="Object.keys(defaultWallet).length > 0">
 						<image src="../../static/image/my/icon_top.png"></image>
 						<text>{{$toTHAddress(defaultWallet.address)}}</text>
@@ -33,24 +33,24 @@
 		<view class="myNav">
 			<view class="nav" @tap="toImportWallet">
 				<image src="../../static/image/my/icon-drqb.png"></image>
-				<text>{{$lan('导入钱包')}}</text>
+				<text>{{$lan('importWallet')}}</text>
 			</view>
 			<view class="nav" @tap="toCreateWallet">
 				<image src="../../static/image/my/icon-cjqb.png"></image>
-				<text>{{$lan('创建钱包')}}</text>
+				<text>{{$lan('createWallet')}}</text>
 			</view>
 			<view class="nav"  @tap="toDeleteWallet">
 				<image src="../../static/image/my/icon-scqb.png"></image>
-				<text>{{$lan('删除钱包')}}</text>
+				<text>{{$lan('deleteWallet')}}</text>
 
 			</view>
 			<uni-popup ref="popup1" type="center" :mask-click="false">
 				<view  class="popupCenter">
-				<view class="center_title">{{$lan('提示')}}</view>
-				<view class="center_content">{{$lan('您正在删除钱包，删除后只能通过助记词和私钥重新导入，请在删除前务必确认已备份住几次或私钥')}}</view>
+				<view class="center_title">{{$lan('prompt')}}</view>
+				<view class="center_content">{{$lan('deleteWalletTips')}}</view>
 				<view class="center_button">
-					<view class="btn1" @click="toPrivateKeyTip(defaultWallet.type=='mnemonic' ? '1' : '2')" >{{$lan( defaultWallet.type=='mnemonic' ? '备份助记词' : '备份私钥' )}}</view>
-					<view class="btn2" @click="deleteWalletAndSetDefault">{{$lan('我已备份，删除钱包')}}</view>
+					<view class="btn1" @click="toPrivateKeyTip(defaultWallet.type=='mnemonic' ? '1' : '2')" >{{$lan( defaultWallet.type=='mnemonic' ? 'backupMnemonic' : 'backupPrivateKey' )}}</view>
+					<view class="btn2" @click="deleteWalletAndSetDefault">{{$lan('IhaveBackedUpDeleteMyWallet')}}</view>
 				</view>
 				</view>
 			</uni-popup>
@@ -61,27 +61,27 @@
 					<view class="popupCenters">
 						<view class="center_title">
 
-							<text>{{$lan('请输入新的钱包名称')}}</text>
+							<text>{{$lan('pleaseEnterANewWalletName')}}</text>
 
 
 						</view>
 						<view class="center_content">
 
-							<input type="text" v-model="newName" :placeholder="this.$lan('请输入新的钱包名称')">
+							<input type="text" v-model="newName" :placeholder="this.$lan('pleaseEnterANewWalletName')">
 
 
 						</view>
-						<!-- <text class="center_txt"> *用户名不得超过20个字符</text> -->
+						<!-- <text class="center_txt"> *Username must not exceed 20 characters</text> -->
 						<view class="center_button">
 
-							<view class="btn1" @click="cancel1">{{$lan('取消')}}</view>
-							<view class="btn2" @click="changeWalletName">{{$lan('保存')}}</view>
+							<view class="btn1" @click="cancel1">{{$lan('cancel')}}</view>
+							<view class="btn2" @click="changeWalletName">{{$lan('save')}}</view>
 						</view>
 					</view>
 				</uni-popup>
 				<view class="main_left">
 					<image src="../../static/image/my/icon-dzb.png"></image>
-					<text>{{$lan('钱包名称')}}</text>
+					<text>{{$lan('walletName')}}</text>
 				</view>
 				<view class="main_right"><image  src="../../static/image/my/icon-yjt.png"></image></view>
 			</view>
@@ -90,43 +90,43 @@
 					<view class="center_title"  v-model="changePswData.changePswModel"
 					:closable="false"
 					:mask-closable="false"
-					:title="this.$lan('修改密码')"
-					>{{$lan('修改密码')}}</view>
+					:title="this.$lan('changePassword')"
+					>{{$lan('changePassword')}}</view>
 					<!-- @on-ok="changePswOk"
 					@on-cancel="changePswCancel" -->
 					<view class="center_text">
 						<!--  -->
 						<!--  -->
 						<!--  -->
-					<input type="password" :value="changePswData.oldPsw"   :placeholder="this.$lan('请输入密码')" @input="oldPaw($event,'oldPsw')">
-					<input type="password" :value="changePswData.newPsw"   :placeholder="this.$lan('请输入新密码')"  @input="newPsw($event,'newPsw')">
-					<input type="password" :value="changePswData.againNewPsw"  :placeholder="this.$lan('再次确认新密码')"  @input="againNewPsw($event,'againNewPsw')">
+					<input type="password" :value="changePswData.oldPsw"   :placeholder="this.$lan('pleaseEnterPassword')" @input="oldPaw($event,'oldPsw')">
+					<input type="password" :value="changePswData.newPsw"   :placeholder="this.$lan('pleaseEnterANewPassword')"  @input="newPsw($event,'newPsw')">
+					<input type="password" :value="changePswData.againNewPsw"  :placeholder="this.$lan('confirmNewPasswordAgain')"  @input="againNewPsw($event,'againNewPsw')">
 
 					</view>
 					<view class="center_button">
-						<view class="btn1" @click="cancel">{{$lan('取消')}}</view>
-						<view class="btn2" @click="preservation">{{$lan('保存')}}</view>
+						<view class="btn1" @click="cancel">{{$lan('cancel')}}</view>
+						<view class="btn2" @click="preservation">{{$lan('save')}}</view>
 					</view>
 
 					</view>
 				</uni-popup>
 				<view class="main_left">
 					<image src="../../static/image/my/icon-xgmm.png"></image>
-					<text>{{$lan('修改密码')}}</text>
+					<text>{{$lan('changePassword')}}</text>
 				</view>
 				<view class="main_right"><image  src="../../static/image/my/icon-yjt.png"></image></view>
 			</view>
 			<view class="main"  v-if="defaultWallet.type=='mnemonic'" @tap="toPrivateKeyTip(1)">
 				<view class="main_left">
 					<image src="../../static/image/my/icon-dczjc.png"></image>
-					<text>{{$lan('导出助记词')}}</text>
+					<text>{{$lan('exportMnemonic')}}</text>
 				</view>
 				<view class="main_right"><image  src="../../static/image/my/icon-yjt.png"></image></view>
 			</view>
 			<view class="main"   @tap="toPrivateKeyTip(2)">
 				<view class="main_left">
 					<image src="../../static/image/my/icon-dcsy.png"></image>
-					<text>{{$lan('导出私钥')}}</text>
+					<text>{{$lan('exportPrivateKey')}}</text>
 				</view>
 				<view class="main_right"><image  src="../../static/image/my/icon-yjt.png"></image></view>
 			</view>
@@ -135,7 +135,7 @@
 			<view class="main" @click="toAddressList">
 				<view class="main_left">
 					<image src="../../static/image/my/icon-dzbb.png"></image>
-					<text>{{$lan('地址簿')}}</text>
+					<text>{{$lan('addressBook')}}</text>
 				</view>
 				<view class="main_right"><image  src="../../static/image/my/icon-yjt.png"></image></view>
 			</view>
@@ -175,19 +175,19 @@ import systemManagement from "../../components/systemManagement";
 				 changePswData: {
                     changePswModel: false,
                     oldPsw: '',
-                    oldPsw_pswLog_noBlank:this.$lan('密码不能为空，请重新输入') ,
+                    oldPsw_pswLog_noBlank:this.$lan('passwordCannotBeEmpty') ,
                     oldPsw_pswLog_noBlank_Flag: 'none',
 
                     newPsw: '',
-                    newPsw_pswLog_noBlank:this.$lan('密码不能为空，请重新输入') ,
+                    newPsw_pswLog_noBlank:this.$lan('passwordCannotBeEmpty') ,
                     newPsw_pswLog_noBlank_Flag: 'none',
-                    pswLog_pattern:this.$lan('密码由5-20位数字字母组成，请重新输入'),
+                    pswLog_pattern:this.$lan('passwordConsistsOf5_20DigitsAndLetters'),
                     pswLog_pattern_Flag: 'none',
 
                     againNewPsw: '',
-                    againNewPsw_pswLog_noBlank:this.$lan('密码不能为空，请重新输入') ,
+                    againNewPsw_pswLog_noBlank:this.$lan('passwordCannotBeEmpty') ,
                     againNewPsw_pswLog_noBlank_Flag: 'none',
-                    pswLog_equality:this.$lan('两次输入密码不相等，请重新输入'),
+                    pswLog_equality:this.$lan('thTwoPasswordsAreInconsistent3'),
                     pswLog_equality_Flag: 'none'
                 }
 
@@ -204,12 +204,11 @@ import systemManagement from "../../components/systemManagement";
 		//  onShow(){
         //     uni.setTabBarItem({
         //     index: 3,
-        //     text:this.$lan('我的')
+        //     text:this.$lan('mine')
         // });
         // },
 		methods: {
 			// toDemo(){
-			// 	console.log('去 demo 页');
 			// 	uni.navigateTo({ url: `/pages/demo/index`})
 			// },
 			toImportWallet() {
@@ -221,34 +220,34 @@ import systemManagement from "../../components/systemManagement";
 			toAddressList(){
 				uni.navigateTo({ url: `/pages/transaction/addressBook`})
 			},
-			//删除钱包
+			//Delete Wallet
 			toDeleteWallet() {
 				this.$refs.popup1.open()
 			},
-			//备份助记词
+			//Backup mnemonics
 			// toPrivateKeyTip(){
 
 			// 	this.$refs.popup1.close()
-			// 	console.log("备份助记词")
+			// 	console.log("backupMnemonic")
 			// 	// uni.navigateTo({ url: `/pages/privateKey/tip`})
 
 			// },
-			//已备份删除钱包
+			//Wallet backup removed
 			deleteWalletAndSetDefault(){
-				// console.log("已备份删除钱包")
+				// console.log("Deleted wallet has been backed up")
 				this.$refs.popup1.close()
 				console.log('this.defaultWallet',this.defaultWallet,this.walletList);
 				aboutWallet.deleteWalletAndSetDefault(this.defaultWallet.address);
 				// deleteWalletAndSetDefault(this.defaultWallet)
 					uni.showToast({
-					title:this.$lan('删除成功'),
+					title:this.$lan('successfullyDeleted'),
 					icon: 'none',
 					duration: 2000
 				});
 
 
 			},
-			//修改密码
+			//Change Password
 			toChangePwd(){
 				console.log(this.changePswData.oldPsw,this.changePswData.newPsw,this.changePswData.againNewPsw)
 				this.changePswData.oldPsw=''
@@ -258,8 +257,7 @@ import systemManagement from "../../components/systemManagement";
 				this.changePswModel = true;
 			},
 
-
-			// 修改密码
+			// Change Password
              preservation() {
 				 console.log('123123');
 				let self = this;
@@ -269,29 +267,28 @@ import systemManagement from "../../components/systemManagement";
 				// console.log(self.changePswData.oldPsw)
 				if(!aboutWallet.checkPassword(this.defaultWallet.address,self.changePswData.oldPsw)){
 					uni.showToast({
-					title:this.$lan('旧密码错误!'),
+					title:this.$lan('Old password error!'),
 					icon: 'none',
 					duration: 2000
 					})
 					this.changePswData.oldPsw=''
-					console.log('校验旧密码');
+					console.log('Verify old password');
 					return;
 				}
 				console.log('333333');
                 if(self.changePswData.oldPsw  ===  self.changePswData.newPsw){
 					uni.showToast({
-					title:this.$lan('校验旧密码与新密码!'),
+					title:this.$lan('Verify old password and new password!'),
 					icon: 'none',
 					duration: 2000
 					})
-					console.log('校验旧密码与新密码');
+					console.log('Verify old password and new password');
 					return;
 				}
-				console.log('4444444');
 
 				 if(self.changePswData.newPsw==self.changePswData.againNewPsw){
 					uni.showToast({
-					title:this.$lan('修改密码成功!'),
+					title:this.$lan('successfullyChangePassword'),
 					icon: 'none',
 					duration: 2000
 					})
@@ -300,7 +297,7 @@ import systemManagement from "../../components/systemManagement";
 
                 }else{
 					uni.showToast({
-					title:this.$lan('修改密码失败，请重新修改!'),
+					title:this.$lan('passwordModificationFailedTips'),
 					icon: 'none',
 					duration: 2000
 				});
@@ -309,23 +306,22 @@ import systemManagement from "../../components/systemManagement";
 					this.changePswData.againNewPsw=''
                 }
             },
-			//修改密码 取消
+			//change password cancel
 			cancel(){
 				this.$refs.popup2.close()
 			},
-			//修改密码 保存
 			// preservation(){
-			// 	console.log("原密码",this.pwdVal)
-			// 	console.log("新密码",this.newPwd)
-			// 	console.log("确认密码",this.confirmPwd)
+			// 	console.log("old password",this.pwdVal)
+			// 	console.log("new password",this.newPwd)
+			// 	console.log("confirm password",this.confirmPwd)
 
 			// },
 			// toPrivateKeyTip() {
 			// 	// uni.navigateTo({ url: `/pages/privateKey/tip`})
 			// },
-			//修改钱包名称
+			//Change wallet name
 			toChangeWalletName(){
-				console.log("修改钱包")
+				console.log("Change wallet name")
 				console.log(this.defaultWallet.address)
 				// console.log('this.defaultWallet',this.walletList);
 				// console.log('this.walletList',this.walletList);
@@ -333,16 +329,16 @@ import systemManagement from "../../components/systemManagement";
 				console.log('this.walletList',this.walletList);
 				this.$refs.popup3.open()
 			},
-			//修改钱包名称取消
+			//Modify wallet name cancel
 			cancel1(){
 				this.$refs.popup3.close()
 			},
-			//修改钱包名称确认
+			//Modify wallet name confirmation
 			changeWalletName(){
-				console.log("名称",this.newName)
+				console.log("name",this.newName)
 				aboutWallet.changeWalletName(this.defaultWallet.address,this.newName);
 				uni.showToast({
-					title:this.$lan('修改钱包名称成功'),
+					title:this.$lan('successfullyModifiedTheWalletName'),
 					icon: 'none',
 					duration: 2000
 				});
@@ -360,15 +356,11 @@ import systemManagement from "../../components/systemManagement";
 					case 'oldPsw':{
 						setTimeout(()=>{
 							this.changePswData.oldPsw = e.target.value
-							console.log("旧密码111",this.changePswData.oldPsw)
+							console.log("Old password 111",this.changePswData.oldPsw)
 						},0)
 						break;
 					}
 				}
-				// console.log("旧密码",)
-				// console.log("e",e.detail)
-				// this.changePswData.oldPsw = e.detail
-				// console.log("旧密码111",this.changePswData.oldPsw)
 
 			},
 			newPsw(a,flag){
@@ -376,7 +368,7 @@ import systemManagement from "../../components/systemManagement";
 					case 'newPsw':{
 						setTimeout(()=>{
 							this.changePswData.newPsw = a.target.value
-							console.log("新密码111",this.changePswData.newPsw)
+							console.log("New password 111",this.changePswData.newPsw)
 						},0)
 						break;
 					}
@@ -387,7 +379,7 @@ import systemManagement from "../../components/systemManagement";
 					case 'againNewPsw':{
 						setTimeout(()=>{
 							this.changePswData.againNewPsw = b.target.value
-							console.log("0新密码111",this.changePswData.againNewPsw)
+							console.log("0 new password 111",this.changePswData.againNewPsw)
 						},0)
 						break;
 					}
@@ -504,7 +496,7 @@ import systemManagement from "../../components/systemManagement";
 							font-size: 28rpx;
 							width: 362rpx;
 							height: 27rpx;
-							line-height: 27rpx;					
+							line-height: 27rpx;
 							font-size: 28rpx;
 							font-family: PingFang SC;
 							font-weight: 300;
@@ -522,14 +514,13 @@ import systemManagement from "../../components/systemManagement";
 		.myNav {
 			width: 686rpx;
 			height: 180rpx;
-			line-height: 180rpx;
 			margin: 0 32rpx;
 			margin-top: -95rpx;
 			margin-bottom: 32rpx;
 			display: flex;
 			border-radius: 20rpx;
 			justify-content: space-around;
-				
+
 
 			// align-items: center;
 			background-color: #FFFFFF;
@@ -575,7 +566,7 @@ import systemManagement from "../../components/systemManagement";
 				height: 40rpx;
 				line-height: 40rpx;
 				padding: 35rpx 0rpx;
-				
+
 
 				// margin: 35rpx 32rpx 35rpx 52rpx;
 				// padding-right: 40rpx;

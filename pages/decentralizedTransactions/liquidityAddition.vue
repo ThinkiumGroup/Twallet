@@ -1,8 +1,8 @@
 <template>
     <view class="container">
-        <nav-bar :title="this.$lan('提供兑换池')">
+        <nav-bar :title="this.$lan('provideExchangePool')">
             <view slot="rightBtn" class="header-right" @click="jumpPage('/pages/decentralizedTransactions/myTokenPools')">
-                {{$lan('我的通证池')}}
+                {{$lan('myTokenPool')}}
             </view>
         </nav-bar>
         <view class="_block_2">
@@ -18,29 +18,29 @@
                                 <image class="TZ-image" :src="dataA.iconUrl" v-show="dataA.iconUrl"/>
                                 <text class="TZ-name">{{dataA.tokenName}}</text>
                             </view>
-                            <text v-else class="TZ-name">{{$lan('请选择通证')}}</text>
+                            <text v-else class="TZ-name">{{$lan('pleaseSelectPass')}}</text>
                             <icon-font src="wallet-p-arrow-down" width="21rpx" height="12rpx" style="margin-left: 35rpx"/>
                         </view>
                         <view class="input-area" :class="{'input-disabled': disabledEdit('A')}">
-                            <view class="transaction-direction-text">{{$lan('添加')}}</view>
+                            <view class="transaction-direction-text">{{$lan('addTo')}}</view>
                             <view
                                 class="tips-for-not-enough"
                                 v-if="checkIfBalanceIsExceeded(dataA, 'A')"
                                 @click="toTransfer">
                                 <view v-if="dataA.type=== 'main'">
-                                    {{$lan('您的dataATokenName不足,请先').replace('dataATokenName',dataA.tokenName)}}
+                                    {{$lan('yourDataATokenNameIsInsufficient').replace('dataATokenName',dataA.tokenName)}}
                                     <text class="__btn">
-                                        {{$lan('跨链转入')}}
+                                        {{$lan('crossChainTransfer2')}}
                                     </text>
                                 </view>
                                 <view v-else>
-                                    {{$lan('您的dataATokenName不足').replace('dataATokenName',dataA.tokenName)}}
+                                    {{$lan('yourDataATokenNameIsInsufficient2').replace('dataATokenName',dataA.tokenName)}}
                                 </view>
                             </view>
                             <input
                                 v-model="dataA.amountsInput"
                                 @input="handleAmountInput1('A')"
-                                :placeholder="disabledEdit('A') ? '' : $lan('输入数量')"
+                                :placeholder="disabledEdit('A') ? '' : $lan('inputQuantity')"
                                 type="number"
                                 class="amounts-input"
                                 :disabled="disabledEdit('A')"/>
@@ -52,29 +52,29 @@
                                 <image class="TZ-image" :src="dataB.iconUrl" v-show="dataB.iconUrl"/>
                                 <text class="TZ-name">{{dataB.tokenName}}</text>
                             </view>
-                            <text v-else class="TZ-name">{{$lan('请选择通证')}}</text>
+                            <text v-else class="TZ-name">{{$lan('pleaseSelectPass')}}</text>
                             <icon-font src="wallet-p-arrow-down" width="21rpx" height="12rpx" style="margin-left: 35rpx"/>
                         </view>
                         <view class="input-area" :class="{'input-disabled': disabledEdit('B')}">
-                            <view class="transaction-direction-text">{{$lan('添加')}}</view>
+                            <view class="transaction-direction-text">{{$lan('addTo')}}</view>
                             <view
                                 class="tips-for-not-enough"
                                 v-if="checkIfBalanceIsExceeded(dataB, 'B')"
                                 @click="toTransfer">
                                 <view v-if="dataB.type=== 'main'">
-                                    {{$lan('您的dataATokenName不足,请先').replace('dataATokenName',dataB.tokenName)}}
+                                    {{$lan('yourDataATokenNameIsInsufficient').replace('dataATokenName',dataB.tokenName)}}
                                     <text class="__btn">
-                                        {{$lan('跨链转入')}}
+                                        {{$lan('crossChainTransfer2')}}
                                     </text>
                                 </view>
                                 <view v-else>
-                                    {{$lan('您的dataATokenName不足').replace('dataATokenName',dataB.tokenName)}}
+                                    {{$lan('yourDataATokenNameIsInsufficient2').replace('dataATokenName',dataB.tokenName)}}
                                 </view>
                             </view>
                             <input
                                 v-model="dataB.amountsInput"
                                 @input="handleAmountInput1('B')"
-                                :placeholder="disabledEdit('B') ? '' : $lan('输入数量')"
+                                :placeholder="disabledEdit('B') ? '' : $lan('inputQuantity')"
                                 type="number"
                                 class="amounts-input"
                                 :disabled="disabledEdit('B')">
@@ -84,7 +84,7 @@
                 <view class="description top_border" v-if="dataA.contractAddress && dataB.contractAddress">
                     <view class="description-item" v-if="pairPriceText">
                         <view class="label">
-                            {{$lan('兑换比例')}}
+                            {{$lan('exchangeRatio')}}
                         </view>
                         <view class="value">
                             {{pairPriceText}}
@@ -92,7 +92,7 @@
                     </view>
                     <view class="description-item">
                         <view class="label">
-                            {{$lan('gas费')}}
+                            {{$lan('gasFee')}}
                         </view>
                         <view class="value">
                             {{gasFeeNeeded}}TKM
@@ -105,14 +105,14 @@
 
         <template>
             <view class="trade-type-description" v-if="transferType === 'stable'">
-                {{$lan('采用市场定价策略时，提供兑换池仅需提供TKM。')}}
+                {{$lan('marketPricingStrategyTips2')}}
             </view>
             <view class="trade-type-description" v-else-if="pairStatus === 2">
-                {{$lan('恭喜您成为该兑换池第一个通证提供者，您将设置初始兑换比例，一旦您对比例满意，请单击按钮进行添加。')}}
+                {{$lan('firstTokenProvider')}}
             </view>
         </template>
 
-        <allBtn :text="this.$lan('确定添加')" @click="toAddLiquidity" :containerStyle="{width: '686rpx', height: '90rpx', marginTop: '87rpx'}" :disabled="!addLiquidityValid()"/>
+        <allBtn :text="this.$lan('oKToAdd')" @click="toAddLiquidity" :containerStyle="{width: '686rpx', height: '90rpx', marginTop: '87rpx'}" :disabled="!addLiquidityValid()"/>
 
         <!-- 通证选择器-->
         <tokenSelector ref="tokenSelector" @select="handleTokenSelect"/>
@@ -138,10 +138,10 @@
     const flashSwapPool = require('../../utils/abis/flashSwapPool');
 
     // const tokenTestAddress = '0x8565a1fb09b87c36de5064deff11e1766ca5519b';
-    const liquidChainId = '103';       // 兑换池的链id
-    const gasFeeApprove = 0.7;         // 进行申请的gas费
-    const gasFeeAddTKMToFlashSwapPool = 0.7;    // 向闪兑池加TKM的gas费
-    const gasFeeAddLiquidity = 0.8;    // 添加兑换池的gas费
+    const liquidChainId = '103';       // Chain ID of exchange pool
+    const gasFeeApprove = 0.7;         // Gas fee for application
+    const gasFeeAddTKMToFlashSwapPool = 0.7;    // Gas charge for adding TKM to flash tank
+    const gasFeeAddLiquidity = 0.8;    // Add gas fee of exchange pool
 
     export default {
         components: { allBtn, tokenSelector, TransferLoading, PasswordPopup },
@@ -164,27 +164,27 @@
                     amountsInput: '',
                 },
                 inputType: '',  // A,B
-                priceBToOneA: 0,  // 1个A对应的B的兑换比例
-                priceAToOneB: 0,  // 1个B对应的A的兑换比例
+                priceBToOneA: 0,  // Exchange ratio of B corresponding to one a
+                priceAToOneB: 0,  // Exchange ratio of a corresponding to 1 b
                 tokenList: [],
                 xtoList: [],
                 otherTokenList: [
                     {   contractAddress: '',
                         iconUrl: '',
                         tokenName: 'TKM',
-                        type: 'main',    // 主币
+                        type: 'main',    // Main currency
                         amount: '',
                     }
                 ],
                 pairPriceTextOrigin: '',
                 pairPriceText: '',
-                pairStatus: '',   // 1是兑换池兑换对, 2非兑换池兑换对
-                transferType: '', // 兑换类型
+                pairStatus: '',   // 1 is the exchange pool exchange pair, 2 is the non exchange pool exchange pair
+                transferType: '', // Exchange type
                 checkTokenInterval: '',
                 hashResult: '',
                 handleAmountInputDebounce: _debounce(() => {this.handleAmountInput()}, 500),
                 toRegularNumber: aboutWallet.toRegularNumber,
-                accountBalance: 0, // 账户余额，big
+                accountBalance: 0, // Account balance，big
                 gasFeeNeeded: '',
             }
         },
@@ -207,12 +207,12 @@
                 }
                 await this.getData();
 
-                //要放在 this.getData 之后
+                //Put it in the this.getData after
                 let pairDataWaitingToAdd = uni.getStorageSync('pairDataWaitingToAdd') || {};
                 this.selectExchangePairsAuto(pairDataWaitingToAdd.tokenA, pairDataWaitingToAdd.tokenB);
                 uni.setStorageSync('pairDataWaitingToAdd', "")
             },
-            // 自动选择兑换对,入参为两个Address
+            // The exchange pair is automatically selected, and the input parameters are two addresses
             selectExchangePairsAuto(tokenA, tokenB){
                 const dataA = this.tokenList.find((item) => {
                     return item.contractAddress === tokenA;
@@ -247,13 +247,13 @@
                     console.log('dataA', dataA);
                     console.log('dataB', dataB);
                     if((dataA.coinType == 1 && dataB.type === 'main') || (dataB.coinType == 1 && dataA.type === 'main')){
-                        return 'stable'   // 结算凭证兑换
+                        return 'stable'   // Exchange of settlement voucher
                     }else if(dataA.type === 'xto' && dataB.type !== 'xto'){
-                        return 'xtoOut'   // 兑出xto
+                        return 'xtoOut'   // Exchange XTO
                     }else if(dataA.type !== 'xto' && dataB.type === 'xto'){
-                        return 'xtoIn'    // 兑入xto
+                        return 'xtoIn'    // Into XTO
                     }else if(dataA.type !== 'xto' && dataB.type !== 'xto'){
-                        return 'other'    // 其他兑换
+                        return 'other'    // Other exchange
                     }
                 }else{
                     return '';
@@ -310,7 +310,7 @@
                 }
                 this.$forceUpdate();
             },
-            // 查看可用余额
+            // View available balance
             checkAvailableBalance(data, type){
                 if(!data.contractAddress){
                     return 0;
@@ -337,7 +337,7 @@
                 return availableBalance >= 0 ? availableBalance : 0;
 
             },
-            // 查看输入值是否超出余额
+            // Check whether the input value exceeds the balance
             checkIfBalanceIsExceeded(data, type){
                 if(data.amountInput <= 0 || !data.contractAddress){
                     return false
@@ -414,7 +414,7 @@
 
                 return decentralizedTransactionsApi.getTokenList(params);
             },
-            showTokenSelector(source){  // 可以传入A B
+            showTokenSelector(source){  // Can pass in a B
 
                 let tokenList = _.cloneDeep(this.tokenList);
                 if((source === 'A' && this.dataB.type) || (source === 'B' && this.dataA.type)){
@@ -472,7 +472,7 @@
                 if(this.transferType && this.transferType !== 'stable'){
                     let price = await this.getPurePairPrice('1', dataA.contractAddress, dataB.contractAddress);
                     this.pairStatus = price <= 0 ? 2 : 1;
-                    console.log('选择兑换对后查询是否有兑换池兑换对', this.pairStatus);
+                    console.log('After selecting the exchange pair, query whether there is a exchange pool exchange pair', this.pairStatus);
                 }else{
                     this.pairStatus = '';
                 }
@@ -480,7 +480,7 @@
                 this.transform();
                 this.$forceUpdate();
             },
-            // 查看 tkm余额
+            // View TKM balance
             async getAccount(){
                 let address = this.defaultWallet.address && this.defaultWallet.address.toLowerCase();
                 if(!address){
@@ -490,11 +490,11 @@
                 this.accountBalance = result.balance;
                 return result.balance;
             },
-            // 查看token余额
+            // View token balance
             checkTokenBalance(){
 
             },
-            // 获得对价(去除掉兑换费用及溢价)
+            // Gain consideration (excluding exchange fee and premium)
             async getPurePairPrice(amounts, tokenA, tokenB){
                 if(!amounts){
                     return '';
@@ -508,10 +508,10 @@
                 const contractObj = await walletApi.callContract(params);
                 walletApi.setVal('0');
                 let price =  await contractObj.quote(aboutWallet.toBigNumber(amounts), tokenA, tokenB );
-                console.log(this.$lan('原始对价'), aboutWallet.toRegularNumber(price));
+                console.log('Original consideration', aboutWallet.toRegularNumber(price));
                 return price;
             },
-            // 查看对价
+            // View consideration
             async getPairPrice(amounts, tokenA, tokenB, type = 'out'){
                 if(!amounts){
                   return '';
@@ -533,20 +533,20 @@
                 }
                 return aboutWallet.toRegularNumber(price);
             },
-            // 去转账
+            // To transfer money
             toTransfer(){
                 uni.navigateTo({
                     url: '/pages/transaction/transfer'
                 })
             },
-            // 判断是否可以进行添加
+            // Judge whether it can be added
             addLiquidityValid(){
                 if(!this.dataA.contractAddress || !this.dataB.contractAddress){
-                    // this.$showToast('请选择需要添加的兑换对！');
+                    // this.$showToast(this.$lan('pleaseSelectTheExchangePairToBeAdded');
                     return false;
                 }
                 if(this.dataA.contractAddress === this.dataB.contractAddress){
-                    // this.$showToast('您选择的兑换对合约相同，请重新选择！');
+                    // this.$showToast(this.$lan('sameContractTips'));
                     return false;
                 }
 
@@ -560,7 +560,7 @@
                         data1 = this.dataB;
                     }
                     if(!data0.amountsInput){
-                        // this.$showToast('请输入通证数量！');
+                        // this.$showToast(this.$lan('pleaseEnterTheNumberOfTokens'));
                         return false;
                     }
                     if(this.checkIfBalanceIsExceeded(data0)){
@@ -584,13 +584,13 @@
                 }
 
                 if(aboutWallet.toRegularNumber(this.accountBalance) - this.gasFeeNeeded < 0){
-                    // this.$showToast(`您的账户余额不足以支付gas费，请先跨链转入`);
+                    // this.$showToast(this.$lan('isNotEnoughToPayTheGasFee'));
                     return false;
                 }
                 return true;
             },
 
-            // 去添加兑换池
+            // Go and add the exchange pool
             toAddLiquidity(){
                 this.$refs.passwordPopup.showPasswordPopup({
                     cancel: () => {
@@ -607,21 +607,21 @@
                     },
                 });
             },
-            // 添加兑换池（组合方法）
+            // Add exchange pool (combination method)
             async addLiquidityGroupFuc( privateKey, walletAddress){
-                this.$refs.TransferLoading.show({text: '兑换池添加中，预计将于1分钟内完成，为避免添加未完成造成财产损失，完成前请勿关闭app', show: true,});
+                this.$refs.TransferLoading.show({text: this.$lan('exchangePoolIsAdding')});
 
                 let addResult;
                 console.log('transferType', this.transferType );
                 if(this.transferType === 'stable' ){
                     addResult = await this.addStableCoin(privateKey, walletAddress, this.dataA, this.dataB);
                 }else{
-                    // 查看是否approve过
+                    // Check whether it has been approved
                     if(this.dataA.type !== 'main'){
                         let result = await this.checkAndApproved(privateKey, walletAddress, this.dataA.contractAddress, this.dataA.amountsInput);
                         if(result !== 'isOk'){
                             this.$refs.TransferLoading.hide();
-                            this.$showToast(`申请${this.dataA.tokenName}额度失败，请稍后再试`);
+                            this.$showToast(this.$lan('failedToApplyForTokenQuota').replace('tokenName', this.dataA.tokenName));
                             return;
                         }
                     }
@@ -629,30 +629,30 @@
                         let result = await this.checkAndApproved(privateKey, walletAddress, this.dataB.contractAddress, this.dataB.amountsInput);
                         if(result !== 'isOk'){
                             this.$refs.TransferLoading.hide();
-                            this.$showToast(`申请${this.dataB.tokenName}额度失败，请稍后再试`);
+                            this.$showToast(this.$lan('failedToApplyForTokenQuota').replace('tokenName', this.dataB.tokenName));
                             return;
                         }
                     }
 
-                    // 进行添加兑换池
+                    // Add exchange pool
                     addResult = await this.addLiquidity(privateKey, walletAddress, this.dataA, this.dataB);
                 }
 
 
-                // 查hash
+                // Check hash
                 if(addResult.TXhash){
                     let result = await getTransactionResultByHashCircularly(liquidChainId, addResult.TXhash);
                     if(result){
-                        this.$showToast(this.$lan(`兑换池添加成功`));
+                        this.$showToast(this.$lan(`exchangPoolAddedSuccessfully`));
                         setTimeout(() => {
                             uni.navigateBack();
                         }, 1000)
                     }else{
-                        this.$showToast(this.$lan(`兑换池添加失败，请稍后再试`));
+                        this.$showToast(this.$lan(`failedToAddRedemptionPool`));
                     }
                 }else{
-                    console.log(this.$lan('hash没有生成'));
-                    this.$showToast(this.$lan(`兑换池添加失败，请稍后再试`));
+                    console.log('hash is not generated');
+                    this.$showToast(this.$lan(`failedToAddRedemptionPool`));
                     setTimeout(() => {
                         this.init();
                     }, 1000)
@@ -662,7 +662,7 @@
                 this.$refs.TransferLoading.hide();
 
             },
-            // 查看是否批准、进行批准(组合方法)
+            //Check whether to approve or not (combined method)
             async checkAndApproved(privateKey, walletAddress, tokenAddress, amounts ){
                 if(!await this.checkTokenIfApproved(privateKey, walletAddress, tokenAddress, amounts)){
                     await this.toTokenContractForApproval(privateKey, walletAddress, tokenAddress, amounts);
@@ -676,7 +676,7 @@
                     return 'isOk';
                 }
             },
-            // 查有没有批准,返回 boolean
+            // Check whether it is approved and return to Boolean
             async checkTokenIfApproved(privateKey, walletAddress, tokenAddress, amounts){
                 let params = {
                     contractAbi: ERC20Abi,
@@ -692,7 +692,7 @@
                 console.log('approve-check', aboutWallet.toRegularNumber(result));
                 return aboutWallet.toRegularNumber(result) - amounts >= 1;
             },
-            // 循环查询 有没有批准,返回 boolean
+            // Loop to check whether there is approval and return Boolean
             async checkTokenIfApprovedCircularly(privateKey, walletAddress, tokenAddress, amounts){
                 return new Promise((resolve, reject) => {
                     let times = 0;
@@ -708,7 +708,7 @@
                     }, 1000)
                 });
             },
-            // 去token合约进行批准
+            // Go to token contract for approval
             async toTokenContractForApproval(privateKey, walletAddress, tokenAddress, amounts){
                 let params = {
                     contractAbi: ERC20Abi,
@@ -718,13 +718,13 @@
                     chainId: liquidChainId
                 };
                 const contractObj = await walletApi.callContract(params);
-                console.log(this.$lan('去批准的参数'), this._contractAddress.CONTRACT_ROUTER, aboutWallet.toBigNumber(amounts - 0 + 10));
+                console.log('Approved parameters', this._contractAddress.CONTRACT_ROUTER, aboutWallet.toBigNumber(amounts - 0 + 10));
                 walletApi.setVal('0');
                 let approveResult = await contractObj.approve(this._contractAddress.CONTRACT_ROUTER, aboutWallet.toBigNumber(amounts  - 0 + 10));
                 console.log('approveResult', approveResult);
             },
 
-            // 添加兑换池
+            // Add exchange pool
             async addLiquidity(privateKey, walletAddress, dataA, dataB) {
                 let params = {
                     contractAbi: thkSwapRouterAbi,
@@ -772,9 +772,9 @@
                     return contractObj.addLiquidity(...groupObjValToList(data));
                 }
             },
-            // 结算凭证充值
+            // Recharge of settlement voucher
             async addStableCoin(privateKey, walletAddress, dataA, dataB){
-                console.log('结算凭证充值');
+                console.log('Recharge of settlement voucher');
                 let dataNewA, dataNewB;
                 if(dataB.type === 'main'){
                     dataNewA = dataB;

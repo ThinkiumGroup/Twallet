@@ -9,7 +9,7 @@
 		</view>
 		<view class="uni-dialog-button-group">
 			<view class="uni-dialog-button" @click="close">
-				<text class="uni-dialog-button-text">取消</text>
+				<text class="uni-dialog-button-text">cancel</text>
 			</view>
 			<view class="uni-dialog-button uni-border-left" @click="onOk">
 				<text class="uni-dialog-button-text uni-button-color">确定</text>

@@ -2,7 +2,7 @@ import Vue from "vue"
 import lan from '@/Framework/language/index'
 import {aboutWallet} from "../utils/businessCommon";
 
-//转换时间
+//Conversion time
 Vue.filter("formatDate", (date_time, format) => {
     let date_time_ls = parseInt(date_time);
     if (date_time_ls == date_time) date_time = date_time_ls;
@@ -27,10 +27,6 @@ Vue.filter("formatDate", (date_time, format) => {
     return formatDate
 });
 
-//转换存证类型
-Vue.filter("transformCertType", (val) => {
-	return val = val == 1 ? "录音存证" : val == 2 ? "拍照存证" : val == 3 ? "录像存证" : val == 4 ? "文件存证" : val == 5 ? "内容存证" : "未匹配，请检查"
-})
 
 Vue.filter("sliceHash", function (e) {
       if (e == '' || e == null || e == undefined) {
@@ -51,7 +47,7 @@ Vue.filter('$formatAmountToFee', function(amount){
     return parseFloat((amount/100).toFixed(2));
 
 })
-//保留六位小数
+//Keep six decimal places
 Vue.filter('$formatAmountToKeepSix', function(val){
 
   if(!val){
@@ -59,45 +55,43 @@ Vue.filter('$formatAmountToKeepSix', function(val){
   }
   return parseFloat((val/1).toFixed(6));
   if(!val){
-    //toFixed(n)实现保留n位小数
        return (val/1).toFixed(6)
     }else{
        return val
     }
 
 })
-//保留六位小数
+//Keep six decimal places
 Vue.filter('$formatAmountToKeepSix1', function(val){
 
   if(val>0){
-    //toFixed(n)实现保留n位小数
        return (val).toFixed(6)
     }else{
        return val
     }
 
 })
-//保留六位小数
+//Keep six decimal places
 Vue.filter('$formatAmountToKeepSixs', function(value){
 
   if(value>0){
-    //toFixed(n)实现保留n位小数
+    //toFixed(n)Realize to keep n decimal places
        return (value).toFixed(6)
     }else{
        return value
     }
 
 })
-//链类型转换
+//Chain type conversion
 Vue.filter('transformChainType', function(data){
 
     if(data=="title.trading_chain"){
 
-      return lan('交易链') ;
+      return lan('accountChain') ;
     }else if (data=="title.pos_reward_chain"){
-		return lan('奖励链')
+		return lan('rewardChain')
 	}else{
-		return lan('商业链')
+		return lan('businessChain')
 	}
 
 
@@ -131,4 +125,21 @@ Vue.filter('$hiddenString', function(string, front = 0, behind = 0){
   string += '';
   return string.substring(0, front) + '...' + string.substring(string.length - behind)
 })
+
+
+
+Vue.filter('$maximumOrMinimum', function(number){
+  if(!number){
+     return 0
+  }
+  if(number - 0.00000001 < 0){
+    return lan('smallAmount')
+  }
+
+  if(number - 9999999999 > 0){
+    return lan('largeAmount')
+  }
+
+  return number;
+});
 

@@ -1,7 +1,7 @@
 <template>
   <view class="container" :style="{paddingTop: customBar + 90 + 'rpx'}">
     <view class="nav-fixed-top" style="width: 100%">
-       <nav-bar :title="$lan('我的通证池')"/>
+       <nav-bar :title="$lan('myTokenPool')"/>
     </view>
     <view class="content-list">
       <view
@@ -29,34 +29,34 @@
             <view class="detail-item nav-row-between-center">
               <view class="nav-row-start-center">
                 <image :src="item.contentA && item.contentA.iconUrl" mode="aspectFit" style="width: 36rpx; height: 30rpx; margin-right: 12rpx"/>
-                <text class="prop-text">{{currentPairData.contentA && currentPairData.contentA.tokenName}}{{$lan('通证池内总量')}}</text>
+                <text class="prop-text">{{currentPairData.contentA && currentPairData.contentA.tokenName}}{{$lan('totalAmountInTheTokenPool')}}</text>
               </view>
               <view class="valve">
-                {{currentPairData.contentA && currentPairData.contentA.reserve}}
+                {{currentPairData.contentA && currentPairData.contentA.reserve | $maximumOrMinimum}}
               </view>
             </view>
             <view class="detail-item nav-row-between-center" v-show="currentPairData.transferType && currentPairData.transferType !== 'stable'">
               <view class="nav-row-start-center">
                 <image :src="item.contentB && item.contentB.iconUrl" mode="aspectFit" style="width: 36rpx; height: 30rpx; margin-right: 12rpx"/>
-                <text class="prop-text">{{currentPairData.contentB && currentPairData.contentB.tokenName}}{{$lan('通证池内总量')}}</text>
+                <text class="prop-text">{{currentPairData.contentB && currentPairData.contentB.tokenName}}{{$lan('totalAmountInTheTokenPool')}}</text>
               </view>
               <view class="valve">
-                {{currentPairData.contentB && currentPairData.contentB.reserve}}
+                {{currentPairData.contentB && currentPairData.contentB.reserve | $maximumOrMinimum}}
               </view>
             </view>
           </view>
           <view class="detail-bottom top-border">
            <view class="nav-row-between-center _top">
              <view class="prop">
-               {{$lan('我的占比')}}
+               {{$lan('myProportion')}}
              </view>
              <view class="value">
                {{lodash.get(currentPairData, 'ratio')}}
              </view>
            </view>
            <view class="btn-list nav-row-between-center">
-             <view class="btn-item"  @click.stop="toExitTokenPool()">{{$lan('退出通证池')}}</view>
-             <view class="btn-item btn-item-blue" @click.stop="toAddExchangePairs()">{{$lan('提供通证池')}}</view>
+             <view class="btn-item"  @click.stop="toExitTokenPool()">{{$lan('exitTheTokenPool')}}</view>
+             <view class="btn-item btn-item-blue" @click.stop="toAddExchangePairs()">{{$lan('provideTokenPool')}}</view>
            </view>
           </view>
         </view>
@@ -101,7 +101,7 @@
         console.log('--stableBalanceOf', stableBalanceOf);
         if(this._contractAddress.CONTRACT_FLASH_SWAP && this._contractAddress.CONTRACT_WTKM && stableBalanceOf - 0){
           pairList.push({
-            tokenA: this._contractAddress.CONTRACT_WTKM,  // 切记, tokenA与tokenB的地址不能颠倒
+            tokenA: this._contractAddress.CONTRACT_WTKM,  // Remember, the addresses of tokenA and tokenB cannot be reversed
             tokenB: this._contractAddress.CONTRACT_FLASH_SWAP,
           });
         }
@@ -181,7 +181,7 @@
         if(transferType === 'stable'){
           let reserves = await this.getStableReserves();
           console.log('-reserves', reserves);
-          pairData.contentA.reserveBig = reserves && reserves.toString();  // 默认contentA为主币内容
+          pairData.contentA.reserveBig = reserves && reserves.toString();  // Default contentA is the main currency content
           pairData.contentA.reserve = aboutWallet.toRegularNumber(reserves);
           let totalSupply = await this.getStableTotalSupply();
           console.log('--totalSupply', totalSupply);
@@ -223,7 +223,7 @@
           uni.hideLoading();
         });
       },
-      // 查看非stable库存量
+      // View unstable inventory
       async getReserves(addressA, addressB){
         if(!addressA || !addressB){
           throw new Error('getReserves方法请传入addressA和addressB')
@@ -246,7 +246,7 @@
         console.log('reserves', reserves);
         return reserves || [];
       },
-      // 查看库存量stable
+      // View inventory stable
       async getStableReserves(){
         let params = {
           contractAbi: flashSwapPoolAbi,
@@ -260,7 +260,7 @@
         console.log('reserves', reserves);
         return reserves.toString() || '0';
       },
-      // 获得总分额,非stable
+      // Total score, not stable
       async getTotalSupply(pairContractAddress){
         console.log('--pairContractAddress', pairContractAddress);
         let params = {
@@ -274,7 +274,7 @@
         let totalSupply = await contractObj.totalSupply();
         return totalSupply.toString() || '';
       },
-      // 获得自己的份额,非stable
+      // It's not stable to get your share
       async getBalanceOf(pairContractAddress){
         console.log('--pairContractAddress', pairContractAddress);
         let params = {
@@ -288,7 +288,7 @@
         let balanceOf = await contractObj.balanceOf(this.defaultWallet.address.toLowerCase());
         return  balanceOf.toString() || '';
       },
-      // 获得总分额,stable
+      // Total score, stable
       async getStableTotalSupply(){
         let params = {
           contractAbi: flashSwapPoolAbi,
@@ -302,7 +302,7 @@
         return totalSupply.toString() || '';
 
       },
-      // 获得自己的份额,stable
+      // Get your share, stable
       async getStableBalanceOf(){
         let params = {
           contractAbi: flashSwapPoolAbi,

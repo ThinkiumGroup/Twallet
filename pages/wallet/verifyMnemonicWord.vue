@@ -1,11 +1,11 @@
 <template>
 	<view class="page-wrap">
-		<nav-bar :title="this.$lan('验证助记词')"></nav-bar>
+		<nav-bar :title="this.$lan('verificationMnemonic')"></nav-bar>
 		<view class="content-wrap">
 			<view class="please">
-				{{$lan('请按顺序选择您刚才备份在纸上的助记词')}}
+				{{$lan('pleaseSelectMnemonicWordsInOrder')}}
 				<view class="error-text" v-if="selectError">
-					{{$lan('助记词顺序不正确，请校对')}}
+					{{$lan('mnemonicWordsIsIncorrectTips')}}
 				</view>
 			</view>
 
@@ -30,7 +30,7 @@
 							:disabled="!(mnemonicList.length == wordList.length && !selectError)"
 				      :class="{active: mnemonicList.length == wordList.length && !selectError}"
 				  >
-				{{$lan('确定')}}
+				{{$lan('determine')}}
 			</button>
 		</view>
 	</view>
@@ -45,7 +45,7 @@
 		name: 'verifyMnemonicWord',
 		data() {
 			return {
-				type: '',  // ''或者1 来自于钱包创建， 2 来自导出助记词
+				type: '',  // '' or 1 from the wallet creation, 2 from the exported mnemonic
 				mnemonicList: [],
 				wordList: [],
 				rodomList: [],
@@ -84,7 +84,7 @@
 					mask: true,
 				});
 
-			  // 设置密码
+			  // set password
 				let password = this.password;
 				let walletData = {
 						mnemonic: this.mnemonicWords,
@@ -98,7 +98,7 @@
 					let address = walletApi.getAddressFromPublicKey(publicKey);
 					aboutWallet.setDefaultWallet(address);
 					uni.showToast({
-						title:this.$lan("创建成功")
+						title:this.$lan("createdSuccessfully")
 					})
 					setTimeout(() => {
 						uni.switchTab({
@@ -107,13 +107,13 @@
 					}, 1500)
 				}else{
 					uni.showToast({
-						title:this.$lan("创建失败")
+						title:this.$lan("creationFailed")
 					})
 				}
 			},
 			async confirmClick() {
 				if(this.type == 2){
-          this.$showToast(this.$lan('验证成功'));
+          this.$showToast(this.$lan('verifiedSuccessfully'));
           setTimeout(() => {
 						uni.switchTab({
 							url: "/pages/my/index"

@@ -1,7 +1,7 @@
 <template>
     <view class="container" :style="{paddingTop: customBar + 100 + 'rpx'}">
         <view class="nav-fixed-top" style="width: 100%">
-            <nav-bar :title="this.$lan('钱包管理')" />
+            <nav-bar :title="this.$lan('walletManagement')" />
         </view>
         <view class="wallet-list">
             <view
@@ -33,8 +33,8 @@
             </view>
         </view>
         <view class="to-add-new-wallet nav-row-start-center">
-            <view @click="toImportWallet" class="to-add-wallet-item">{{$lan('导入钱包')}}</view>
-            <view @click="toCreateWallet" class="to-add-wallet-item">{{$lan('创建钱包')}}</view>
+            <view @click="toImportWallet" class="to-add-wallet-item">{{$lan('importWallet')}}</view>
+            <view @click="toCreateWallet" class="to-add-wallet-item">{{$lan('createWallet')}}</view>
         </view>
 
         <EasyDialog ref="EasyDialog"/>
@@ -73,10 +73,10 @@
                 if(result.status === 1){
                     this.getAllWalletAsset();
                     this.$refs.EasyDialog.showDialog({
-                        title:this.$lan('提示'),
-                        text:this.$lan('更换成功, 该钱包将作为新的默认钱包。'),
-                        okText:this.$lan('确定'),
-                        cancelText:this.$lan('取消'),
+                        title:this.$lan('prompt'),
+                        text:this.$lan('changeWalletSuccessfully'),
+                        okText:this.$lan('determine'),
+                        cancelText: this.$lan('cancel'),
                         ok: () => {
                             uni.navigateBack();
                         },
@@ -85,10 +85,10 @@
                         },
                     });
                 }else{
-                    this.$showToast(this.$lan('更换失败'));
+                    this.$showToast(this.$lan('replacementFailed'));
                 }
             },
-            // 获得钱包余额
+            //Get wallet balance
             getAllWalletAsset(){
                 uni.showLoading({
                     title: '',
@@ -97,7 +97,7 @@
                 let walletList = _.cloneDeep(this.walletList);
                 let lastTime = uni.getStorageSync('lastTimeOfGetAllWalletAsset') || 0;
                 walletList.map(async(item) => {
-                    if(item.address === this.defaultWallet.address || isTimeInvalid(lastTime, 30*60*1000)){ // 非默认钱包， 30分钟刷新一次
+                    if(item.address === this.defaultWallet.address || isTimeInvalid(lastTime, 30*60*1000)){ // Non-default wallet, refreshed every 30 minutes
                         let asset = new BigNumber(0);
                         for(var i=0;  i<chainList.length; i++){
                             let content = await walletApi.getAccount(chainList[i].id, item.address.toLowerCase())

@@ -1,22 +1,22 @@
 <template>
     <view class="container">
-        <nav-bar :title="this.$lan('备份助记词')" />
+        <nav-bar :title="this.$lan('backupMnemonic')" />
         <view class="content">
             <view class="export-tips nav-row-start-start">
                 <icon-font src="wallet-p-exclamation" width="28rpx" height="25rpx" style="margin-right: 19rpx; display: inline-block"/>
-                <view class="export-tips-text">{{$lan('请勿将助记词在联网环境下分享及储存，例如社交应用、邮箱、相册等。')}}</view>
+                <view class="export-tips-text">{{$lan('doNotShareMnemonicWords')}}</view>
             </view>
             <view class="divide-line"/>
             <view class="tip-title">
-               {{$lan('请按照顺序将助记词抄写在纸上并妥善保管')}} 
+               {{$lan('copyTheMnemonicWordsOnPaper')}}
             </view>
             <view class="mnemonic-area" v-if="mnemonic">
                 {{mnemonic}}
             </view>
             <view class="attention">
-                {{$lan('注：官方客服不会以任何形式索要您的私钥。')}}
+                {{$lan('willNotAskForPrivateKey')}}
             </view>
-            <allBtn :text="this.$lan('下一步')"  :containerStyle="{marginTop: '500rpx'}" @click="next"/>
+            <allBtn :text="this.$lan('nextStep')"  :containerStyle="{marginTop: '500rpx'}" @click="next"/>
         </view>
         <view>
 
@@ -44,7 +44,7 @@
           async getMnemonic(walletAddress, password){
               let walletDetail = this.walletList.find((item) => { return item.address === walletAddress}) || {};
               if(walletDetail.type !== 'mnemonic'){
-                 throw  new Error(this.$lan('该钱包没有私钥'))
+                 throw  new Error('The wallet does not have a private key')
               }
               let walletInfo = await aboutWallet.getWalletInfo(walletAddress, password);
               this.mnemonic = walletInfo.mnemonic;
@@ -58,7 +58,7 @@
         },
         onLoad(option){
             if(!option.address || !option.password){
-                throw new Error(this.$lan('连接中缺少地址和密码数据'));
+                throw new Error('Address and password data missing in the connection');
             }
             this.getMnemonic(option.address, option.password);
         }

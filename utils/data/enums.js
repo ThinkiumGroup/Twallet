@@ -3,10 +3,10 @@
 import lan from '@/Framework/language/index'
 
 export const transferTypeUrl = {
-		0: require('@/static/icon/transferIn.png'), //转入
-		1: require('@/static/icon/transferOut.png'), //转出
-		2: require('@/static/icon/exchange.png'), //闪兑
-		3: require('@/static/icon/crossChain.png'), //跨链
+		0: require('@/static/icon/transferIn.png'), //transferIn
+		1: require('@/static/icon/transferOut.png'), //transferOut
+		2: require('@/static/icon/exchange.png'), //flashRedemption
+		3: require('@/static/icon/crossChain.png'), //crossChain
 }
 
 export const gasCost = {
@@ -16,15 +16,15 @@ export const gasCost = {
 
 export const chainList = [
 	{
-		value: lan('账户链'),
+		value: lan('accountChain'),
 		id: '1'
 	},
 	{
-		value: lan('奖励链'),
+		value: lan('rewardChain'),
 		id: '2'
 	},
 	{
-		value: lan('商业链'),
+		value: lan('businessChain'),
 		id: '103'
 	},
 ]
@@ -32,8 +32,8 @@ export const chainList = [
 
 export const contractIndexEnum = {
 	WTKM: -1,             //WTKM
-	FLASH_SWAP: -2,       //闪兑 结算凭证
-	FLASH_SWAP_POOL: -3,  //闪兑池
-	ROUTER: -1000,        //路由
-	FACTORY: -1001,       //工厂
+	FLASH_SWAP: -2,       //flashRedemption Settlement voucher
+	FLASH_SWAP_POOL: -3,  //Flash pool
+	ROUTER: -1000,        //routing
+	FACTORY: -1001,       //factory
 };

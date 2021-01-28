@@ -8,16 +8,16 @@
 						<text>TKM</text>
 					</view>
 					<view class="tkm_right">
-						<view class="t_r_t1">{{$lan('总量:122312.34')}}</view>
+						<view class="t_r_t1">{{$lan('total')}}:</view>
 						<!-- <view class="t_r_t2">-1366.23</view> -->
 					</view>
-                   
+
 				</view>
                  <view class="tkm_bottom">
                         <text>
                              SHWUEY327E382EY37RY4FHCE7UCGDYS123e2473eydegcf46
                         </text>
-                       
+
                     </view>
 				<view class="zcl1">
 					<view class="zcl1_cont" >
@@ -26,62 +26,62 @@
                                 <view class="left_center">12</view>
                             </view>
 							<!-- <image src="../../static/image/transfer/yh_r.png"></image> -->
-							<view class="left_bottom">{{$lan('交易数量')}}</view>
+							<view class="left_bottom">{{$lan('numberOfTransactions')}}</view>
 						</view>
 						<view class="zcl1_left">
                             <view class="zcl_img">
                                 <view class="left_center">{{$lan('12')}}</view>
                             </view>
 							<!-- <image src="../../static/image/transfer/yh_r.png"></image> -->
-							<view class="left_bottom">{{$lan('账户数量')}}</view>
+							<view class="left_bottom">{{$lan('numberOfAccounts')}}</view>
 						</view>
 					</view>
 				</view>
 
-				
+
 			</view>
 
-		
+
 		<view class="llq_ban">
 
         </view>
         <view class="llq_search">
             <!-- <view class="sea_inp"> -->
-                 <input type="text" :placeholder="this.$lan('请输入交易哈希/账户地址')"  >
+                 <input type="text" :placeholder="this.$lan('pleaseEnterTransactionHashAccountAddress')"  >
         <!-- </view> -->
            <view class="sea_btn">
-               <text>{{$lan('交易查询')}}</text>
+               <text>{{$lan('transactionInquiry')}}</text>
         </view>
         </view>
         <view class="llq_bottom">
             <view class="llq_cont1">
-                <view class="llq_cont_txt1">{{$lan('主链')}}</view>
+                <view class="llq_cont_txt1">{{$lan('mainChain')}}</view>
                  <view class="llq_cont_txt2">
-                     {{$lan('块高：1232323块')}}
+                     {{$lan('blockHeight')}}
                  </view>
             </view>
             <view class="llq_cont1">
-                <view class="llq_cont_txt1">{{$lan('主链')}}</view>
+                <view class="llq_cont_txt1">{{$lan('mainChain')}}</view>
                  <view class="llq_cont_txt2">
-                     {{$lan('块高：1232323块')}}
+                     {{$lan('blockHeight')}}
                  </view>
             </view>
             <view class="llq_cont1">
-                <view class="llq_cont_txt1">{{$lan('主链')}}</view>
+                <view class="llq_cont_txt1">{{$lan('mainChain')}}</view>
                  <view class="llq_cont_txt2">
-                     {{$lan('块高：1232323块')}}
+                     {{$lan('blockHeight')}}
                  </view>
             </view>
             <view class="llq_cont1">
-                <view class="llq_cont_txt1">{{$lan('主链')}}</view>
+                <view class="llq_cont_txt1">{{$lan('mainChain')}}</view>
                  <view class="llq_cont_txt2">
-                     {{$lan('块高：1232323块')}}
+                     {{$lan('blockHeight')}}
                  </view>
                   <view class="llq_cont_txt2">
-                     {{$lan('块高：1232323块')}}
+                     {{$lan('blockHeight')}}
                  </view>
             </view>
-            
+
         </view>
 
 
@@ -170,7 +170,7 @@ export default {
 
 				.tkm_right {
 					.t_r_t1 {
-						
+
                         font-size: 30rpx;
                         font-family: PingFang SC;
                         font-weight: bold;
@@ -185,7 +185,7 @@ export default {
 					// 	color: #999999;
 					// }
 				}
-               
+
 
 			}
              .tkm_bottom{
@@ -310,9 +310,9 @@ export default {
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    
+
                 text{
-                    
+
                     font-size: 32rpx;
                     font-family: PingFang SC;
                     font-weight: 500;
@@ -360,6 +360,6 @@ export default {
 
             }
 
-		
+
 		}
 </style>

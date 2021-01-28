@@ -1,7 +1,7 @@
 <template>
 	<view class="page-wrap">
-		<nav-bar :title="this.$lan('导入钱包')">
-			<!-- h5端暂不支持扫码 -->
+		<nav-bar :title="this.$lan('importWallet')">
+			<!-- The h5 terminal does not support scanning codes temporarily -->
 			<!-- #ifndef H5 -->
 			<view class="top_right" @click="searchCode" slot="rightBtn" v-show="selected == 2">
 				<image src="../../static/image/home/icon_sys.png"></image>
@@ -12,22 +12,22 @@
 			<view class="import-pattern-wrap">
 				<view class="import-tab">
 					<view class="tab-item" :class="{active: selected == 1}" @tap="selectClick(1)">
-						{{$lan('助记词导入')}}
+						{{$lan('MnemonicImport')}}
 					</view>
 					<view class="tab-item" :class="{active: selected == 2}" @tap="selectClick(2)">
-						{{$lan('私钥导入')}}
+						{{$lan('privateKeyImport')}}
 					</view>
 				</view>
-				<textarea class="import-content" v-model="mnemonic" :placeholder="this.$lan('请输入助记词，用空格分隔')"  v-show="selected == 1"/>
-				<textarea class="import-content" v-model="privateKey" :placeholder="this.$lan('请输入私钥')"  v-show="selected == 2"/>
+				<textarea class="import-content" v-model="mnemonic" :placeholder="this.$lan('pleaseEnterTheMnemonicWords')"  v-show="selected == 1"/>
+				<textarea class="import-content" v-model="privateKey" :placeholder="this.$lan('pleaseEnterThePrivateKey')"  v-show="selected == 2"/>
 			</view>
 			<view class="password-wrap">
-				<input type="text" v-model="walletName"  :placeholder="this.$lan('请输入钱包名称')"  />
-				<input type="password"  v-model="password" :placeholder="this.$lan('请设置钱包密码（不少于6位）')"  />
-				<input type="password"  v-model="repeatPassword" :placeholder="this.$lan('重复密码')" />
+				<input type="text" v-model="walletName"  :placeholder="this.$lan('pleaseEnterTheWalletName')"  />
+				<input type="password"  v-model="password" :placeholder="this.$lan('pleaseSetWalletPassword2')"  />
+				<input type="password"  v-model="repeatPassword" :placeholder="this.$lan('repeatPassword')" />
 			</view>
 			<view class="imort-btn" @click="importWallet">
-				{{$lan('开始导入')}}
+				{{$lan('startImport')}}
 			</view>
 			<EasyDialog ref="EasyDialog"/>
 		</view>
@@ -46,7 +46,7 @@
 		name: 'importWallet',
 		data() {
 			return {
-				selected: 1, //1是助记词导入， 2是私钥导入
+				selected: 1, //1 is to import mnemonic words, 2 is to import private keys
 				mnemonic: '',
 				privateKey: '',
 				walletName: '',
@@ -65,29 +65,29 @@
 			async importWallet(){
 				console.log('walletList', this.walletList);
 				if(this.selected == 1 && !this.mnemonic.trim()){
-          this.$showToast(this.$lan('请填写助记词'));
+          this.$showToast(this.$lan('pleaseFillInTheMnemonic'));
           return;
 				}
 				if(this.selected == 2 && !this.privateKey.trim()){
-					this.$showToast(this.$lan('请填写私钥'));
+					this.$showToast(this.$lan('pleaseFillInThePrivateKey'));
 					return;
 				}
 
 				if(!this.walletName){
-					this.$showToast(this.$lan('请填写钱包名称'));
+					this.$showToast(this.$lan('pleaseFillInTheWalleName'));
 					return;
 				}
 				if(!this.password){
-					this.$showToast(this.$lan('请设置钱包密码'));
+					this.$showToast(this.$lan('pleaseSetWalletPassword'));
 					return;
 				}
 				if(!this.repeatPassword){
-					this.$showToast(this.$lan('请重复密码'));
+					this.$showToast(this.$lan('pleaseRepeatPassword'));
 					return;
 				}
 
 				if(this.password !==this.repeatPassword){
-					this.$showToast(this.$lan('两次密码输入的值不一致，请重新填写'));
+					this.$showToast(this.$lan('thTwoPasswordsAreInconsistent2'));
 					this.password = '';
 					this.repeatPassword = '';
 					return;
@@ -117,10 +117,10 @@
         if(result.status === 1){
         	if(this.hasDefaultWallet){
 						this.$refs.EasyDialog.showDialog({
-							title:this.$lan('导入完成'),
-							text:this.$lan('您的钱包已导入完成，现在可以使用了，快去看看吧'),
-							okText:this.$lan('开始使用'),
-							cancelText:this.$lan('暂时不用'),
+							title:this.$lan('importComplete'),
+							text:this.$lan('tipsThatYourWalletCanBeUsed'),
+							okText:this.$lan('startUsing'),
+							cancelText:this.$lan('beingNot'),
 							ok: () => {
 								setTimeout(() => {
 									let address = this.walletList[this.walletList.length - 1].address;
@@ -138,7 +138,7 @@
         		setTimeout(() => {
 							let address = this.walletList[0].address;
 							aboutWallet.setDefaultWallet(address);
-							this.$showToast(this.$lan('钱包导入成功'));
+							this.$showToast(this.$lan('walletImportedSuccessfully'));
 						})
 						setTimeout(() => {
 							uni.navigateBack();

@@ -12,7 +12,7 @@ let request = ({
                  baseUrl
                }) => {
   return new Promise((resolve, reject) => {
-    console.log('调用了request');
+    console.log('Request is called');
     if(baseUrl || getBaseUrl()){
       uni.request({
         url: (baseUrl || getBaseUrl()) + url,
@@ -21,14 +21,14 @@ let request = ({
         header: header || {
           'content-type': 'application/json',
           'token': !noToken ? (uni.getStorageSync('token') || '') : '',
-          // 设置请求的语言
+          // Set the requested language
           'locale': getLanguage(),
         },
         success: (res) => {
 		  // #ifdef APP-PLUS
-		  console.log('######请求接口 ', url);
-		  console.log('######请求参数 ', JSON.stringify(data));
-		  console.log('######返回数据 ', JSON.stringify(res.data));
+		  console.log('######interface ', url);
+		  console.log('######parameter', JSON.stringify(data));
+		  console.log('######Return data', JSON.stringify(res.data));
 		  // #endif
 
           if (res.data.code == 200) {
@@ -38,7 +38,7 @@ let request = ({
           }
         },
         fail: (err) => {
-          console.log('###request失败');
+          console.log('###request failure');
           reject(err)
         }
       })

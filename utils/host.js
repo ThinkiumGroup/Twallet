@@ -5,15 +5,15 @@ export const baseUrlListByEnv = {
   dev: 'http://browser.chainopen.cn',
 };
 
-// 用于本地调试
+// For local debugging
 const baseUrlListByHost = {
   'localhost:8080': 'http://cert-test.chainopen.cn',
   'localhost:8081': 'http://cert-test.chainopen.cn',
   'localhost:8082': 'http://cert-test.chainopen.cn',
   'localhost:8083': 'http://cert-test.chainopen.cn',
   'localhost:8084': 'http://cert-test.chainopen.cn',
-  '192.168.0.110:9001': '/browser',    //配置了代理，位置 mainfest.json
-  'localhost:9001': '/browser',    //配置了代理，位置 mainfest.json
+  '192.168.0.110:9001': '/browser',    //Proxy is configured, location mainfest.json
+  'localhost:9001': '/browser',    //Proxy is configured, location mainfest.json
   'localhost:9002': '/browser',
 };
 
@@ -64,8 +64,8 @@ const rpcUrlListByHost = {
   'localhost:8081': rpcUrlByEnv.dev,
   'localhost:8082': rpcUrlByEnv.dev,
   'localhost:8083': rpcUrlByEnv.dev,
-  '192.168.0.110:9001': '/api',    //配置了代理，位置 mainfest.json
-  'localhost:9001': '/api',    //配置了代理，位置 mainfest.json
+  '192.168.0.110:9001': '/api',    //Proxy is configured, location mainfest.json
+  'localhost:9001': '/api',    //Proxy is configured, location mainfest.json
 };
 
 

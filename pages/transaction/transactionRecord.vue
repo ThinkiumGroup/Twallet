@@ -47,11 +47,11 @@
 								</text>
 								<text class="transfer-list-money-token">{{tokenNname}}</text>
 							</view>
-							<view class="transfer-list-item-money-btm">交易成功</view>
+							<view class="transfer-list-item-money-btm">{{$lan('transactionWasSuccessful')}}}</view>
 						</view>
 					</view>
-					<view class="transfer-list-item" v-if="isMore">{{$lan('正在加载...')}}</view>
-					<view  class="transfer-list-item" v-if="noMore">{{$lan('没有更多了')}}</view>
+					<view class="transfer-list-item" v-if="isMore">{{$lan('loading')}}</view>
+					<view  class="transfer-list-item" v-if="noMore">{{$lan('noMore')}}</view>
 				</scroll-view>
 			</swiper-item>
 
@@ -82,31 +82,31 @@
 		},
 		data() {
 			return {
-				title:this.$lan('TKM的交易记录'),
+				title:this.$lan('TKMTransactionHistory'),
 				tabList: [{
 						id: 0,
 						parentType: 3,
 						childType: 302,
-						name:this.$lan('转入'),
+						name:this.$lan('transferIn'),
 					},
 					{
 						id: 1,
 						parentType: 3,
 						childType: 301,
-						name:this.$lan('转出'),
+						name:this.$lan('transferOut'),
 					},
 					{
 						id: 2,
 						parentType: 2,
 						childType: '',
-						name:this.$lan('闪兑'),
+						name:this.$lan('flashRedemption'),
 
 					},
 					{
 						id: 3,
 						parentType: 7,
 						childType: null,
-						name:this.$lan('跨链'),
+						name:this.$lan('crossChain'),
 					}
 				],
 				tabListClone: [],
@@ -126,28 +126,28 @@
 				tokenType: 0,
 				contractAddress: '',
 				chainInfo: {
-					1: this.$lan('账户链'),
-					2: this.$lan('奖励连'),
-					103: this.$lan('商业链'),
+					1: this.$lan('accountChain'),
+					2: this.$lan('rewardChain'),
+					103: this.$lan('businessChain'),
 				},
 				tokenNname: 'TKM',
 			}
 		},
 		watch: {
-			//切换通证
+			//Switch token
 			async tokenType(newVal) {
 				if(!this.tokenList.length) {
 					await this.getTokenList()
 				}
-				// 0代表主币
+				// 0 represents the main currency
 				const tokenItem = this.tokenList.find(v => v.value == newVal)
 				this.contractAddress = tokenItem && tokenItem.contractAddress
 				this.tokenNname = tokenItem && tokenItem.text
 				if(newVal) {
 					this.tabList = this.tabListClone.filter(v => v.id != 2 && v.id != 3)
 					this.clearData()
-					//tkm切换到token时 如果选中的为 闪对或者跨链重置为转入展示
-					//否则直接继承
+					//When TKM switches to token, if the selected one is flash pair or cross chain, it will be reset to turn in display
+					//Otherwise, it will be inherited directly
 					if(this.tabIndex == 2 || this.tabIndex == 3) {
 						this.tabIndex = 0
 					} else {
@@ -164,7 +164,7 @@
 		},
 		onLoad({ tokenType }) {
 			this.tokenType = Number(tokenType)
-			this.contractAddress = [this._contractAddress.CONTRACT_ROUTER, this._contractAddress.CONTRACT_FLASH_SWAP, this._contractAddress.CONTRACT_FLASH_SWAP_POOL];
+			this.contractAddress = [this._contractAddress.CONTRACT_FLASH_SWAP, this._contractAddress.CONTRACT_FLASH_SWAP_POOL];
 		},
 		onShow() {
 			if(!this.tokenType) {
@@ -180,13 +180,13 @@
 			copyData(data) {
 				copy(data)
 				uni.showToast({
-					title: this.$lan('复制成功'),
+					title: this.$lan('copySuccessfully'),
 					icon: 'none',
 					duration: 2000
 				});
-			
+
 			},
-			
+
 			numberChange(nums) {
 				return aboutWallet.toRegularNumber(nums)
 			},
@@ -195,14 +195,14 @@
 				this.tabIndex = index
 			},
 
-			//页面类型切换时
+			//When switching page types
 			swiperChange(e) {
-				//获取对应的type
+				//Get the corresponding type
 				this.tabIndex = e.target.current
 				this.parentType = this.tabList[this.tabIndex].parentType
 				this.childType = this.tabList[this.tabIndex].childType
 				this.clearData()
-				//通证交易记录和tkm交易记录
+				//Token transaction and TKM transaction
 				if(this.tokenType) {
 					const transType =  this.tabIndex ? 0 : 1
 					this.getTokenTransferList({ transType })
@@ -214,24 +214,24 @@
 
 			clearData() {
 				console.log(99999992)
-				//每次切换页面清空数据
+				//Clear the data every time you switch the page
 				this.pageData  = []
 				this.page = 1
 				this.timeStamp = ''
-				this.noMore = false //隐藏没有更多
+				this.noMore = false //There is no more to hide
 			},
 
-			//滚动到底部
+			//Scroll to the bottom
 			scrollMonitor() {
 				if(this.total > this.pageData.length) {
 					this.getData()
 				} else {
-					this.noMore = true //打开没有更多
-					this.isMore = false //隐藏正在加载loading
+					this.noMore = true //Open no more
+					this.isMore = false //Hiding loading
 				}
 			},
 
-			//获取主币交易记录数据
+			//Get transaction data of primary currency
 			async getData() {
 				 let data = {
 					parentType: this.parentType,
@@ -242,7 +242,7 @@
 					childType: this.childType,
 					tables: this.tables,
 				}
-				//获取闪兑记录 添加参数
+				//Get flash cash record add parameters
 				if(this.tabIndex === 2) {
 					const paramsData = {
 						contractAddresss: this.contractAddress,
@@ -256,7 +256,7 @@
 
 
 
-			//获取token列表
+			//Get token list
 			async getTokenList() {
 				const paramsData = {
 					chainId: 103,
@@ -283,12 +283,12 @@
 					console.log(this._contractAddress)
 					console.log(this._contractAddress.CONTRACT_ROUTER, 99999)
 				}
-				
+
 				this.tokenList = tokenList
 				console.log(this.tokenList , 9000)
 			},
 
-			//获取token交易记录
+			//Get token transaction
 			async getTokenTransferList({ transType }) {
 				const data = {
 					address: this.defaultWallet.address,
@@ -313,9 +313,9 @@
 				this.total = data.total
 				this.pageData = [...this.pageData, ...list ]
 				this.timeStamp = list.length && list[list.length -1].timeStamp
-				if(this.total <= this.rows) { //数据比较少不足一屏幕 无法触发滚动事件时
-					this.isMore = false //隐藏正在加载loading
-					this.noMore = true //打开没有更多
+				if(this.total <= this.rows) { //When the data is less than one screen and the scrolling event cannot be triggered
+					this.isMore = false //Hide loading
+					this.noMore = true //Open no more
 				}
 			},
 

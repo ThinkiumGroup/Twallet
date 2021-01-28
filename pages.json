@@ -260,7 +260,7 @@
 				"pagePath": "pages/decentralizedTransactions/decentralizedTransactions",
 				"iconPath": "static/icon/sd.png",
 				"selectedIconPath": "static/icon/sdSelect.png",
-				"text": "闪兑"
+				"text": "flashRedemption"
 			},
 			{
 				"pagePath": "pages/browser/index",

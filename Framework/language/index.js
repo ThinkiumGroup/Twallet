@@ -1,7 +1,7 @@
 import languagePackage from './package/index'
 import Cookies from 'js-cookie'
 
-// 获取系统语言
+//Get system language
 export const getLanguage = () => {
   var langFromStorage = uni.getStorageSync('lang');
   if(langFromStorage) return langFromStorage;
@@ -23,17 +23,13 @@ export const getLanguage = () => {
 };
 
 
-// 设置系统语言
+// Set system language
 export const setLanguage = (lang) => {
   uni.setStorageSync('lang',lang);
 };
 
 let lan = (key) => {
-  if (getLanguage() === 'zh') {
-    return key
-  } else {
-    return lan[key] || ''
-  }
+  return lan[key] || ''
 }
 
 

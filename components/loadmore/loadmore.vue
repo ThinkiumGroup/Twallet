@@ -9,22 +9,22 @@
 	export default {
 		name: "tuiLoadmore",
 		props: {
-			//显示文本
+			//Display text
 			text: {
 				type: String,
-				default: "正在加载..."
+				default: "Loading..."
 			},
-			//是否可见
+			//Is it visible
 			visible: {
 				type: Boolean,
 				default: false
 			},
-			//loading 样式 ：1,2,3
+			//loading style ：1,2,3
 			index: {
 				type: Number,
 				default: 1
 			},
-			//颜色设置，只有index=3时生效：primary，red，orange，green
+			//The color setting takes effect only when index = 3: primary, red, orange, green
 			type: {
 				type: String,
 				default: ""

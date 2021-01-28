@@ -19,11 +19,11 @@
               default: function () {
                   return [
                       {
-                          prop: '转账',
+                          prop: 'transfer accounts',
                           value: 1,
                       },
                       {
-                          prop: '给他人转账',
+                          prop: 'Transfer money to others',
                           value: 2,
                       },
                   ]

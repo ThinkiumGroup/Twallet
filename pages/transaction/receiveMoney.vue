@@ -4,20 +4,17 @@
 			<ms-dropdown-menu slot="title" v-if="list.length > 1">
 				<ms-dropdown-item v-model="value" :list="list" />
 			</ms-dropdown-menu>
-			<text slot="title" v-else>TKM</text> 
+			<text slot="title" v-else>TKM</text>
 		</nav-bar>
 		<view class="receive-money-body">
 			<view class="receive-money-content">
 				<image class="token-icon" src="../../static/image/home/shoukuan.png" ></image>
-				<text class="token-address-title">钱包地址</text>
+				<text class="token-address-title">{{$lan('walletAddress')}}</text>
 				<text class="token-address">{{$toTHAddress(defaultWallet.address)}}</text>
-				<view class="copy-address" @click="copyStr($toTHAddress(defaultWallet.address))">复制地址</view>
+				<view class="copy-address" @click="copyStr($toTHAddress(defaultWallet.address))">{{this.$lan('copyAddress')}}</view>
 				<view class="canvas-box">
 					<canvas canvas-id="qrcode" style="width: 300rpx;height: 300rpx;" />
 				</view>
-			<!-- 	<view @click="saveImg">
-					保存二维码
-				</view> -->
 			</view>
 		</view>
 	</view>
@@ -69,7 +66,7 @@
 			}
 		},
 		methods: {
-			//获取token列表
+			//Get token list
 			async getTokenList() {
 				const obj = {
 					chainId: 103,
@@ -91,13 +88,13 @@
 				})
 				this.list = list
 			},
-			//制作二维码
+			//Making QR code
 			async make() {
 				const {windowWidth, windowHeight} = uni.getSystemInfoSync();
 				let size = 300 * windowWidth / 750;
 				const address = this.$toTHAddress(this.defaultWallet.address)
 				let text = encodeURIComponent(`type=transfer&address=${address}&tokenType=${this.value}`)
-			// 同步等待
+			// Synchronization waiting
 				const res = await uQRCode.make({
 					text,
 					canvasId: 'qrcode',
@@ -114,7 +111,7 @@
 			copyStr(data) {
 				copy(data)
 				uni.showToast({
-					title: this.$lan('复制成功'),
+					title: this.$lan('copySuccessfully'),
 					icon: 'none',
 					duration: 2000
 				});
@@ -122,7 +119,7 @@
 			saveImg() {
 				saveHeadImgFile(this.img, 1000)
 					.then(res => {
-						this.$showToast(this.$lan('保存成功'))
+						this.$showToast(this.$lan('savedSuccessfully'))
 					})
 					.catch(err => {
 						console.log(err,222)

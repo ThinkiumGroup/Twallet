@@ -1,49 +1,49 @@
 <template>
 	<view class="add-address-container">
 		<nav-bar :title="title" >
-		
+
 		</nav-bar>
 		<view class="add-address-body">
 			<view class="add-address-form">
 				<view class="form-item">
-					<view class="form-item-label">{{$lan('地址名称')}}</view>
-					<input 
-						type="text" 
-						:placeholder="this.$lan('请输入地址名称备注(必填)')"
+					<view class="form-item-label">{{$lan('addressName')}}</view>
+					<input
+						type="text"
+						:placeholder="this.$lan('pleaseEnterTheAddressNameRemark')"
 						class="form-item-input"
 						v-model="formData.name"
 					>
 				</view>
 				<view class="form-item">
-					<view class="form-item-label">{{$lan('地址')}}</view>
-					<input 
-						type="text" 
-						:placeholder="this.$lan('请输入钱包地址(必填)')"
-						
+					<view class="form-item-label">{{$lan('address')}}</view>
+					<input
+						type="text"
+						:placeholder="this.$lan('pleaseEnterTheWalletAddress')"
+
 						class="form-item-input"
 						v-model="formData.address"
 					>
 				</view>
 				<view class="form-item">
-					<view class="form-item-label">{{$lan('手机号')}}</view>
-					<input 
-						type="text" 
-						:placeholder="this.$lan('请输入手机号(必填)')"
-						
+					<view class="form-item-label">{{$lan('phoneNumber')}}</view>
+					<input
+						type="text"
+						:placeholder="this.$lan('pleaseEnterYourPhoneNumber ')"
+
 						class="form-item-input"
 						v-model="formData.phone"
 					>
 				</view>
 				<view class="form-item-remark">
 					<view class="dot"></view>
-					<text>{{$lan('手机号可用于获取转账确认短信')}}</text>
+					<text>{{$lan('mobilePhoneNumberFunction')}}</text>
 				</view>
 			</view>
 			<view
 				class="addAddress-submit"
 				@click="saveSubmit"
 			>
-			{{$lan('保存')}}
+			{{$lan('save')}}
 			</view>
 		</view>
 	</view>
@@ -56,7 +56,7 @@
 	export default {
 		data() {
 			return {
-				title:this.$lan('添加地址'),
+				title:this.$lan('addAddress'),
 				formData: {
 					name: '',
 					address: '',
@@ -68,22 +68,22 @@
 			saveSubmit() {
 				const { name, address, phone } = this.formData
 				if(name == '') {
-					this.$showToast(this.$lan('名称不能为空'))
+					this.$showToast(this.$lan('nameIsRequired'))
 					return
 				}
 				if(address == '' || !aboutWallet.checkAddress(address)) {
-					this.$showToast(this.$lan('请输入正确地址'))
+					this.$showToast(this.$lan('PleaseEnterTheCorrectAddress'))
 					return
 				}
 				if(phone == '' ||  !/^1[3456789]\d{9}$/.test(phone)) {
-					this.$showToast(this.$lan('请输入正确手机号'))
+					this.$showToast(this.$lan('pleaseEnterTheCorrectPhoneNumber'))
 					return
 				}
 				this.$store.commit('setAddressList', [this.formData])
-				this.$showToast(this.$lan('添加成功'))
+				this.$showToast(this.$lan('addedSuccessfully'))
 				uni.navigateBack()
-					
-				
+
+
 			}
 		}
 	}

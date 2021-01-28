@@ -7,21 +7,21 @@
 			<view class="address-search-container">
 				<view class="address-search-input">
 					<icon-font src="search" width="40rpx" height="40rpx"/>
-					<input 
-						style="margin-left: 16rpx;" 
-						type="text" 
-						:placeholder="this.$lan('请输入关键词搜索')" 
-						
+					<input
+						style="margin-left: 16rpx;"
+						type="text"
+						:placeholder="this.$lan('pleaseEnterKeywordsToSearch')"
+
 						v-model="searchValue"
 					/>
 				</view>
 				<view class="address-search-btn" @click="searchAddress">
 						<icon-font src="filter" width="40rpx" height="40rpx"/>
-						<text style="margin-left: 14rpx;">{{$lan('筛选')}}</text>
+						<text style="margin-left: 14rpx;">{{$lan('filter')}}</text>
 				</view>
 			</view>
-			<view 
-				v-for="(item, index) in addressData" 
+			<view
+				v-for="(item, index) in addressData"
 				class="address-item"
 				:key="index"
 				@click="toTransfer(item.address)"
@@ -38,7 +38,7 @@
 	export default {
 		data() {
 			return {
-				title:this.$lan('地址簿'),
+				title:this.$lan('addressBook'),
 				addressData: [],
 				searchValue: '',
 				transferAmount: 0,
@@ -87,7 +87,7 @@
 				display: flex;
 				justify-content: space-between;
 				height: 80rpx;
-			
+
 				.address-search-input {
 					flex: 1;
 					background: #fff;
@@ -110,7 +110,7 @@
 					box-sizing: border-box;
 					border-radius: 40rpx;
 				}
-				
+
 			}
 			.address-item {
 				padding: 37rpx 0 37rpx 48rpx;

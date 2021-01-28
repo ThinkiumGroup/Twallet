@@ -11,45 +11,46 @@ var util = require('ethereumjs-util');
 
 
 export default {
-  // 创建 助记词
+  // Creating mnemonics
   async createMnemonicWords() {
     let mnemonicWords = await bip39.generateMnemonic();
     console.log('createMnemonicWords', mnemonicWords)
     return mnemonicWords;
   },
-  // 根据助记词获得私钥
+  // Get the private key according to the mnemonic words
   async getPrivateKeyFromMnemonicWords(mnemonicWords) {
     if (!mnemonicWords) {
-      throw new Error("传入的助记词无效");
+      throw new Error("Invalid mnemonic passed in");
     }
     let seed = await bip39.mnemonicToSeed(mnemonicWords);
-    //  使用 seed 产生 HD Wallet。如果要说更明确，就是产生 Master Key 并记录起来。
+		/*  Use seed to generate HD wallet. If we want to be more specific,
+		we need to generate the master key and record it.*/
     let hdWallet = hdkey.fromMasterSeed(seed);
     let key1 = hdWallet.derive("m/44'/60'/0'/0/0");
     let privateKey = '0x' + key1._privateKey.toString('hex');
     console.log('privateKey', privateKey);
     return privateKey
   },
-  // 获得公钥
+  // Get public key
   getPublicKeyFromPrivateKey(privateKey) {
     if(!privateKey){
-      throw new Error("传入的私钥无效");
+      throw new Error("The private key passed in is invalid");
     }
     let publicKey = util.bufferToHex(util.privateToPublic(util.toBuffer(privateKey)));
     console.log('publicKey', publicKey)
     return publicKey;
   },
-  // 获得地址
+  // Get the address
   getAddressFromPublicKey(publicKey) {
-    //  使用 keypair 中的公钥产生 address。
+    //  Use the public key in keypair to generate the address.
     var address = util.pubToAddress(util.toBuffer(publicKey), true);
-    //  基于BIP55协议对地址进行再次编码，获取最终ETH地址
+    //  Based on bip55 protocol, the address is encoded again to obtain the final eth address
     address = util.toChecksumAddress('0x' + address.toString('hex')).toLowerCase();
     console.log('address', address)
     return address
   },
   /**
-   * 获取账户余额
+   * Get account balance
    * @param chainId
    * @param address
    * @returns {*}
@@ -69,7 +70,7 @@ export default {
   },
 
   /**
-   * 交易(发布合约、调合约方法、链内转账)
+   * Transaction (issuing contract, adjusting contract method, intra chain transfer)
    * @param chainId
    * @param fromChainId
    * @param toChainId
@@ -97,13 +98,13 @@ export default {
     };
 		console.log(obj, 99999999)
 		this.setVal(null)
-    //签名参数
+    //Signature parameters
 		privateKey && web3.thk.signTransaction(obj, privateKey);
     return web3.thk.SendTx(obj)
   },
 
   /**
-   * 通过hash获取交易详情
+   * Get transaction details through hash
    * @param chainId
    * @param txHash
    * @returns {*}
@@ -113,8 +114,8 @@ export default {
   },
 
 	/**
-	 * 获取块高
-	 * @param toChainId 目标链id
+	 * Get block height
+	 * @param toChainId
 	 */
 	async getExpireHeight(toChainId) {
 		let expireAfter = 200
@@ -123,7 +124,7 @@ export default {
 	},
 
 	/**
-	*  生成支票input
+	* Generate check input
 	* @param  FromChain,
 	* @param  FromAddress,
 	*	@param  Nonce,
@@ -138,8 +139,8 @@ export default {
 	},
 
   /**
-   * 初始化web3的数据，
-   * @param privateKey  Buffer类型
+   * Initialize the data of Web3,
+   * @param privateKey  Buffer type
    * @param address
    * @param chainId
    */
@@ -150,7 +151,7 @@ export default {
     web3.thk.defaultChainId = chainId.toString();
   },
   /**
-   * 调用合约
+   * Call contract
    * @param contractAbi
    * @param contractAddress
    * @param privateKey
@@ -159,17 +160,17 @@ export default {
    */
   callContract({contractAbi, contractAddress, privateKey, address, chainId}) {
   	if(privateKey){
-      // 初始化私钥、地址、链id
+      // Initialize private key, address and Chain ID
 			this.init(privateKey, address, chainId);
 		}else{
 			web3.thk.defaultAddress = address.toLowerCase();
 			web3.thk.defaultChainId = chainId;
 		}
-    // 获取合约对象，通过该对象可以调用合约内的方法
+    // Gets the contract object through which the methods in the contract can be called
     return web3.thk.contract(contractAbi).at(contractAddress, null);
   },
   /**
-   * 设置主币
+   * Setting the primary currency
    * @param value
    */
   setVal(value){
@@ -178,7 +179,7 @@ export default {
 
 
 	/**
-	*  生成支票证明input
+	*  Generate check proof input
 	* @param 	chainId,
 	* @param  fromChain,
 	* @param  fromAddress,
@@ -193,7 +194,7 @@ export default {
 	},
 
 	/**
-	 * 撤销支票证明参数
+	 * Revocation of check proof parameters
 	 * @param input
 	 *
 	 */
@@ -201,7 +202,7 @@ export default {
 		return web3.CashCheque.decode(input)
 	},
 	/**
-	*  撤销支票证明input
+	*  Cancellation of check certificate input
 	* @param 	chainId,
 	* @param  fromChain,
 	* @param  fromAddress,
@@ -215,10 +216,10 @@ export default {
 		return web3.thk.MakeCCCExistenceProof(data)
 	},
 	/**
-	 * 调用合约
-	 * transfer(address,uint):(uint256) 方法
-	 * 0x113 地址
-	 * .... 参数
+	 * Call contract
+	 * transfer(address,uint):(uint256) method
+	 * 0x113 address
+	 * .... parameter
 	 * */
 	simpleEncode(...data) {
 		return web3.ABI.simpleEncode(...data)

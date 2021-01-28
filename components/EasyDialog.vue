@@ -38,11 +38,11 @@
             },
             okText: {
                 type: String,
-                default: '好的',
+                default: '',
             },
             cancelText: {
                 type: String,
-                default: '取消',
+                default: '',
             }
         },
         data() {
@@ -55,21 +55,21 @@
             }
         },
         computed: {
-            titles(){ return this.title || this.title2},
-            texts(){ return this.text || this.text2},
-            isOneBtns(){ return this.isOneBtn || this.isOneBtn2},
-            okTexts(){ return this.okText || this.okText2},
-            cancelTexts(){ return this.cancelText || this.cancelText2},
+            titles(){ return this.title2 || this.title},
+            texts(){ return this.text2 || this.text},
+            isOneBtns(){ return this.isOneBtn2 || this.isOneBtn},
+            okTexts(){ return this.okText2 || this.okText},
+            cancelTexts(){ return this.cancelText2 || this.cancelText},
         },
         methods: {
             onOkBtnClick(){
-                console.log('点击了确定');
+                console.log('Click OK');
                 this.onOk && this.onOk();
                 this.closeDialog();
                 this.$emit('onOkBtnClick')
             },
             onCancelBtnClick(){
-                console.log('点击了取消');
+                console.log('Click Cancel');
                 this.onCancel && this.onCancel();
                 this.closeDialog();
                 this.$emit('onCancelBtnClick')
@@ -78,7 +78,7 @@
                 if(title) this.title2 = title;
                 if(text) this.text2 = text;
                 if(okText) this.okText2 = okText;
-                if(cancelText) this.cancelText2 = ok;
+                if(cancelText) this.cancelText2 = cancelText;
                 if(ok) this.onOk = ok;
                 if(cancel) this.onCancel = cancel;
                 this.$refs.easyDialog.open()

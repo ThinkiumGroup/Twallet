@@ -2,7 +2,7 @@ import request from "../utils/request";
 
 export default {
   /**
-   * 查看通证列表
+   * View the list of token
    * accountAddress
    * contractAddress
    * page
@@ -18,7 +18,7 @@ export default {
   },
 
   /**
-   * 获得兑换对列表
+   * Get a list of exchange pairs
    * @param data
    * @returns {Promise | Promise<unknown>}
    */
@@ -30,7 +30,7 @@ export default {
     })
   },
   /**
-   * 获得钱包添加过的兑换对列表
+   * Get the list of exchange pairs added by Wallet
    * @param data
    * @returns {Promise | Promise<unknown>}
    */
