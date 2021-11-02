@@ -9,19 +9,19 @@ export const baseUrlListByEnv = {
 
 export const rpcUrlDev = {
   [ChainIdEnum.MAIN_CHAIN]: '',
-  [ChainIdEnum.ACCOUNT_CHAIN]: 'http://43.247.184.48:32021',
-  [ChainIdEnum.POS_CHAIN]: 'http://43.247.184.49:32016',
-  [ChainIdEnum.BUSINESS_CHAIN]: 'http://43.247.184.49:32021',
-  'thk': 'http://test.thinkiumrpc.net',
+  [ChainIdEnum.ACCOUNT_CHAIN]: 'https://test1.thinkiumrpc.net',
+  [ChainIdEnum.POS_CHAIN]: 'https://test2.thinkiumrpc.net',
+  [ChainIdEnum.BUSINESS_CHAIN]: 'https://test103.thinkiumrpc.net',
+  'thk': 'https://test.thinkiumrpc.net',
 };
 
 
 export const rpcUrlPro = {
   [ChainIdEnum.MAIN_CHAIN]: '',
-  [ChainIdEnum.ACCOUNT_CHAIN]: '',
-  [ChainIdEnum.BUSINESS_CHAIN]: '',
-  [ChainIdEnum.BUSINESS_CHAIN]: '',
-  'thk': '',
+  [ChainIdEnum.ACCOUNT_CHAIN]: 'https://proxy1.thinkiumrpc.net',
+  [ChainIdEnum.BUSINESS_CHAIN]: 'https://proxy2.thinkiumrpc.net',
+  [ChainIdEnum.BUSINESS_CHAIN]: 'https://proxy103.thinkiumrpc.net',
+  'thk': 'https://proxy.thinkiumrpc.net',
 };
 
 // For local debugging
