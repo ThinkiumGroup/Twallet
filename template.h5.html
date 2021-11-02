@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <script>
+        console.log('11111-----------')
+      </script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>
+    <%= htmlWebpackPlugin.options.title %>
+  </title>
+
+  <script src="https://cdn.bootcss.com/vConsole/3.2.2/vconsole.min.js"></script>
+  <script src="static/js/html2canvas.min.js"></script>
+  
+  <script>
+    
+    // 禁止双击放大
+    document.documentElement.addEventListener('touchstart', function (event) {
+      if (event.touches.length > 1) {
+        event.preventDefault();
+      }
+    }, false);
+    // 初始化
+    // var vConsole = new VConsole();
+  </script>
+  
+
+  <link rel="stylesheet" href="<%= BASE_URL %>static/index.<%= VUE_APP_INDEX_CSS_HASH %>.css" />
+</head>
+<body>
+<noscript>
+  <strong>Please enable JavaScript to continue.</strong>
+</noscript>
+<div id="app"></div>
+
+</body>
+<script type="text/javascript" src="https://js.cdn.aliyun.dcloud.net.cn/dev/uni-app/uni.webview.1.5.2.js"></script>
+<script>
+  console.log("message1111111111")
+ // 待触发 `UniAppJSBridgeReady` 事件后，即可调用 uni 的 API。
+ document.addEventListener('UniAppJSBridgeReady', function() {
+   console.log("message00000000")
+        window.postMessage({
+            data: {
+                action: 'message'
+            }
+        });
+        console.log("message22222222")
+      })</script>
+</html>
